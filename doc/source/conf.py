@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # pplpy documentation build configuration file, created by
-# sphinx-quickstart on Wed Jan 13 21:59:44 2016.
+# sphinx-quickstart on Wed Jan 13 22:41:05 2016.
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.
@@ -30,9 +30,12 @@ sys.path.insert(0, os.path.abspath('/home/vincent/programming/ppl/'))
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.doctest',
     'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
+    'sphinx.ext.coverage',
     'sphinx.ext.mathjax',
+    'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
 ]
 
