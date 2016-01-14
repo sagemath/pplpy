@@ -4,3 +4,4 @@ pylong.so
 src/ppl.c
 src/ppl.cpp
 src/pylong.c
+*.swp
