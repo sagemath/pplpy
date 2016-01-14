@@ -105,20 +105,11 @@ basis vectors:
 >>> basis = range(0,5)
 >>> x = [ Variable(i) for i in basis ]
 >>> gs = Generator_System();
->>> for coeff in Permutations(basis):
+>>> from itertools import permutations
+>>> for coeff in permutations(basis):
 ...    gs.insert(point( sum( (coeff[i]+1)*x[i] for i in basis ) ))
 >>> C_Polyhedron(gs)
 A 4-dimensional polyhedron in QQ^5 defined as the convex hull of 120 points
-
-The above computation (using PPL) finishes without noticeable delay (timeit
-measures it to be 90 microseconds on sage.math). Below we do the same
-computation with cddlib, which needs more than 3 seconds on the same
-hardware:
-
->>> basis = range(0,5)
->>> gs = [ tuple(coeff) for coeff in Permutations(basis) ]
->>> Polyhedron(vertices=gs, backend='cdd')  # long time (3s on sage.math, 2011)
-A 4-dimensional polyhedron in QQ^5 defined as the convex hull of 120 vertices
 
 DIFFERENCES VS. C++
 
@@ -609,23 +600,6 @@ cdef class MIP_Problem(_mutable_or_immutable):
 
         - ``lower``, ``upper`` -- a rational number or ``None``, where
           ``None`` means that there is no constraint
-
-        TESTS:
-
-        Create a linear system with only equalities as constraints::
-
-            >>> p = MixedIntegerLinearProgram(solver="PPL")
-            >>> x = p.new_variable(nonnegative=False)
-            >>> n = 40
-            >>> v = random_vector(QQ, n)
-            >>> M = random_matrix(QQ, 2*n, n)
-            >>> for j in range(2*n):  # indirect doctest
-            ....:     lhs = p.sum(M[j,i]*x[i] for i in range(n))
-            ....:     rhs = M.row(j).inner_product(v)
-            ....:     p.add_constraint(lhs == rhs)
-            >>> p.solve()  # long time
-            0
-
         """
         raise NotImplementedError
 #        if lower == upper:
@@ -805,7 +779,7 @@ cdef class MIP_Problem(_mutable_or_immutable):
             >>> m.set_objective_function(x + y)
             >>> g = Generator.point(5 * x - 2 * y, 7)
             >>> m.evaluate_objective_function(g)
-            3/7
+            Fraction(3, 7)
             >>> z = Variable(2)
             >>> g = Generator.point(5 * x - 2 * z, 7)
             >>> m.evaluate_objective_function(g)
@@ -1637,30 +1611,34 @@ cdef class Polyhedron(_mutable_or_immutable):
             >>> from ppl import Variable, C_Polyhedron, NNC_Polyhedron, Constraint_System, Linear_Expression
             >>> x = Variable(0);  y = Variable(1)
             >>> cs = Constraint_System()
-            >>> cs.insert( x>=0 )
-            >>> cs.insert( y>=0 )
-            >>> cs.insert( 3*x+5*y<=10 )
+            >>> cs.insert(x >= 0)
+            >>> cs.insert(y >= 0)
+            >>> cs.insert(3*x+5*y <= 10)
             >>> p = C_Polyhedron(cs)
-            >>> p.maximize( x+y )
-            {'bounded': True,
-             'generator': point(10/3, 0/3),
-             'maximum': True,
-             'sup_d': 3,
-             'sup_n': 10}
+            >>> pm = p.maximize(x+y)
+            >>> for key in sorted(pm):
+            ...     print key, pm[key]
+            bounded True
+            generator point(10/3, 0/3)
+            maximum True
+            sup_d 3
+            sup_n 10
 
         Unbounded case::
 
             >>> cs = Constraint_System()
-            >>> cs.insert( x>0 )
+            >>> cs.insert(x > 0)
             >>> p = NNC_Polyhedron(cs)
-            >>> p.maximize( +x )
+            >>> p.maximize(+x)
             {'bounded': False}
-            >>> p.maximize( -x )
-            {'bounded': True,
-             'generator': closure_point(0/1),
-             'maximum': False,
-             'sup_d': 1,
-             'sup_n': 0}
+            >>> pm = p.maximize(-x)
+            >>> for key in pm:
+            ...     print key, pm[key]
+            bounded True
+            generator closure_point(0/1)
+            maximum False
+            sup_d 1
+            sup_n 0
         """
         cdef PPL_Coefficient sup_n
         cdef PPL_Coefficient sup_d
@@ -1717,24 +1695,28 @@ cdef class Polyhedron(_mutable_or_immutable):
         >>> cs.insert( y>=0 )
         >>> cs.insert( 3*x+5*y<=10 )
         >>> p = C_Polyhedron(cs)
-        >>> p.minimize( x+y )
-        {'bounded': True,
-         'generator': point(0/1, 0/1),
-         'inf_d': 1,
-         'inf_n': 0,
-         'minimum': True}
+        >>> pm = p.minimize( x+y )
+        >>> for key in sorted(pm):
+        ...     print key, pm[key]
+        bounded True
+        generator point(0/1, 0/1)
+        inf_d 1
+        inf_n 0
+        minimum True
 
         Unbounded case:
 
         >>> cs = Constraint_System()
-        >>> cs.insert( x>0 )
+        >>> cs.insert(x > 0)
         >>> p = NNC_Polyhedron(cs)
-        >>> p.minimize( +x )
-        {'bounded': True,
-         'generator': closure_point(0/1),
-         'inf_d': 1,
-         'inf_n': 0,
-         'minimum': False}
+        >>> pm = p.minimize(+x)
+        >>> for key in sorted(pm):
+        ...    print key, pm[key]
+        bounded True
+        generator closure_point(0/1)
+        inf_d 1
+        inf_n 0
+        minimum False
         >>> p.minimize( -x )
         {'bounded': False}
         """
@@ -2602,9 +2584,9 @@ cdef class Polyhedron(_mutable_or_immutable):
         >>> cmd += 'p = C_Polyhedron(3*x+2*y==1)\n'
         >>> cmd += 'p.minimized_generators()\n'
         >>> cmd += 'p.ascii_dump()\n'
-        >>> TODO EXECUTE
-        >>> (out, err, ret) = sys.EXECUTE(['python', '-c', sage_cmd], timeout=100)
-        >>> print err  # long time
+        >>> import subprocess
+        >>> import sys
+        >>> out = subprocess.call(['python', '-c', cmd], stderr=subprocess.STDOUT)
         space_dim 2
         -ZE -EM  +CM +GM  +CS +GS  -CP -GP  -SC +SG
         con_sys (up-to-date)
@@ -2628,6 +2610,8 @@ cdef class Polyhedron(_mutable_or_immutable):
         2 x 2
         0 0
         0 1
+        >>> print out
+        0
         """
         sig_on()
         self.thisptr.ascii_dump()
@@ -3626,14 +3610,14 @@ cdef class Linear_Expression(object):
 
         Examples:
 
-        >>> sage_cmd  = 'from ppl import Linear_Expression, Variable\n'
-        >>> sage_cmd += 'x = Variable(0)\n'
-        >>> sage_cmd += 'y = Variable(1)\n'
-        >>> sage_cmd += 'e = 3*x+2*y+1\n'
-        >>> sage_cmd += 'e.ascii_dump()\n'
-        >>> from sage.tests.cmdline import test_executable
-        >>> (out, err, ret) = test_executable(['sage', '-c', sage_cmd], timeout=100)  # long time, indirect doctest
-        >>> print err  # long time
+        >>> cmd  = 'from ppl import Linear_Expression, Variable\n'
+        >>> cmd += 'x = Variable(0)\n'
+        >>> cmd += 'y = Variable(1)\n'
+        >>> cmd += 'e = 3*x+2*y+1\n'
+        >>> cmd += 'e.ascii_dump()\n'
+        >>> import subprocess
+        >>> import sys
+        >>> subprocess.call(['python', '-c', cmd], stderr=subprocess.STDOUT)
         size 3 1 3 2
         """
         self.thisptr.ascii_dump()
@@ -4456,9 +4440,9 @@ cdef class Generator(object):
         >>> cmd += 'y = Variable(1)\n'
         >>> cmd += 'p = point(3*x+2*y)\n'
         >>> cmd += 'p.ascii_dump()\n'
-        >>> TODO
-        >>> (out, err, ret) = TODO(['python', '-c', sage_cmd], timeout=100)  # long time, indirect doctest
-        >>> print err  # long time
+        >>> import subprocess
+        >>> import sys
+        >>> subprocess.call(['python', '-c', cmd], stderr=subprocess.STDOUT)
         size 3 1 3 2 P (C)
         """
         self.thisptr.ascii_dump()
@@ -4671,18 +4655,18 @@ cdef class Generator_System(_mutable_or_immutable):
 
         Examples:
 
-            >>> sage_cmd  = 'from ppl import Generator_System, point, Variable\n'
-            >>> sage_cmd += 'x = Variable(0)\n'
-            >>> sage_cmd += 'y = Variable(1)\n'
-            >>> sage_cmd += 'gs = Generator_System( point(3*x+2*y+1) )\n'
-            >>> sage_cmd += 'gs.ascii_dump()\n'
-            >>> from sage.tests.cmdline import test_executable
-            >>> (out, err, ret) = test_executable(['sage', '-c', sage_cmd], timeout=100)  # long time, indirect doctest
-            >>> print err  # long time
-            topology NECESSARILY_CLOSED
-            1 x 2 SPARSE (sorted)
-            index_first_pending 1
-            size 3 1 3 2 P (C)
+        >>> cmd  = 'from ppl import Generator_System, point, Variable\n'
+        >>> cmd += 'x = Variable(0)\n'
+        >>> cmd += 'y = Variable(1)\n'
+        >>> cmd += 'gs = Generator_System( point(3*x+2*y+1) )\n'
+        >>> cmd += 'gs.ascii_dump()\n'
+        >>> import subprocess
+        >>> import sys
+        >>> subprocess.call(['python', '-c', cmd], stderr=subprocess.STDOUT)
+        topology NECESSARILY_CLOSED
+        1 x 2 SPARSE (sorted)
+        index_first_pending 1
+        size 3 1 3 2 P (C)
         """
         self.thisptr.ascii_dump()
 
@@ -4692,12 +4676,12 @@ cdef class Generator_System(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import Variable, Generator_System, point
-            >>> x = Variable(0)
-            >>> y = Variable(1)
-            >>> gs = Generator_System( point(3*x+2*y+1) )
-            >>> gs.OK()
-            True
+        >>> from ppl import Variable, Generator_System, point
+        >>> x = Variable(0)
+        >>> y = Variable(1)
+        >>> gs = Generator_System( point(3*x+2*y+1) )
+        >>> gs.OK()
+        True
         """
         return self.thisptr.OK()
 
@@ -4705,15 +4689,15 @@ cdef class Generator_System(_mutable_or_immutable):
         """
         Return the number of generators in the system.
 
-            >>> from ppl import Variable, Generator_System, point
-            >>> x = Variable(0)
-            >>> y = Variable(1)
-            >>> gs = Generator_System()
-            >>> gs.insert(point(3*x+2*y))
-            >>> gs.insert(point(x))
-            >>> gs.insert(point(y))
-            >>> len(gs)
-            3
+        >>> from ppl import Variable, Generator_System, point
+        >>> x = Variable(0)
+        >>> y = Variable(1)
+        >>> gs = Generator_System()
+        >>> gs.insert(point(3*x+2*y))
+        >>> gs.insert(point(x))
+        >>> gs.insert(point(y))
+        >>> len(gs)
+        3
         """
         return sum([1 for g in self])
 
@@ -4723,12 +4707,12 @@ cdef class Generator_System(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import Generator_System, Variable, point
-            >>> x = Variable(0)
-            >>> gs = Generator_System(point(3*x))
-            >>> iter = gs.__iter__()
-            >>> next(iter)
-            point(3/1)
+        >>> from ppl import Generator_System, Variable, point
+        >>> x = Variable(0)
+        >>> gs = Generator_System(point(3*x))
+        >>> iter = gs.__iter__()
+        >>> next(iter)
+        point(3/1)
         """
         return Generator_System_iterator(self)
 
@@ -4750,17 +4734,17 @@ cdef class Generator_System(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import Generator_System, Variable, point
-            >>> x = Variable(0)
-            >>> gs = Generator_System()
-            >>> gs.insert(point(3*x))
-            >>> gs.insert(point(-2*x))
-            >>> gs
-            Generator_System {point(3/1), point(-2/1)}
-            >>> gs[0]
-            point(3/1)
-            >>> gs[1]
-            point(-2/1)
+        >>> from ppl import Generator_System, Variable, point
+        >>> x = Variable(0)
+        >>> gs = Generator_System()
+        >>> gs.insert(point(3*x))
+        >>> gs.insert(point(-2*x))
+        >>> gs
+        Generator_System {point(3/1), point(-2/1)}
+        >>> gs[0]
+        point(3/1)
+        >>> gs[1]
+        point(-2/1)
         """
         if k < 0:
             raise IndexError('index must be nonnegative')
@@ -4782,13 +4766,13 @@ cdef class Generator_System(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import Generator_System, Variable, point, ray
-            >>> x = Variable(0)
-            >>> y = Variable(1)
-            >>> gs = Generator_System(point(3*x+2*y+1))
-            >>> gs.insert(ray(x))
-            >>> gs.__repr__()
-            'Generator_System {point(3/1, 2/1), ray(1, 0)}'
+        >>> from ppl import Generator_System, Variable, point, ray
+        >>> x = Variable(0)
+        >>> y = Variable(1)
+        >>> gs = Generator_System(point(3*x+2*y+1))
+        >>> gs.insert(ray(x))
+        >>> gs.__repr__()
+        'Generator_System {point(3/1, 2/1), ray(1, 0)}'
         """
         s = 'Generator_System {'
         s += ', '.join([ repr(g) for g in self ])
@@ -4801,13 +4785,13 @@ cdef class Generator_System(_mutable_or_immutable):
 
         Tests:
 
-            >>> from ppl import Generator_System, Variable, point, ray
-            >>> x = Variable(0)
-            >>> y = Variable(1)
-            >>> gs = Generator_System((point(3*x+2*y+1), ray(x)));  gs
-            Generator_System {point(3/1, 2/1), ray(1, 0)}
-            >>> loads(dumps(gs))
-            Generator_System {point(3/1, 2/1), ray(1, 0)}
+        >>> from ppl import Generator_System, Variable, point, ray
+        >>> x = Variable(0)
+        >>> y = Variable(1)
+        >>> gs = Generator_System((point(3*x+2*y+1), ray(x)));  gs
+        Generator_System {point(3/1, 2/1), ray(1, 0)}
+        >>> loads(dumps(gs))
+        Generator_System {point(3/1, 2/1), ray(1, 0)}
         """
         return (Generator_System, (tuple(self), ))
 
@@ -4824,17 +4808,17 @@ cdef class Generator_System_iterator(object):
 
     Examples:
 
-        >>> from ppl import Generator_System, Variable, line, ray, point, closure_point, Generator_System_iterator
-        >>> x = Variable(0)
-        >>> y = Variable(1)
-        >>> gs = Generator_System( line(5*x-2*y) )
-        >>> gs.insert( ray(6*x-3*y) )
-        >>> gs.insert( point(2*x-7*y, 5) )
-        >>> gs.insert( closure_point(9*x-1*y, 2) )
-        >>> next(Generator_System_iterator(gs))
-        line(5, -2)
-        >>> list(gs)
-        [line(5, -2), ray(2, -1), point(2/5, -7/5), closure_point(9/2, -1/2)]
+    >>> from ppl import Generator_System, Variable, line, ray, point, closure_point, Generator_System_iterator
+    >>> x = Variable(0)
+    >>> y = Variable(1)
+    >>> gs = Generator_System( line(5*x-2*y) )
+    >>> gs.insert( ray(6*x-3*y) )
+    >>> gs.insert( point(2*x-7*y, 5) )
+    >>> gs.insert( closure_point(9*x-1*y, 2) )
+    >>> next(Generator_System_iterator(gs))
+    line(5, -2)
+    >>> list(gs)
+    [line(5, -2), ray(2, -1), point(2/5, -7/5), closure_point(9/2, -1/2)]
     """
     def __cinit__(self, Generator_System gs):
         r"""
@@ -4842,8 +4826,8 @@ cdef class Generator_System_iterator(object):
 
         Tests:
 
-            >>> from ppl import Generator_System, Generator_System_iterator
-            >>> iter = Generator_System_iterator(Generator_System())   # indirect doctest
+        >>> from ppl import Generator_System, Generator_System_iterator
+        >>> iter = Generator_System_iterator(Generator_System())   # indirect doctest
         """
         self.gs = gs
         self.gsi_ptr = init_gs_iterator(gs.thisptr[0])
@@ -4864,12 +4848,12 @@ cdef class Generator_System_iterator(object):
 
         Examples:
 
-            >>> from ppl import Generator_System, Variable, point, Generator_System_iterator
-            >>> x = Variable(0)
-            >>> y = Variable(1)
-            >>> gs = Generator_System( point(5*x-2*y) )
-            >>> next(Generator_System_iterator(gs))
-            point(5/1, -2/1)
+        >>> from ppl import Generator_System, Variable, point, Generator_System_iterator
+        >>> x = Variable(0)
+        >>> y = Variable(1)
+        >>> gs = Generator_System( point(5*x-2*y) )
+        >>> next(Generator_System_iterator(gs))
+        point(5/1, -2/1)
         """
         if is_end_gs_iterator((<Generator_System>self.gs).thisptr[0], self.gsi_ptr):
             raise StopIteration
@@ -5317,15 +5301,15 @@ cdef class Constraint(object):
 
         Examples:
 
-            >>> sage_cmd  = 'from ppl import Linear_Expression, Variable\n'
-            >>> sage_cmd += 'x = Variable(0)\n'
-            >>> sage_cmd += 'y = Variable(1)\n'
-            >>> sage_cmd += 'e = (3*x+2*y+1 > 0)\n'
-            >>> sage_cmd += 'e.ascii_dump()\n'
-            >>> from sage.tests.cmdline import test_executable
-            >>> (out, err, ret) = test_executable(['sage', '-c', sage_cmd], timeout=100)  # long time, indirect doctest
-            >>> print err  # long time
-            size 4 1 3 2 -1 > (NNC)
+        >>> cmd  = 'from ppl import Linear_Expression, Variable\n'
+        >>> cmd += 'x = Variable(0)\n'
+        >>> cmd += 'y = Variable(1)\n'
+        >>> cmd += 'e = (3*x+2*y+1 > 0)\n'
+        >>> cmd += 'e.ascii_dump()\n'
+        >>> import subprocess
+        >>> import sys
+        >>> subprocess.call(['python', '-c', cmd], stderr=subprocess.STDOUT)
+        size 4 1 3 2 -1 > (NNC)
         """
         self.thisptr.ascii_dump()
 
@@ -5653,9 +5637,9 @@ cdef class Constraint_System(object):
         >>> cmd += 'y = Variable(1)\n'
         >>> cmd += 'cs = Constraint_System( 3*x > 2*y+1 )\n'
         >>> cmd += 'cs.ascii_dump()\n'
-        >>> TODO: from sage.tests.cmdline import test_executable
-        >>> (out, err, ret) = test_executable(['python', '-c', sage_cmd], timeout=100)  # long time, indirect doctest
-        >>> print err  # long time
+        >>> import subprocess
+        >>> import sys
+        >>> subprocess.call(['python', '-c', cmd], stderr=subprocess.STDOUT)
         topology NOT_NECESSARILY_CLOSED
         1 x 2 SPARSE (sorted)
         index_first_pending 1
@@ -5966,11 +5950,11 @@ cdef class Poly_Gen_Relation(object):
 
         Examples:
 
-            >>> sage_cmd  = 'from ppl import Poly_Gen_Relation\n'
-            >>> sage_cmd += 'Poly_Gen_Relation.nothing().ascii_dump()\n'
-            >>> from sage.tests.cmdline import test_executable
-            >>> (out, err, ret) = test_executable(['sage', '-c', sage_cmd], timeout=100)  # long time, indirect doctest
-            >>> print err  # long time
+            >>> cmd  = 'from ppl import Poly_Gen_Relation\n'
+            >>> cmd += 'Poly_Gen_Relation.nothing().ascii_dump()\n'
+            >>> import subprocess
+            >>> import sys
+            >>> subprocess.call(['python', '-c', cmd], stderr=subprocess.STDOUT)
             NOTHING
         """
         self.thisptr.ascii_dump()
@@ -6048,17 +6032,15 @@ cdef class Poly_Con_Relation(object):
         >>> rels.append(Poly_Con_Relation.saturates())
         >>> rels
         [nothing, is_disjoint, strictly_intersects, is_included, saturates]
-        >>> from sage.matrix.constructor import matrix
-        >>> m = matrix(5,5)
         >>> for i, rel_i in enumerate(rels):
         ...       for j, rel_j in enumerate(rels):
-        ...           m[i,j] = rel_i.implies(rel_j)
-        >>> m
-        [1 0 0 0 0]
-        [1 1 0 0 0]
-        [1 0 1 0 0]
-        [1 0 0 1 0]
-        [1 0 0 0 1]
+        ...           print int(rel_i.implies(rel_j)),
+        ...       print
+        1 0 0 0 0
+        1 1 0 0 0
+        1 0 1 0 0
+        1 0 0 1 0
+        1 0 0 0 1
     """
     def __cinit__(self, do_not_construct_manually=False):
         """
@@ -6197,11 +6179,11 @@ cdef class Poly_Con_Relation(object):
 
         Examples:
 
-        >>> sage_cmd  = 'from ppl import Poly_Con_Relation\n'
-        >>> sage_cmd += 'Poly_Con_Relation.nothing().ascii_dump()\n'
-        >>> from sage.tests.cmdline import test_executable
-        >>> (out, err, ret) = test_executable(['sage', '-c', sage_cmd], timeout=100)  # long time, indirect doctest
-        >>> print err  # long time
+        >>> cmd  = 'from ppl import Poly_Con_Relation\n'
+        >>> cmd += 'Poly_Con_Relation.nothing().ascii_dump()\n'
+        >>> import subprocess
+        >>> import sys
+        >>> subprocess.call(['python', '-c', cmd], stderr=subprocess.STDOUT)
         NOTHING
         """
         self.thisptr.ascii_dump()
