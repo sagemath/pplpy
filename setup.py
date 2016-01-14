@@ -5,7 +5,10 @@ from Cython.Build import cythonize
 
 setup(
     name='ppl',
-    packages=['ppl'],
+    version='0.0',
+    description='PPL wrapper',
+    author='Vincent Delecroix',
+    author_email='vincent.delecroix@labri.fr',
     ext_modules=[
         Extension('ppl',
             sources=['src/ppl.pyx', 'src/ppl_shim.cc'],
