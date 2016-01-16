@@ -1,0 +1,3 @@
+include *.txt
+include doc/build/text/*.txt
+include doc/build/html/*.html
