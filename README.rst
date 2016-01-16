@@ -13,12 +13,12 @@ The names of objects and methods are the same as in the library::
     x = ppl.Variable(0)
     y = ppl.Variable(1)
     z = ppl.Variable(2)
-    cs = Constraint_System()
+    cs = ppl.Constraint_System()
     cs.insert(x >= 0)
     cs.insert(y >= 0)
     cs.insert(z >= 0)
     cs.insert(x + y + z == 1)
-    poly = C_Polyhedron(cs)
+    poly = ppl.C_Polyhedron(cs)
 
 Note that in order to compile this package you need the ppl libraries and
 header files. 
