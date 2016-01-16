@@ -1,6 +1,7 @@
 build/*
 ppl.so
 pylong.so
+sphinx-doc/*
 src/ppl.c
 src/ppl.cpp
 src/pylong.c
