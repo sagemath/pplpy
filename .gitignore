@@ -1,3 +1,4 @@
+.pypirc
 build/*
 ppl.so
 pylong.so
