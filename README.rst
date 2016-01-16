@@ -32,4 +32,6 @@ Find the latest version on github: https://github.com/videlec/pplpy/
 Requirements
 ------------
 
-PPL libraries with headers
+- PPL libraries with headers
+
+- `Cython <http://cython.org>`_

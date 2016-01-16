@@ -29,9 +29,11 @@ setup(
         ],
     classifiers=[
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+        "Programming Language :: C++",
         "Programming Language :: Python",
         "Development Status :: 3 - Alpha",
         "Operating System :: Unix",
+        "Intended Audience :: Science/Research",
     ],
     keywords=['polyhedron', 'polytope', 'convex', 'mathematics', 'ppl', 'milp', 'linear-programming'],
     cmdclass  = {'build_ext': build_ext}
