@@ -5,12 +5,14 @@ from Cython.Distutils import build_ext
 from Cython.Build import cythonize
 
 setup(
-    name='ppl',
+    name='pplpy',
     version='0.1',
     description='Python PPL wrapper',
     long_description=open("README.txt").read(),
     author='Vincent Delecroix',
     author_email='vincent.delecroix@labri.fr',
+    url = 'https://github.com/videlec/pplpy',
+    download_url = 'https://github.com/videlec/pplpy/tarball/0.1',
     license='GPL v3',
     platforms=['any'],
     ext_modules=[
