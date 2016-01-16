@@ -1,15 +1,18 @@
 #!/usr/bin/env python
-from distutils.core import setup
-from distutils.extension import Extension
+from setuptools import setup
+from setuptools.extension import Extension
 from Cython.Distutils import build_ext
 from Cython.Build import cythonize
 
 setup(
     name='ppl',
-    version='0.0',
-    description='PPL wrapper',
+    version='0.1',
+    description='Python PPL wrapper',
+    long_description=open("README.txt").read(),
     author='Vincent Delecroix',
     author_email='vincent.delecroix@labri.fr',
+    license='GPL v3',
+    platforms=['any'],
     ext_modules=[
         Extension('ppl',
             sources=['src/ppl.pyx', 'src/ppl_shim.cc'],
@@ -21,5 +24,12 @@ setup(
             libraries=['gmp'],
             language='c'),
         ],
+    classifiers=[
+        "License :: OSI Approved :: GNU General Public License (GPL) version 3",
+        "Programming Language :: Python",
+        "Development Status :: 0 - Beta",
+        "Operating System :: Unix",
+    ],
+    keywords=['polyhedron', 'polytope', 'convex', 'mathematics', 'ppl', 'milp', 'linear-programming'],
     cmdclass  = {'build_ext': build_ext}
 )
