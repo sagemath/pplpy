@@ -28,6 +28,14 @@ The names of objects and methods are the same as in the library:
     >>> poly.minimized_generators()
     Generator_System {point(1/1, 0/1, 0/1), point(0/1, 1/1, 0/1), point(0/1, 0/1, 1/1)}
 
+Installation
+------------
+
+The project is available at `Python Package Index <https://pypi.python.org/pypi/pplpy/>`_ and
+can be installed with pip
+
+    $ pip install pplpy
+
 Source
 ------
 
