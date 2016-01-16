@@ -1,10 +1,13 @@
-==================
 PPL Python wrapper
 ==================
 
-This Python package provides a wrapper to the C++ [Parma Polyhedra Library
-(PPL)](http://bugseng.com/products/ppl/). The names of objects and methods
-are the same as in the library:
+This Python package provides a wrapper to the C++ `Parma Polyhedra Library
+(PPL) <http://bugseng.com/products/ppl/>`_.
+
+How it works
+------------
+
+The names of objects and methods are the same as in the library::
 
     import ppl
     x = ppl.Variable(0)
@@ -19,3 +22,14 @@ are the same as in the library:
 
 Note that in order to compile this package you need the ppl libraries and
 header files. 
+
+Source
+------
+
+Find the latest version on github: https://github.com/videlec/pplpy/
+
+
+Requirements
+------------
+
+PPL libraries with headers
