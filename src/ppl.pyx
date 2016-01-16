@@ -3,10 +3,9 @@
 r"""
 Cython wrapper for the Parma Polyhedra Library (PPL)
 
-The Parma Polyhedra Library (PPL) is a library for polyhedral
-computations over `\QQ`. This interface tries to reproduce the C++ API
-as faithfully as possible in Cython/Sage. For example, the following
-C++ excerpt:
+The Parma Polyhedra Library (PPL) is a library for polyhedral computations over
+`\QQ`. This interface tries to reproduce the C++ API as faithfully as possible
+in Python. For example, the following C++ excerpt:
 
 .. code-block:: c++
 
@@ -1228,7 +1227,7 @@ cdef class Polyhedron(_mutable_or_immutable):
             >>> p.relation_with( x+y<1 )
             is_disjoint, saturates
 
-        In a Sage program you will usually use :meth:`relation_with`
+        In a Python program you will usually use :meth:`relation_with`
         together with :meth:`~ppl.Poly_Gen_Relation.implies`
         or :meth:`~ppl.Poly_Con_Relation.implies`, for
         example::

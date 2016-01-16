@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Welcome to pplpy’s documentation! &mdash; pplpy 0.0 documentation</title>
+    <title>pplpy 0.3 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.0',
+        VERSION:     '0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,19 +24,13 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="pplpy 0.0 documentation" href="#" /> 
+    <link rel="top" title="None" href="index.html#document-index" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li><a href="#">pplpy 0.0 documentation</a> &raquo;</li> 
+        <li><a href="index.html#document-index">pplpy 0.3 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -45,18 +39,12 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="welcome-to-pplpy-s-documentation">
-<h1>Welcome to pplpy&#8217;s documentation!<a class="headerlink" href="#welcome-to-pplpy-s-documentation" title="Permalink to this headline">¶</a></h1>
-<p>Contents:</p>
-<div class="toctree-wrapper compound">
-<ul class="simple">
-</ul>
-</div>
-<span class="target" id="module-ppl"></span><p>Cython wrapper for the Parma Polyhedra Library (PPL)</p>
-<p>The Parma Polyhedra Library (PPL) is a library for polyhedral
-computations over <cite>QQ</cite>. This interface tries to reproduce the C++ API
-as faithfully as possible in Cython/Sage. For example, the following
-C++ excerpt:</p>
+  <div class="section" id="module-ppl">
+<span id="welcome-to-pplpy-s-documentation"></span><h1>Welcome to pplpy&#8217;s documentation!<a class="headerlink" href="#module-ppl" title="Permalink to this headline">¶</a></h1>
+<p>Cython wrapper for the Parma Polyhedra Library (PPL)</p>
+<p>The Parma Polyhedra Library (PPL) is a library for polyhedral computations over
+<cite>QQ</cite>. This interface tries to reproduce the C++ API as faithfully as possible
+in Python. For example, the following C++ excerpt:</p>
 <div class="highlight-c++"><div class="highlight"><pre><span class="n">Variable</span> <span class="nf">x</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 <span class="n">Variable</span> <span class="nf">y</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
 <span class="n">Constraint_System</span> <span class="n">cs</span><span class="p">;</span>
@@ -3668,7 +3656,7 @@ according to the type of the input.</p>
 <span class="go">is_disjoint, saturates</span>
 </pre></div>
 </div>
-<p>In a Sage program you will usually use <a class="reference internal" href="#ppl.Polyhedron.relation_with" title="ppl.Polyhedron.relation_with"><tt class="xref py py-meth docutils literal"><span class="pre">relation_with()</span></tt></a>
+<p>In a Python program you will usually use <a class="reference internal" href="#ppl.Polyhedron.relation_with" title="ppl.Polyhedron.relation_with"><tt class="xref py py-meth docutils literal"><span class="pre">relation_with()</span></tt></a>
 together with <a class="reference internal" href="#ppl.Poly_Gen_Relation.implies" title="ppl.Poly_Gen_Relation.implies"><tt class="xref py py-meth docutils literal"><span class="pre">implies()</span></tt></a>
 or <a class="reference internal" href="#ppl.Poly_Con_Relation.implies" title="ppl.Poly_Con_Relation.implies"><tt class="xref py py-meth docutils literal"><span class="pre">implies()</span></tt></a>, for
 example:</p>
@@ -4177,14 +4165,6 @@ convertible to it (<a class="reference internal" href="#ppl.Variable" title="ppl
 </dd></dl>
 
 </div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
-<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
-<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
-</ul>
-</div>
 
 
           </div>
@@ -4192,30 +4172,6 @@ convertible to it (<a class="reference internal" href="#ppl.Variable" title="ppl
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="#">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Welcome to pplpy&#8217;s documentation!</a></li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
-</ul>
-
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/index.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -4223,13 +4179,7 @@ convertible to it (<a class="reference internal" href="#ppl.Variable" title="ppl
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li><a href="#">pplpy 0.0 documentation</a> &raquo;</li> 
+        <li><a href="index.html#document-index">pplpy 0.3 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
