@@ -12,7 +12,7 @@ setup(
     author='Vincent Delecroix',
     author_email='vincent.delecroix@labri.fr',
     url = 'https://github.com/videlec/pplpy',
-    download_url = 'https://github.com/videlec/pplpy/tarball/0.1',
+    download_url = 'https://github.com/videlec/pplpy/archive/0.1.tar.gz',
     license='GPL v3',
     platforms=['any'],
     ext_modules=[
