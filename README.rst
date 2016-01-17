@@ -4,9 +4,8 @@ PPL Python wrapper
 This Python package provides a wrapper to the C++ `Parma Polyhedra Library
 (PPL) <http://bugseng.com/products/ppl/>`_.
 
-The whole package is essentially a copy/paste of the corresponding file
-from the `Sage <http://sagemath.org>`_ software. Though, the pplpy package
-does not need Sage and can be used directly from Python.
+The whole package started as a fork of a tiny part of the `Sage
+<http://sagemath.org>`_ software.
 
 How it works
 ------------
@@ -32,7 +31,7 @@ Installation
 ------------
 
 The project is available at `Python Package Index <https://pypi.python.org/pypi/pplpy/>`_ and
-can be installed with pip
+can be installed with pip::
 
     $ pip install pplpy
 
@@ -46,6 +45,12 @@ https://github.com/videlec/pplpy/
 Requirements
 ------------
 
-- PPL libraries with headers
+- PPL library with headers files
+
+- `gmp <https://gmplib.org/>`_
 
 - `Cython <http://cython.org>`_
+
+On Debian/Ubuntu systems these can be installed with::
+
+    $ sudo apt-get install cython libgmp-dev libppl-dev

@@ -6,13 +6,13 @@ from Cython.Build import cythonize
 
 setup(
     name='pplpy',
-    version='0.4',
+    version='0.5.beta',
     description='Python PPL wrapper',
     long_description=open("README.rst").read(),
     author='Vincent Delecroix',
     author_email='vincent.delecroix@labri.fr',
     url = 'https://github.com/videlec/pplpy',
-    download_url = 'https://github.com/videlec/pplpy/archive/0.1.tar.gz',
+    download_url = 'https://github.com/videlec/pplpy/archive/0.4.tar.gz',
     license='GPL v3',
     platforms=['any'],
     ext_modules=[

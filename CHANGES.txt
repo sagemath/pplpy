@@ -1,3 +1,4 @@
+v0.4, 2016/01/16 -- iterator for MIP_Problem
 v0.3, 2016/01/16 -- Reworked documentation
 v0.2, 2016/01/16 -- Fix build
 v0.1, 2016/01/16 -- Initial release
