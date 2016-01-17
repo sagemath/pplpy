@@ -1,8 +1,10 @@
 build/*
 ppl.so
 pylong.so
-sphinx-doc/*
 src/ppl.c
 src/ppl.cpp
 src/pylong.c
 *.swp
+dist/
+pplpy.egg-info/
+sphinx-doc/build/
