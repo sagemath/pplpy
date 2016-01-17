@@ -471,24 +471,24 @@ cdef class MIP_Problem(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import Variable, Constraint_System, MIP_Problem
-            >>> x = Variable(0)
-            >>> y = Variable(1)
-            >>> cs = Constraint_System()
-            >>> cs.insert( x >= 0 )
-            >>> cs.insert( y >= 0 )
-            >>> cs.insert( 3 * x + 5 * y <= 10 )
-            >>> m = MIP_Problem(2, cs, x + y)
-            >>> m.optimal_value()
-            10/3
-            >>> cs = Constraint_System()
-            >>> cs.insert( x >= 0 )
-            >>> m = MIP_Problem(1, cs, x + x )
-            >>> m.optimal_value()
-            Traceback (most recent call last):
-            ...
-            ValueError: PPL::MIP_Problem::optimizing_point():
-            *this does not have an optimizing point.
+        >>> from ppl import Variable, Constraint_System, MIP_Problem
+        >>> x = Variable(0)
+        >>> y = Variable(1)
+        >>> cs = Constraint_System()
+        >>> cs.insert( x >= 0 )
+        >>> cs.insert( y >= 0 )
+        >>> cs.insert( 3 * x + 5 * y <= 10 )
+        >>> m = MIP_Problem(2, cs, x + y)
+        >>> m.optimal_value()
+        Fraction(10, 3)
+        >>> cs = Constraint_System()
+        >>> cs.insert( x >= 0 )
+        >>> m = MIP_Problem(1, cs, x + x )
+        >>> m.optimal_value()
+        Traceback (most recent call last):
+        ...
+        ValueError: PPL::MIP_Problem::optimizing_point():
+        *this does not have an optimizing point.
         """
         cdef PPL_Coefficient sup_n
         cdef PPL_Coefficient sup_d
@@ -507,16 +507,16 @@ cdef class MIP_Problem(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import Variable, Constraint_System, MIP_Problem
-            >>> x = Variable(0)
-            >>> y = Variable(1)
-            >>> cs = Constraint_System()
-            >>> cs.insert( x >= 0)
-            >>> cs.insert( y >= 0 )
-            >>> cs.insert( 3 * x + 5 * y <= 10 )
-            >>> m = MIP_Problem(2, cs, x + y)
-            >>> m.space_dimension()
-            2
+        >>> from ppl import Variable, Constraint_System, MIP_Problem
+        >>> x = Variable(0)
+        >>> y = Variable(1)
+        >>> cs = Constraint_System()
+        >>> cs.insert( x >= 0)
+        >>> cs.insert( y >= 0 )
+        >>> cs.insert( 3 * x + 5 * y <= 10 )
+        >>> m = MIP_Problem(2, cs, x + y)
+        >>> m.space_dimension()
+        2
         """
         return self.thisptr.space_dimension()
 
@@ -526,16 +526,16 @@ cdef class MIP_Problem(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import Variable, Constraint_System, MIP_Problem
-            >>> x = Variable(0)
-            >>> y = Variable(1)
-            >>> cs = Constraint_System()
-            >>> cs.insert( x >= 0)
-            >>> cs.insert( y >= 0 )
-            >>> cs.insert( 3 * x + 5 * y <= 10 )
-            >>> m = MIP_Problem(2, cs, x + y)
-            >>> m.objective_function()
-            x0+x1
+        >>> from ppl import Variable, Constraint_System, MIP_Problem
+        >>> x = Variable(0)
+        >>> y = Variable(1)
+        >>> cs = Constraint_System()
+        >>> cs.insert( x >= 0)
+        >>> cs.insert( y >= 0 )
+        >>> cs.insert( 3 * x + 5 * y <= 10 )
+        >>> m = MIP_Problem(2, cs, x + y)
+        >>> m.objective_function()
+        x0+x1
         """
         rc = Linear_Expression()
         rc.thisptr[0] = self.thisptr.objective_function()
@@ -547,19 +547,19 @@ cdef class MIP_Problem(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import Variable, Constraint_System, MIP_Problem
-            >>> x = Variable(0)
-            >>> y = Variable(1)
-            >>> cs = Constraint_System()
-            >>> cs.insert( x >= 0)
-            >>> cs.insert( y >= 0 )
-            >>> cs.insert( 3 * x + 5 * y <= 10 )
-            >>> m = MIP_Problem(2, cs, x + y)
-            >>> m.objective_function()
-            x0+x1
-            >>> m.clear()
-            >>> m.objective_function()
-            0
+        >>> from ppl import Variable, Constraint_System, MIP_Problem
+        >>> x = Variable(0)
+        >>> y = Variable(1)
+        >>> cs = Constraint_System()
+        >>> cs.insert( x >= 0)
+        >>> cs.insert( y >= 0 )
+        >>> cs.insert( 3 * x + 5 * y <= 10 )
+        >>> m = MIP_Problem(2, cs, x + y)
+        >>> m.objective_function()
+        x0+x1
+        >>> m.clear()
+        >>> m.objective_function()
+        0
         """
         self.thisptr.clear()
 
@@ -569,17 +569,17 @@ cdef class MIP_Problem(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import Variable, Constraint_System, MIP_Problem
-            >>> x = Variable(0)
-            >>> y = Variable(1)
-            >>> cs = Constraint_System()
-            >>> cs.insert( x >= 0)
-            >>> cs.insert( y >= 0 )
-            >>> cs.insert( 3 * x + 5 * y <= 10 )
-            >>> m = MIP_Problem(2, cs, x + y)
-            >>> m.add_space_dimensions_and_embed(5)
-            >>> m.space_dimension()
-            7
+        >>> from ppl import Variable, Constraint_System, MIP_Problem
+        >>> x = Variable(0)
+        >>> y = Variable(1)
+        >>> cs = Constraint_System()
+        >>> cs.insert( x >= 0)
+        >>> cs.insert( y >= 0 )
+        >>> cs.insert( 3 * x + 5 * y <= 10 )
+        >>> m = MIP_Problem(2, cs, x + y)
+        >>> m.add_space_dimensions_and_embed(5)
+        >>> m.space_dimension()
+        7
         """
         self.assert_mutable("The MIP_Problem is not mutable!");
         sig_on()
@@ -653,28 +653,28 @@ cdef class MIP_Problem(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import Variable, Constraint_System, MIP_Problem
-            >>> x = Variable(0)
-            >>> y = Variable(1)
-            >>> cs = Constraint_System()
-            >>> cs.insert(x >= 0)
-            >>> cs.insert(y >= 0)
-            >>> cs.insert(3 * x + 5 * y <= 10)
-            >>> m = MIP_Problem(2)
-            >>> m.set_objective_function(x + y)
-            >>> m.add_constraints(cs)
-            >>> m.optimal_value()
-            Fraction(10, 3)
+        >>> from ppl import Variable, Constraint_System, MIP_Problem
+        >>> x = Variable(0)
+        >>> y = Variable(1)
+        >>> cs = Constraint_System()
+        >>> cs.insert(x >= 0)
+        >>> cs.insert(y >= 0)
+        >>> cs.insert(3 * x + 5 * y <= 10)
+        >>> m = MIP_Problem(2)
+        >>> m.set_objective_function(x + y)
+        >>> m.add_constraints(cs)
+        >>> m.optimal_value()
+        Fraction(10, 3)
 
         Tests:
 
-            >>> p = Variable(9)
-            >>> cs.insert(p >= -3)
-            >>> m.add_constraints(cs)
-            Traceback (most recent call last):
-            ...
-            ValueError: PPL::MIP_Problem::add_constraints(cs):
-            cs.space_dimension() == 10 exceeds this->space_dimension() == 2.
+        >>> p = Variable(9)
+        >>> cs.insert(p >= -3)
+        >>> m.add_constraints(cs)
+        Traceback (most recent call last):
+        ...
+        ValueError: PPL::MIP_Problem::add_constraints(cs):
+        cs.space_dimension() == 10 exceeds this->space_dimension() == 2.
         """
         self.assert_mutable("The MIP_Problem is not mutable!");
         sig_on()
@@ -689,26 +689,26 @@ cdef class MIP_Problem(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import Variable, Constraint_System, MIP_Problem
-            >>> x = Variable(0)
-            >>> y = Variable(1)
-            >>> m = MIP_Problem()
-            >>> m.add_space_dimensions_and_embed(2)
-            >>> m.add_constraint(x >= 0)
-            >>> m.add_constraint(y >= 0)
-            >>> m.add_constraint(3 * x + 5 * y <= 10)
-            >>> m.set_objective_function(x + y)
-            >>> m.optimal_value()
-            Fraction(10, 3)
+        >>> from ppl import Variable, Constraint_System, MIP_Problem
+        >>> x = Variable(0)
+        >>> y = Variable(1)
+        >>> m = MIP_Problem()
+        >>> m.add_space_dimensions_and_embed(2)
+        >>> m.add_constraint(x >= 0)
+        >>> m.add_constraint(y >= 0)
+        >>> m.add_constraint(3 * x + 5 * y <= 10)
+        >>> m.set_objective_function(x + y)
+        >>> m.optimal_value()
+        Fraction(10, 3)
 
         Tests:
 
-            >>> z = Variable(2)
-            >>> m.set_objective_function(x + y + z)
-            Traceback (most recent call last):
-            ...
-            ValueError: PPL::MIP_Problem::set_objective_function(obj):
-            obj.space_dimension() == 3 exceeds this->space_dimension == 2.
+        >>> z = Variable(2)
+        >>> m.set_objective_function(x + y + z)
+        Traceback (most recent call last):
+        ...
+        ValueError: PPL::MIP_Problem::set_objective_function(obj):
+        obj.space_dimension() == 3 exceeds this->space_dimension == 2.
         """
         self.assert_mutable("The MIP_Problem is not mutable!");
         self.thisptr.set_objective_function(obj.thisptr[0])
@@ -747,16 +747,16 @@ cdef class MIP_Problem(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import Variable, Constraint_System, MIP_Problem
-            >>> x = Variable(0)
-            >>> y = Variable(1)
-            >>> m = MIP_Problem()
-            >>> m.add_space_dimensions_and_embed(2)
-            >>> m.add_constraint(x >= 0)
-            >>> m.add_constraint(y >= 0)
-            >>> m.add_constraint(3 * x + 5 * y <= 10)
-            >>> m.is_satisfiable()
-            True
+        >>> from ppl import Variable, Constraint_System, MIP_Problem
+        >>> x = Variable(0)
+        >>> y = Variable(1)
+        >>> m = MIP_Problem()
+        >>> m.add_space_dimensions_and_embed(2)
+        >>> m.add_constraint(x >= 0)
+        >>> m.add_constraint(y >= 0)
+        >>> m.add_constraint(3 * x + 5 * y <= 10)
+        >>> m.is_satisfiable()
+        True
         """
         return self.thisptr.is_satisfiable()
 
@@ -767,25 +767,25 @@ cdef class MIP_Problem(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import Variable, Constraint_System, MIP_Problem, Generator
-            >>> x = Variable(0)
-            >>> y = Variable(1)
-            >>> m = MIP_Problem()
-            >>> m.add_space_dimensions_and_embed(2)
-            >>> m.add_constraint(x >= 0)
-            >>> m.add_constraint(y >= 0)
-            >>> m.add_constraint(3 * x + 5 * y <= 10)
-            >>> m.set_objective_function(x + y)
-            >>> g = Generator.point(5 * x - 2 * y, 7)
-            >>> m.evaluate_objective_function(g)
-            Fraction(3, 7)
-            >>> z = Variable(2)
-            >>> g = Generator.point(5 * x - 2 * z, 7)
-            >>> m.evaluate_objective_function(g)
-            Traceback (most recent call last):
-            ...
-            ValueError: PPL::MIP_Problem::evaluate_objective_function(p, n, d):
-            *this and p are dimension incompatible.
+        >>> from ppl import Variable, Constraint_System, MIP_Problem, Generator
+        >>> x = Variable(0)
+        >>> y = Variable(1)
+        >>> m = MIP_Problem()
+        >>> m.add_space_dimensions_and_embed(2)
+        >>> m.add_constraint(x >= 0)
+        >>> m.add_constraint(y >= 0)
+        >>> m.add_constraint(3 * x + 5 * y <= 10)
+        >>> m.set_objective_function(x + y)
+        >>> g = Generator.point(5 * x - 2 * y, 7)
+        >>> m.evaluate_objective_function(g)
+        Fraction(3, 7)
+        >>> z = Variable(2)
+        >>> g = Generator.point(5 * x - 2 * z, 7)
+        >>> m.evaluate_objective_function(g)
+        Traceback (most recent call last):
+        ...
+        ValueError: PPL::MIP_Problem::evaluate_objective_function(p, n, d):
+        *this and p are dimension incompatible.
         """
         cdef PPL_Coefficient sup_n
         cdef PPL_Coefficient sup_d
@@ -1008,12 +1008,12 @@ cdef class Polyhedron(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import Variable, C_Polyhedron
-            >>> x = Variable(0)
-            >>> y = Variable(1)
-            >>> p = C_Polyhedron( 5*x-2*y >=  x+y-1 )
-            >>> p.space_dimension()
-            2
+        >>> from ppl import Variable, C_Polyhedron
+        >>> x = Variable(0)
+        >>> y = Variable(1)
+        >>> p = C_Polyhedron( 5*x-2*y >=  x+y-1 )
+        >>> p.space_dimension()
+        2
         """
         return self.thisptr.space_dimension()
 
@@ -1028,12 +1028,12 @@ cdef class Polyhedron(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import Variable, C_Polyhedron
-            >>> x = Variable(0)
-            >>> y = Variable(1)
-            >>> p = C_Polyhedron( 5*x-2*y ==  x+y-1 )
-            >>> p.affine_dimension()
-            1
+        >>> from ppl import Variable, C_Polyhedron
+        >>> x = Variable(0)
+        >>> y = Variable(1)
+        >>> p = C_Polyhedron( 5*x-2*y ==  x+y-1 )
+        >>> p.affine_dimension()
+        1
         """
         sig_on()
         cdef size_t dim = self.thisptr.affine_dimension()
@@ -1052,16 +1052,16 @@ cdef class Polyhedron(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import Variable, C_Polyhedron
-            >>> x = Variable(0)
-            >>> y = Variable(1)
-            >>> p = C_Polyhedron(y >= 0)
-            >>> p.add_constraint(x >= 0)
-            >>> p.add_constraint(x+y >= 0)
-            >>> p.constraints()
-            Constraint_System {x1>=0, x0>=0, x0+x1>=0}
-            >>> p.minimized_constraints()
-            Constraint_System {x1>=0, x0>=0}
+        >>> from ppl import Variable, C_Polyhedron
+        >>> x = Variable(0)
+        >>> y = Variable(1)
+        >>> p = C_Polyhedron(y >= 0)
+        >>> p.add_constraint(x >= 0)
+        >>> p.add_constraint(x+y >= 0)
+        >>> p.constraints()
+        Constraint_System {x1>=0, x0>=0, x0+x1>=0}
+        >>> p.minimized_constraints()
+        Constraint_System {x1>=0, x0>=0}
         """
         sig_on()
         cdef PPL_Constraint_System cs = self.thisptr.constraints()
@@ -1080,16 +1080,16 @@ cdef class Polyhedron(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import Variable, C_Polyhedron
-            >>> x = Variable(0)
-            >>> y = Variable(1)
-            >>> p = C_Polyhedron(y >= 0)
-            >>> p.add_constraint(x >= 0)
-            >>> p.add_constraint(x+y >= 0)
-            >>> p.constraints()
-            Constraint_System {x1>=0, x0>=0, x0+x1>=0}
-            >>> p.minimized_constraints()
-            Constraint_System {x1>=0, x0>=0}
+        >>> from ppl import Variable, C_Polyhedron
+        >>> x = Variable(0)
+        >>> y = Variable(1)
+        >>> p = C_Polyhedron(y >= 0)
+        >>> p.add_constraint(x >= 0)
+        >>> p.add_constraint(x+y >= 0)
+        >>> p.constraints()
+        Constraint_System {x1>=0, x0>=0, x0+x1>=0}
+        >>> p.minimized_constraints()
+        Constraint_System {x1>=0, x0>=0}
         """
         sig_on()
         cdef PPL_Constraint_System cs = self.thisptr.minimized_constraints()
@@ -1108,17 +1108,17 @@ cdef class Polyhedron(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import Variable, C_Polyhedron, point
-            >>> x = Variable(0)
-            >>> y = Variable(1)
-            >>> p = C_Polyhedron(3,'empty')
-            >>> p.add_generator(point(-x-y))
-            >>> p.add_generator(point(0))
-            >>> p.add_generator(point(+x+y))
-            >>> p.generators()
-            Generator_System {point(-1/1, -1/1, 0/1), point(0/1, 0/1, 0/1), point(1/1, 1/1, 0/1)}
-            >>> p.minimized_generators()
-            Generator_System {point(-1/1, -1/1, 0/1), point(1/1, 1/1, 0/1)}
+        >>> from ppl import Variable, C_Polyhedron, point
+        >>> x = Variable(0)
+        >>> y = Variable(1)
+        >>> p = C_Polyhedron(3,'empty')
+        >>> p.add_generator(point(-x-y))
+        >>> p.add_generator(point(0))
+        >>> p.add_generator(point(+x+y))
+        >>> p.generators()
+        Generator_System {point(-1/1, -1/1, 0/1), point(0/1, 0/1, 0/1), point(1/1, 1/1, 0/1)}
+        >>> p.minimized_generators()
+        Generator_System {point(-1/1, -1/1, 0/1), point(1/1, 1/1, 0/1)}
         """
         sig_on()
         cdef PPL_Generator_System gs = self.thisptr.generators()
@@ -1137,17 +1137,17 @@ cdef class Polyhedron(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import Variable, C_Polyhedron, point
-            >>> x = Variable(0)
-            >>> y = Variable(1)
-            >>> p = C_Polyhedron(3,'empty')
-            >>> p.add_generator(point(-x-y))
-            >>> p.add_generator(point(0))
-            >>> p.add_generator(point(+x+y))
-            >>> p.generators()
-            Generator_System {point(-1/1, -1/1, 0/1), point(0/1, 0/1, 0/1), point(1/1, 1/1, 0/1)}
-            >>> p.minimized_generators()
-            Generator_System {point(-1/1, -1/1, 0/1), point(1/1, 1/1, 0/1)}
+        >>> from ppl import Variable, C_Polyhedron, point
+        >>> x = Variable(0)
+        >>> y = Variable(1)
+        >>> p = C_Polyhedron(3,'empty')
+        >>> p.add_generator(point(-x-y))
+        >>> p.add_generator(point(0))
+        >>> p.add_generator(point(+x+y))
+        >>> p.generators()
+        Generator_System {point(-1/1, -1/1, 0/1), point(0/1, 0/1, 0/1), point(1/1, 1/1, 0/1)}
+        >>> p.minimized_generators()
+        Generator_System {point(-1/1, -1/1, 0/1), point(1/1, 1/1, 0/1)}
         """
         sig_on()
         cdef PPL_Generator_System gs = self.thisptr.minimized_generators()
@@ -1207,48 +1207,48 @@ cdef class Polyhedron(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import Variable, C_Polyhedron, point, ray, Poly_Con_Relation
-            >>> x = Variable(0);  y = Variable(1)
-            >>> p = C_Polyhedron(2, 'empty')
-            >>> p.add_generator( point(1*x+0*y) )
-            >>> p.add_generator( point(0*x+1*y) )
-            >>> p.minimized_constraints()
-            Constraint_System {x0+x1-1==0, -x1+1>=0, x1>=0}
-            >>> p.relation_with( point(1*x+1*y) )
-            nothing
-            >>> p.relation_with( point(1*x+1*y, 2) )
-            subsumes
-            >>> p.relation_with( x+y==-1 )
-            is_disjoint
-            >>> p.relation_with( x==y )
-            strictly_intersects
-            >>> p.relation_with( x+y<=1 )
-            is_included, saturates
-            >>> p.relation_with( x+y<1 )
-            is_disjoint, saturates
+        >>> from ppl import Variable, C_Polyhedron, point, ray, Poly_Con_Relation
+        >>> x = Variable(0);  y = Variable(1)
+        >>> p = C_Polyhedron(2, 'empty')
+        >>> p.add_generator( point(1*x+0*y) )
+        >>> p.add_generator( point(0*x+1*y) )
+        >>> p.minimized_constraints()
+        Constraint_System {x0+x1-1==0, -x1+1>=0, x1>=0}
+        >>> p.relation_with( point(1*x+1*y) )
+        nothing
+        >>> p.relation_with( point(1*x+1*y, 2) )
+        subsumes
+        >>> p.relation_with( x+y==-1 )
+        is_disjoint
+        >>> p.relation_with( x==y )
+        strictly_intersects
+        >>> p.relation_with( x+y<=1 )
+        is_included, saturates
+        >>> p.relation_with( x+y<1 )
+        is_disjoint, saturates
 
         In a Python program you will usually use :meth:`relation_with`
         together with :meth:`~ppl.Poly_Gen_Relation.implies`
         or :meth:`~ppl.Poly_Con_Relation.implies`, for
-        example::
+        example:
 
-            >>> p.relation_with( x+y<1 ).implies(Poly_Con_Relation.saturates())
-            True
+        >>> p.relation_with( x+y<1 ).implies(Poly_Con_Relation.saturates())
+        True
 
         You can only get relations with dimension-compatible
-        generators or constraints::
+        generators or constraints:
 
-            >>> z = Variable(2)
-            >>> p.relation_with( point(x+y+z) )
-            Traceback (most recent call last):
-            ...
-            ValueError: PPL::C_Polyhedron::relation_with(g):
-            this->space_dimension() == 2, g.space_dimension() == 3.
-            >>> p.relation_with( z>0 )
-            Traceback (most recent call last):
-            ...
-            ValueError: PPL::C_Polyhedron::relation_with(c):
-            this->space_dimension() == 2, c.space_dimension() == 3.
+        >>> z = Variable(2)
+        >>> p.relation_with( point(x+y+z) )
+        Traceback (most recent call last):
+        ...
+        ValueError: PPL::C_Polyhedron::relation_with(g):
+        this->space_dimension() == 2, g.space_dimension() == 3.
+        >>> p.relation_with( z>0 )
+        Traceback (most recent call last):
+        ...
+        ValueError: PPL::C_Polyhedron::relation_with(c):
+        this->space_dimension() == 2, c.space_dimension() == 3.
         """
         if isinstance(arg, Generator):
             return self._relation_with_generator(arg)
@@ -1267,11 +1267,11 @@ cdef class Polyhedron(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import C_Polyhedron
-            >>> C_Polyhedron(3, 'empty').is_empty()
-            True
-            >>> C_Polyhedron(3, 'universe').is_empty()
-            False
+        >>> from ppl import C_Polyhedron
+        >>> C_Polyhedron(3, 'empty').is_empty()
+        True
+        >>> C_Polyhedron(3, 'universe').is_empty()
+        False
         """
         sig_on()
         cdef bint result = self.thisptr.is_empty()
@@ -1288,11 +1288,11 @@ cdef class Polyhedron(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import C_Polyhedron
-            >>> C_Polyhedron(3, 'empty').is_universe()
-            False
-            >>> C_Polyhedron(3, 'universe').is_universe()
-            True
+        >>> from ppl import C_Polyhedron
+        >>> C_Polyhedron(3, 'empty').is_universe()
+        False
+        >>> C_Polyhedron(3, 'universe').is_universe()
+        True
         """
         sig_on()
         cdef bint result = self.thisptr.is_universe()
@@ -1310,14 +1310,14 @@ cdef class Polyhedron(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import Variable, C_Polyhedron, NNC_Polyhedron
-            >>> x = Variable(0);  y = Variable(1)
-            >>> C_Polyhedron(3, 'universe').is_topologically_closed()
-            True
-            >>> C_Polyhedron( x>=1 ).is_topologically_closed()
-            True
-            >>> NNC_Polyhedron( x>1 ).is_topologically_closed()
-            False
+        >>> from ppl import Variable, C_Polyhedron, NNC_Polyhedron
+        >>> x = Variable(0);  y = Variable(1)
+        >>> C_Polyhedron(3, 'universe').is_topologically_closed()
+        True
+        >>> C_Polyhedron( x>=1 ).is_topologically_closed()
+        True
+        >>> NNC_Polyhedron( x>1 ).is_topologically_closed()
+        False
         """
         sig_on()
         cdef bint result = self.thisptr.is_topologically_closed()
@@ -1342,34 +1342,34 @@ cdef class Polyhedron(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import Variable, C_Polyhedron, NNC_Polyhedron
-            >>> x = Variable(0);  y = Variable(1)
-            >>> C_Polyhedron(x<=0).is_disjoint_from( C_Polyhedron(x>=1) )
-            True
+        >>> from ppl import Variable, C_Polyhedron, NNC_Polyhedron
+        >>> x = Variable(0);  y = Variable(1)
+        >>> C_Polyhedron(x<=0).is_disjoint_from( C_Polyhedron(x>=1) )
+        True
 
-        This is not allowed::
+        This is not allowed:
 
-            >>> x = Variable(0);  y = Variable(1)
-            >>> poly_1d = C_Polyhedron(x<=0)
-            >>> poly_2d = C_Polyhedron(x+0*y>=1)
-            >>> poly_1d.is_disjoint_from(poly_2d)
-            Traceback (most recent call last):
-            ...
-            ValueError: PPL::C_Polyhedron::intersection_assign(y):
-            this->space_dimension() == 1, y.space_dimension() == 2.
+        >>> x = Variable(0);  y = Variable(1)
+        >>> poly_1d = C_Polyhedron(x<=0)
+        >>> poly_2d = C_Polyhedron(x+0*y>=1)
+        >>> poly_1d.is_disjoint_from(poly_2d)
+        Traceback (most recent call last):
+        ...
+        ValueError: PPL::C_Polyhedron::intersection_assign(y):
+        this->space_dimension() == 1, y.space_dimension() == 2.
 
-        Nor is this::
+        Nor is this:
 
-            >>> x = Variable(0);  y = Variable(1)
-            >>> c_poly   =   C_Polyhedron( x<=0 )
-            >>> nnc_poly = NNC_Polyhedron( x >0 )
-            >>> c_poly.is_disjoint_from(nnc_poly)
-            Traceback (most recent call last):
-            ...
-            ValueError: PPL::C_Polyhedron::intersection_assign(y):
-            y is a NNC_Polyhedron.
-            >>> NNC_Polyhedron(c_poly).is_disjoint_from(nnc_poly)
-            True
+        >>> x = Variable(0);  y = Variable(1)
+        >>> c_poly   =   C_Polyhedron( x<=0 )
+        >>> nnc_poly = NNC_Polyhedron( x >0 )
+        >>> c_poly.is_disjoint_from(nnc_poly)
+        Traceback (most recent call last):
+        ...
+        ValueError: PPL::C_Polyhedron::intersection_assign(y):
+        y is a NNC_Polyhedron.
+        >>> NNC_Polyhedron(c_poly).is_disjoint_from(nnc_poly)
+        True
         """
         cdef bint result
         sig_on()
@@ -1389,14 +1389,14 @@ cdef class Polyhedron(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import Variable, C_Polyhedron, point, ray
-            >>> x = Variable(0);  y = Variable(1)
-            >>> p = C_Polyhedron( point(1*x+2*y) )
-            >>> p.is_discrete()
-            True
-            >>> p.add_generator( point(x) )
-            >>> p.is_discrete()
-            False
+        >>> from ppl import Variable, C_Polyhedron, point, ray
+        >>> x = Variable(0);  y = Variable(1)
+        >>> p = C_Polyhedron( point(1*x+2*y) )
+        >>> p.is_discrete()
+        True
+        >>> p.add_generator( point(x) )
+        >>> p.is_discrete()
+        False
         """
         sig_on()
         cdef bint result = self.thisptr.is_discrete()
@@ -1413,15 +1413,15 @@ cdef class Polyhedron(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import Variable, NNC_Polyhedron, point, closure_point, ray
-            >>> x = Variable(0)
-            >>> p = NNC_Polyhedron( point(0*x) )
-            >>> p.add_generator( closure_point(1*x) )
-            >>> p.is_bounded()
-            True
-            >>> p.add_generator( ray(1*x) )
-            >>> p.is_bounded()
-            False
+        >>> from ppl import Variable, NNC_Polyhedron, point, closure_point, ray
+        >>> x = Variable(0)
+        >>> p = NNC_Polyhedron( point(0*x) )
+        >>> p.add_generator( closure_point(1*x) )
+        >>> p.is_bounded()
+        True
+        >>> p.add_generator( ray(1*x) )
+        >>> p.is_bounded()
+        False
         """
         sig_on()
         cdef bint result = self.thisptr.is_bounded()
@@ -1472,20 +1472,20 @@ cdef class Polyhedron(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import Variable, C_Polyhedron
-            >>> x = Variable(0)
-            >>> p = C_Polyhedron(1, 'universe')
-            >>> p.constrains(x)
-            False
-            >>> p = C_Polyhedron(x>=0)
-            >>> p.constrains(x)
-            True
-            >>> y = Variable(1)
-            >>> p.constrains(y)
-            Traceback (most recent call last):
-            ...
-            ValueError: PPL::C_Polyhedron::constrains(v):
-            this->space_dimension() == 1, v.space_dimension() == 2.
+        >>> from ppl import Variable, C_Polyhedron
+        >>> x = Variable(0)
+        >>> p = C_Polyhedron(1, 'universe')
+        >>> p.constrains(x)
+        False
+        >>> p = C_Polyhedron(x>=0)
+        >>> p.constrains(x)
+        True
+        >>> y = Variable(1)
+        >>> p.constrains(y)
+        Traceback (most recent call last):
+        ...
+        ValueError: PPL::C_Polyhedron::constrains(v):
+        this->space_dimension() == 1, v.space_dimension() == 2.
         """
         cdef bint result
         sig_on()
@@ -1513,19 +1513,19 @@ cdef class Polyhedron(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import Variable, C_Polyhedron, Linear_Expression
-            >>> x = Variable(0);  y = Variable(1)
-            >>> p = C_Polyhedron(y<=0)
-            >>> p.bounds_from_above(x+1)
-            False
-            >>> p.bounds_from_above(Linear_Expression(y))
-            True
-            >>> p = C_Polyhedron(x<=0)
-            >>> p.bounds_from_above(y+1)
-            Traceback (most recent call last):
-            ...
-            ValueError: PPL::C_Polyhedron::bounds_from_above(e):
-            this->space_dimension() == 1, e.space_dimension() == 2.
+        >>> from ppl import Variable, C_Polyhedron, Linear_Expression
+        >>> x = Variable(0);  y = Variable(1)
+        >>> p = C_Polyhedron(y<=0)
+        >>> p.bounds_from_above(x+1)
+        False
+        >>> p.bounds_from_above(Linear_Expression(y))
+        True
+        >>> p = C_Polyhedron(x<=0)
+        >>> p.bounds_from_above(y+1)
+        Traceback (most recent call last):
+        ...
+        ValueError: PPL::C_Polyhedron::bounds_from_above(e):
+        this->space_dimension() == 1, e.space_dimension() == 2.
         """
         cdef bint result
         sig_on()
@@ -1553,19 +1553,19 @@ cdef class Polyhedron(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import Variable, C_Polyhedron, Linear_Expression
-            >>> x = Variable(0);  y = Variable(1)
-            >>> p = C_Polyhedron(y>=0)
-            >>> p.bounds_from_below(x+1)
-            False
-            >>> p.bounds_from_below(Linear_Expression(y))
-            True
-            >>> p = C_Polyhedron(x<=0)
-            >>> p.bounds_from_below(y+1)
-            Traceback (most recent call last):
-            ...
-            ValueError: PPL::C_Polyhedron::bounds_from_below(e):
-            this->space_dimension() == 1, e.space_dimension() == 2.
+        >>> from ppl import Variable, C_Polyhedron, Linear_Expression
+        >>> x = Variable(0);  y = Variable(1)
+        >>> p = C_Polyhedron(y>=0)
+        >>> p.bounds_from_below(x+1)
+        False
+        >>> p.bounds_from_below(Linear_Expression(y))
+        True
+        >>> p = C_Polyhedron(x<=0)
+        >>> p.bounds_from_below(y+1)
+        Traceback (most recent call last):
+        ...
+        ValueError: PPL::C_Polyhedron::bounds_from_below(e):
+        this->space_dimension() == 1, e.space_dimension() == 2.
         """
         cdef bint result
         sig_on()
@@ -1607,37 +1607,37 @@ cdef class Polyhedron(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import Variable, C_Polyhedron, NNC_Polyhedron, Constraint_System, Linear_Expression
-            >>> x = Variable(0);  y = Variable(1)
-            >>> cs = Constraint_System()
-            >>> cs.insert(x >= 0)
-            >>> cs.insert(y >= 0)
-            >>> cs.insert(3*x+5*y <= 10)
-            >>> p = C_Polyhedron(cs)
-            >>> pm = p.maximize(x+y)
-            >>> for key in sorted(pm):
-            ...     print key, pm[key]
-            bounded True
-            generator point(10/3, 0/3)
-            maximum True
-            sup_d 3
-            sup_n 10
+        >>> from ppl import Variable, C_Polyhedron, NNC_Polyhedron, Constraint_System, Linear_Expression
+        >>> x = Variable(0);  y = Variable(1)
+        >>> cs = Constraint_System()
+        >>> cs.insert(x >= 0)
+        >>> cs.insert(y >= 0)
+        >>> cs.insert(3*x+5*y <= 10)
+        >>> p = C_Polyhedron(cs)
+        >>> pm = p.maximize(x+y)
+        >>> for key in sorted(pm):
+        ...     print key, pm[key]
+        bounded True
+        generator point(10/3, 0/3)
+        maximum True
+        sup_d 3
+        sup_n 10
 
         Unbounded case::
 
-            >>> cs = Constraint_System()
-            >>> cs.insert(x > 0)
-            >>> p = NNC_Polyhedron(cs)
-            >>> p.maximize(+x)
-            {'bounded': False}
-            >>> pm = p.maximize(-x)
-            >>> for key in pm:
-            ...     print key, pm[key]
-            bounded True
-            generator closure_point(0/1)
-            maximum False
-            sup_d 1
-            sup_n 0
+        >>> cs = Constraint_System()
+        >>> cs.insert(x > 0)
+        >>> p = NNC_Polyhedron(cs)
+        >>> p.maximize(+x)
+        {'bounded': False}
+        >>> pm = p.maximize(-x)
+        >>> for key in pm:
+        ...     print key, pm[key]
+        bounded True
+        generator closure_point(0/1)
+        maximum False
+        sup_d 1
+        sup_n 0
         """
         cdef PPL_Coefficient sup_n
         cdef PPL_Coefficient sup_d
@@ -2336,16 +2336,16 @@ cdef class Polyhedron(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import Variable, NNC_Polyhedron
-            >>> x = Variable(0)
-            >>> p = NNC_Polyhedron(x>0)
-            >>> p.is_topologically_closed()
-            False
-            >>> p.topological_closure_assign()
-            >>> p.is_topologically_closed()
-            True
-            >>> p.minimized_constraints()
-            Constraint_System {x0>=0}
+        >>> from ppl import Variable, NNC_Polyhedron
+        >>> x = Variable(0)
+        >>> p = NNC_Polyhedron(x>0)
+        >>> p.is_topologically_closed()
+        False
+        >>> p.topological_closure_assign()
+        >>> p.is_topologically_closed()
+        True
+        >>> p.minimized_constraints()
+        Constraint_System {x0>=0}
         """
         self.assert_mutable('The Polyhedron is not mutable!')
         sig_on()
@@ -2584,33 +2584,10 @@ cdef class Polyhedron(_mutable_or_immutable):
         >>> cmd += 'p.minimized_generators()\n'
         >>> cmd += 'p.ascii_dump()\n'
         >>> import subprocess
-        >>> import sys
-        >>> out = subprocess.call(['python', '-c', cmd], stderr=subprocess.STDOUT)
-        space_dim 2
-        -ZE -EM  +CM +GM  +CS +GS  -CP -GP  -SC +SG
-        con_sys (up-to-date)
-        topology NECESSARILY_CLOSED
-        2 x 2 SPARSE (sorted)
-        index_first_pending 2
-        size 3 -1 3 2 = (C)
-        size 3 1 0 0 >= (C)
-        <BLANKLINE>
-        gen_sys (up-to-date)
-        topology NECESSARILY_CLOSED
-        2 x 2 DENSE (not_sorted)
-        index_first_pending 2
-        size 3 0 2 -3 L (C)
-        size 3 2 0 1 P (C)
-        <BLANKLINE>
-        sat_c
-        0 x 0
-        <BLANKLINE>
-        sat_g
-        2 x 2
-        0 0
-        0 1
-        >>> print out
-        0
+        >>> proc = subprocess.Popen(['python', '-c', cmd], stderr=subprocess.PIPE)
+        >>> out, err = proc.communicate()
+        >>> err
+        'space_dim 2\n-ZE -EM  +CM +GM  +CS +GS  -CP -GP  -SC +SG \ncon_sys (up-to-date)\ntopology NECESSARILY_CLOSED\n2 x 2 SPARSE (sorted)\nindex_first_pending 2\nsize 3 -1 3 2 = (C)\nsize 3 1 0 0 >= (C)\n\ngen_sys (up-to-date)\ntopology NECESSARILY_CLOSED\n2 x 2 DENSE (not_sorted)\nindex_first_pending 2\nsize 3 0 2 -3 L (C)\nsize 3 2 0 1 P (C)\n\nsat_c\n0 x 0\n\nsat_g\n2 x 2\n0 0 \n0 1 \n\n'
         """
         sig_on()
         self.thisptr.ascii_dump()
@@ -2627,11 +2604,8 @@ cdef class Polyhedron(_mutable_or_immutable):
         Examples:
 
         >>> from ppl import C_Polyhedron
-        >>> C_Polyhedron(1, 'empty').max_space_dimension()   # random output
-        1152921504606846974
         >>> C_Polyhedron(1, 'empty').max_space_dimension()
-        357913940            # 32-bit
-        1152921504606846974  # 64-bit
+        1152921504606846974
         """
         return self.thisptr.max_space_dimension()
 
@@ -3615,8 +3589,9 @@ cdef class Linear_Expression(object):
         >>> cmd += 'e = 3*x+2*y+1\n'
         >>> cmd += 'e.ascii_dump()\n'
         >>> import subprocess
-        >>> import sys
-        >>> subprocess.call(['python', '-c', cmd], stderr=subprocess.STDOUT)
+        >>> proc = subprocess.Popen(['python', '-c', cmd], stderr=subprocess.PIPE)
+        >>> out, err = proc.communicate()
+        >>> print err
         size 3 1 3 2
         """
         self.thisptr.ascii_dump()
@@ -4440,9 +4415,11 @@ cdef class Generator(object):
         >>> cmd += 'p = point(3*x+2*y)\n'
         >>> cmd += 'p.ascii_dump()\n'
         >>> import subprocess
-        >>> import sys
-        >>> subprocess.call(['python', '-c', cmd], stderr=subprocess.STDOUT)
+        >>> proc = subprocess.Popen(['python', '-c', cmd], stderr=subprocess.PIPE)
+        >>> out, err = proc.communicate()
+        >>> print err
         size 3 1 3 2 P (C)
+        <BLANKLINE>
         """
         self.thisptr.ascii_dump()
 
@@ -4541,9 +4518,9 @@ cdef class Generator_System(_mutable_or_immutable):
 
         Tests:
 
-            >>> from ppl import Generator_System
-            >>> Generator_System()   # indirect doctest
-            Generator_System {}
+        >>> from ppl import Generator_System
+        >>> Generator_System()   # indirect doctest
+        Generator_System {}
         """
         if arg is None:
             self.thisptr = new PPL_Generator_System()
@@ -4579,11 +4556,11 @@ cdef class Generator_System(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import Variable, Generator_System, point
-            >>> x = Variable(0)
-            >>> gs = Generator_System( point(3*x) )
-            >>> gs.space_dimension()
-            1
+        >>> from ppl import Variable, Generator_System, point
+        >>> x = Variable(0)
+        >>> gs = Generator_System( point(3*x) )
+        >>> gs.space_dimension()
+        1
         """
         return self.thisptr.space_dimension()
 
@@ -4594,13 +4571,13 @@ cdef class Generator_System(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import Variable, Generator_System, point
-            >>> x = Variable(0)
-            >>> gs = Generator_System( point(3*x) ); gs
-            Generator_System {point(3/1)}
-            >>> gs.clear()
-            >>> gs
-            Generator_System {}
+        >>> from ppl import Variable, Generator_System, point
+        >>> x = Variable(0)
+        >>> gs = Generator_System( point(3*x) ); gs
+        Generator_System {point(3/1)}
+        >>> gs.clear()
+        >>> gs
+        Generator_System {}
         """
         self.assert_mutable('The Generator_System is not mutable!')
         self.thisptr.clear()
@@ -4617,12 +4594,12 @@ cdef class Generator_System(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import Variable, Generator_System, point
-            >>> x = Variable(0)
-            >>> gs = Generator_System( point(3*x) )
-            >>> gs.insert( point(-3*x) )
-            >>> gs
-            Generator_System {point(3/1), point(-3/1)}
+        >>> from ppl import Variable, Generator_System, point
+        >>> x = Variable(0)
+        >>> gs = Generator_System( point(3*x) )
+        >>> gs.insert( point(-3*x) )
+        >>> gs
+        Generator_System {point(3/1), point(-3/1)}
         """
         self.assert_mutable('The Generator_System is not mutable!')
         self.thisptr.insert(g.thisptr[0])
@@ -4637,14 +4614,14 @@ cdef class Generator_System(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import Variable, Generator_System, point
-            >>> x = Variable(0)
-            >>> gs = Generator_System()
-            >>> gs.empty()
-            True
-            >>> gs.insert( point(-3*x) )
-            >>> gs.empty()
-            False
+        >>> from ppl import Variable, Generator_System, point
+        >>> x = Variable(0)
+        >>> gs = Generator_System()
+        >>> gs.empty()
+        True
+        >>> gs.insert( point(-3*x) )
+        >>> gs.empty()
+        False
         """
         return self.thisptr.empty()
 
@@ -4660,12 +4637,14 @@ cdef class Generator_System(_mutable_or_immutable):
         >>> cmd += 'gs = Generator_System( point(3*x+2*y+1) )\n'
         >>> cmd += 'gs.ascii_dump()\n'
         >>> import subprocess
-        >>> import sys
-        >>> subprocess.call(['python', '-c', cmd], stderr=subprocess.STDOUT)
+        >>> proc = subprocess.Popen(['python', '-c', cmd], stderr=subprocess.PIPE)
+        >>> out, err = proc.communicate()
+        >>> print err
         topology NECESSARILY_CLOSED
         1 x 2 SPARSE (sorted)
         index_first_pending 1
         size 3 1 3 2 P (C)
+        <BLANKLINE>
         """
         self.thisptr.ascii_dump()
 
@@ -5051,14 +5030,14 @@ cdef class Constraint(object):
 
         Examples:
 
-            >>> from ppl import Variable
-            >>> x = Variable(0)
-            >>> (x==0).is_equality()
-            True
-            >>> (x>=0).is_equality()
-            False
-            >>> (x>0).is_equality()
-            False
+        >>> from ppl import Variable
+        >>> x = Variable(0)
+        >>> (x==0).is_equality()
+        True
+        >>> (x>=0).is_equality()
+        False
+        >>> (x>0).is_equality()
+        False
         """
         return self.thisptr.is_equality()
 
@@ -5073,14 +5052,14 @@ cdef class Constraint(object):
 
         Examples:
 
-            >>> from ppl import Variable
-            >>> x = Variable(0)
-            >>> (x==0).is_inequality()
-            False
-            >>> (x>=0).is_inequality()
-            True
-            >>> (x>0).is_inequality()
-            True
+        >>> from ppl import Variable
+        >>> x = Variable(0)
+        >>> (x==0).is_inequality()
+        False
+        >>> (x>=0).is_inequality()
+        True
+        >>> (x>0).is_inequality()
+        True
         """
         return self.thisptr.is_inequality()
 
@@ -5095,14 +5074,14 @@ cdef class Constraint(object):
 
         Examples:
 
-            >>> from ppl import Variable
-            >>> x = Variable(0)
-            >>> (x==0).is_nonstrict_inequality()
-            False
-            >>> (x>=0).is_nonstrict_inequality()
-            True
-            >>> (x>0).is_nonstrict_inequality()
-            False
+        >>> from ppl import Variable
+        >>> x = Variable(0)
+        >>> (x==0).is_nonstrict_inequality()
+        False
+        >>> (x>=0).is_nonstrict_inequality()
+        True
+        >>> (x>0).is_nonstrict_inequality()
+        False
         """
         return self.thisptr.is_nonstrict_inequality()
 
@@ -5117,14 +5096,14 @@ cdef class Constraint(object):
 
         Examples:
 
-            >>> from ppl import Variable
-            >>> x = Variable(0)
-            >>> (x==0).is_strict_inequality()
-            False
-            >>> (x>=0).is_strict_inequality()
-            False
-            >>> (x>0).is_strict_inequality()
-            True
+        >>> from ppl import Variable
+        >>> x = Variable(0)
+        >>> (x==0).is_strict_inequality()
+        False
+        >>> (x>=0).is_strict_inequality()
+        False
+        >>> (x>0).is_strict_inequality()
+        True
         """
         return self.thisptr.is_strict_inequality()
 
@@ -5142,17 +5121,17 @@ cdef class Constraint(object):
 
         Examples:
 
-            >>> from ppl import Variable
-            >>> x = Variable(0)
-            >>> ineq = 3*x+1 > 0
-            >>> ineq.coefficient(x)
-            3
-            >>> y = Variable(1)
-            >>> ineq = 3**50 * y + 2 > 1
-            >>> ineq.coefficient(y)
-            717897987691852588770249L
-            >>> ineq.coefficient(x)
-            0
+        >>> from ppl import Variable
+        >>> x = Variable(0)
+        >>> ineq = 3*x+1 > 0
+        >>> ineq.coefficient(x)
+        3
+        >>> y = Variable(1)
+        >>> ineq = 3**50 * y + 2 > 1
+        >>> ineq.coefficient(y)
+        717897987691852588770249L
+        >>> ineq.coefficient(x)
+        0
         """
         return mpz_get_pyintlong(self.thisptr.coefficient(v.thisptr[0]).get_mpz_t())
 
@@ -5168,12 +5147,12 @@ cdef class Constraint(object):
 
         Examples:
 
-            >>> from ppl import Variable
-            >>> x = Variable(0);  y = Variable(1)
-            >>> ineq = ( 3*x+5*y+1 ==  2);  ineq
-            3*x0+5*x1-1==0
-            >>> ineq.coefficients()
-            (3, 5)
+        >>> from ppl import Variable
+        >>> x = Variable(0);  y = Variable(1)
+        >>> ineq = ( 3*x+5*y+1 ==  2);  ineq
+        3*x0+5*x1-1==0
+        >>> ineq.coefficients()
+        (3, 5)
         """
         cdef int d = self.space_dimension()
         cdef int i
@@ -5192,16 +5171,16 @@ cdef class Constraint(object):
 
         Examples:
 
-            >>> from ppl import Variable
-            >>> y = Variable(1)
-            >>> ineq = 10+y > 9
-            >>> ineq
-            x1+1>0
-            >>> ineq.inhomogeneous_term()
-            1
-            >>> ineq = 2**66 + y > 0
-            >>> ineq.inhomogeneous_term()
-            73786976294838206464L
+        >>> from ppl import Variable
+        >>> y = Variable(1)
+        >>> ineq = 10+y > 9
+        >>> ineq
+        x1+1>0
+        >>> ineq.inhomogeneous_term()
+        1
+        >>> ineq = 2**66 + y > 0
+        >>> ineq.inhomogeneous_term()
+        73786976294838206464L
         """
         return mpz_get_pyintlong(self.thisptr.inhomogeneous_term().get_mpz_t())
 
@@ -5224,12 +5203,12 @@ cdef class Constraint(object):
 
         Examples:
 
-            >>> from ppl import Variable
-            >>> x = Variable(0)
-            >>> (x==0).is_tautological()
-            False
-            >>> (0*x>=0).is_tautological()
-            True
+        >>> from ppl import Variable
+        >>> x = Variable(0)
+        >>> (x==0).is_tautological()
+        False
+        >>> (0*x>=0).is_tautological()
+        True
         """
         return self.thisptr.is_tautological()
 
@@ -5253,12 +5232,12 @@ cdef class Constraint(object):
 
         Examples:
 
-            >>> from ppl import Variable
-            >>> x = Variable(0)
-            >>> (x==1).is_inconsistent()
-            False
-            >>> (0*x>=1).is_inconsistent()
-            True
+        >>> from ppl import Variable
+        >>> x = Variable(0)
+        >>> (x==1).is_inconsistent()
+        False
+        >>> (0*x>=1).is_inconsistent()
+        True
         """
         return self.thisptr.is_inconsistent()
 
@@ -5282,15 +5261,15 @@ cdef class Constraint(object):
 
         Examples:
 
-            >>> from ppl import Variable, Linear_Expression
-            >>> x = Variable(0)
-            >>> y = Variable(1)
-            >>> (x > 0).is_equivalent_to(Linear_Expression(0) < x)
-            True
-            >>> (x > 0).is_equivalent_to(0*y < x)
-            False
-            >>> (0*x > 1).is_equivalent_to(0*x == -2)
-            True
+        >>> from ppl import Variable, Linear_Expression
+        >>> x = Variable(0)
+        >>> y = Variable(1)
+        >>> (x > 0).is_equivalent_to(Linear_Expression(0) < x)
+        True
+        >>> (x > 0).is_equivalent_to(0*y < x)
+        False
+        >>> (0*x > 1).is_equivalent_to(0*x == -2)
+        True
         """
         return self.thisptr.is_equivalent_to(c.thisptr[0])
 
@@ -5306,9 +5285,11 @@ cdef class Constraint(object):
         >>> cmd += 'e = (3*x+2*y+1 > 0)\n'
         >>> cmd += 'e.ascii_dump()\n'
         >>> import subprocess
-        >>> import sys
-        >>> subprocess.call(['python', '-c', cmd], stderr=subprocess.STDOUT)
+        >>> proc = subprocess.Popen(['python', '-c', cmd], stderr=subprocess.PIPE)
+        >>> out, err = proc.communicate()
+        >>> print err
         size 4 1 3 2 -1 > (NNC)
+        <BLANKLINE>
         """
         self.thisptr.ascii_dump()
 
@@ -5318,12 +5299,12 @@ cdef class Constraint(object):
 
         Examples:
 
-            >>> from ppl import Linear_Expression, Variable
-            >>> x = Variable(0)
-            >>> y = Variable(1)
-            >>> ineq = (3*x+2*y+1>=0)
-            >>> ineq.OK()
-            True
+        >>> from ppl import Linear_Expression, Variable
+        >>> x = Variable(0)
+        >>> y = Variable(1)
+        >>> ineq = (3*x+2*y+1>=0)
+        >>> ineq.OK()
+        True
         """
         return self.thisptr.OK()
 
@@ -5333,15 +5314,15 @@ cdef class Constraint(object):
 
         Examples:
 
-            >>> from ppl import Linear_Expression, Variable
-            >>> x = Variable(0)
-            >>> y = Variable(1)
-            >>> loads(dumps(3*x+2*y+1>=5))
-            3*x0+2*x1-4>=0
-            >>> loads(dumps(3*x+2*y+1>5))
-            3*x0+2*x1-4>0
-            >>> loads(dumps(3*x+2*y+1==5))
-            3*x0+2*x1-4==0
+        >>> from ppl import Linear_Expression, Variable
+        >>> x = Variable(0)
+        >>> y = Variable(1)
+        >>> loads(dumps(3*x+2*y+1>=5))
+        3*x0+2*x1-4>=0
+        >>> loads(dumps(3*x+2*y+1>5))
+        3*x0+2*x1-4>0
+        >>> loads(dumps(3*x+2*y+1==5))
+        3*x0+2*x1-4==0
         """
         le = Linear_Expression(self.coefficients(), self.inhomogeneous_term())
         if self.is_nonstrict_inequality():
@@ -5473,9 +5454,9 @@ cdef class Constraint_System(object):
 
         Tests:
 
-            >>> from ppl import Constraint_System
-            >>> Constraint_System()
-            Constraint_System {}
+        >>> from ppl import Constraint_System
+        >>> Constraint_System()
+        Constraint_System {}
         """
         if arg is None:
             self.thisptr = new PPL_Constraint_System()
@@ -5511,11 +5492,11 @@ cdef class Constraint_System(object):
 
         Examples:
 
-            >>> from ppl import Variable, Constraint_System
-            >>> x = Variable(0)
-            >>> cs = Constraint_System( x>0 )
-            >>> cs.space_dimension()
-            1
+        >>> from ppl import Variable, Constraint_System
+        >>> x = Variable(0)
+        >>> cs = Constraint_System( x>0 )
+        >>> cs.space_dimension()
+        1
         """
         return self.thisptr.space_dimension()
 
@@ -5552,16 +5533,16 @@ cdef class Constraint_System(object):
 
         Examples:
 
-            >>> from ppl import Variable, Constraint_System
-            >>> x = Variable(0)
-            >>> cs = Constraint_System()
-            >>> cs.insert( x>=0 )
-            >>> cs.insert( x==-1 )
-            >>> cs.has_strict_inequalities()
-            False
-            >>> cs.insert( x>0 )
-            >>> cs.has_strict_inequalities()
-            True
+        >>> from ppl import Variable, Constraint_System
+        >>> x = Variable(0)
+        >>> cs = Constraint_System()
+        >>> cs.insert( x>=0 )
+        >>> cs.insert( x==-1 )
+        >>> cs.has_strict_inequalities()
+        False
+        >>> cs.insert( x>0 )
+        >>> cs.has_strict_inequalities()
+        True
         """
         return self.thisptr.has_strict_inequalities()
 
@@ -5637,12 +5618,14 @@ cdef class Constraint_System(object):
         >>> cmd += 'cs = Constraint_System( 3*x > 2*y+1 )\n'
         >>> cmd += 'cs.ascii_dump()\n'
         >>> import subprocess
-        >>> import sys
-        >>> subprocess.call(['python', '-c', cmd], stderr=subprocess.STDOUT)
+        >>> proc = subprocess.Popen(['python', '-c', cmd], stderr=subprocess.PIPE)
+        >>> out, err = proc.communicate()
+        >>> print err
         topology NOT_NECESSARILY_CLOSED
         1 x 2 SPARSE (sorted)
         index_first_pending 1
         size 4 -1 3 -2 -1 > (NNC)
+        <BLANKLINE>
         """
         self.thisptr.ascii_dump()
 
@@ -5801,8 +5784,8 @@ cdef class Constraint_System_iterator(object):
 
         Tests:
 
-            >>> from ppl import Constraint_System, Constraint_System_iterator
-            >>> iter = Constraint_System_iterator( Constraint_System() )   # indirect doctest
+        >>> from ppl import Constraint_System, Constraint_System_iterator
+        >>> iter = Constraint_System_iterator( Constraint_System() )   # indirect doctest
         """
         self.cs = cs
         self.csi_ptr = init_cs_iterator(cs.thisptr[0])
@@ -5823,11 +5806,11 @@ cdef class Constraint_System_iterator(object):
 
         Examples:
 
-            >>> from ppl import Constraint_System, Variable, Constraint_System_iterator
-            >>> x = Variable(0)
-            >>> cs = Constraint_System( 5*x > 0 )
-            >>> next(Constraint_System_iterator(cs))
-            x0>0
+        >>> from ppl import Constraint_System, Variable, Constraint_System_iterator
+        >>> x = Variable(0)
+        >>> cs = Constraint_System( 5*x > 0 )
+        >>> next(Constraint_System_iterator(cs))
+        x0>0
         """
         if is_end_cs_iterator((<Constraint_System>self.cs).thisptr[0], self.csi_ptr):
             raise StopIteration
@@ -5855,15 +5838,15 @@ cdef class Poly_Gen_Relation(object):
 
     Examples:
 
-        >>> from ppl import Poly_Gen_Relation
-        >>> nothing = Poly_Gen_Relation.nothing(); nothing
-        nothing
-        >>> subsumes = Poly_Gen_Relation.subsumes(); subsumes
-        subsumes
-        >>> nothing.implies( subsumes )
-        False
-        >>> subsumes.implies( nothing )
-        True
+    >>> from ppl import Poly_Gen_Relation
+    >>> nothing = Poly_Gen_Relation.nothing(); nothing
+    nothing
+    >>> subsumes = Poly_Gen_Relation.subsumes(); subsumes
+    subsumes
+    >>> nothing.implies( subsumes )
+    False
+    >>> subsumes.implies( nothing )
+    True
     """
     def __cinit__(self, do_not_construct_manually=False):
         """
@@ -5873,9 +5856,9 @@ cdef class Poly_Gen_Relation(object):
 
         Tests:
 
-            >>> from ppl import Poly_Gen_Relation
-            >>> Poly_Gen_Relation.nothing()
-            nothing
+        >>> from ppl import Poly_Gen_Relation
+        >>> Poly_Gen_Relation.nothing()
+        nothing
         """
         assert(do_not_construct_manually)
         self.thisptr = NULL
@@ -5901,10 +5884,10 @@ cdef class Poly_Gen_Relation(object):
 
         Examples:
 
-            >>> from ppl import Poly_Gen_Relation
-            >>> nothing = Poly_Gen_Relation.nothing()
-            >>> nothing.implies( nothing )
-            True
+        >>> from ppl import Poly_Gen_Relation
+        >>> nothing = Poly_Gen_Relation.nothing()
+        >>> nothing.implies( nothing )
+        True
         """
         return self.thisptr.implies(y.thisptr[0])
 
@@ -5919,9 +5902,9 @@ cdef class Poly_Gen_Relation(object):
 
         Examples:
 
-            >>> from ppl import Poly_Gen_Relation
-            >>> Poly_Gen_Relation.nothing()
-            nothing
+        >>> from ppl import Poly_Gen_Relation
+        >>> Poly_Gen_Relation.nothing()
+        nothing
         """
         return _wrap_Poly_Gen_Relation(PPL_Poly_Gen_Relation_nothing())
 
@@ -5937,9 +5920,9 @@ cdef class Poly_Gen_Relation(object):
 
         Examples:
 
-            >>> from ppl import Poly_Gen_Relation
-            >>> Poly_Gen_Relation.subsumes()
-            subsumes
+        >>> from ppl import Poly_Gen_Relation
+        >>> Poly_Gen_Relation.subsumes()
+        subsumes
         """
         return _wrap_Poly_Gen_Relation(PPL_Poly_Gen_Relation_subsumes())
 
@@ -5949,12 +5932,15 @@ cdef class Poly_Gen_Relation(object):
 
         Examples:
 
-            >>> cmd  = 'from ppl import Poly_Gen_Relation\n'
-            >>> cmd += 'Poly_Gen_Relation.nothing().ascii_dump()\n'
-            >>> import subprocess
-            >>> import sys
-            >>> subprocess.call(['python', '-c', cmd], stderr=subprocess.STDOUT)
-            NOTHING
+        >>> cmd  = 'from ppl import Poly_Gen_Relation\n'
+        >>> cmd += 'Poly_Gen_Relation.nothing().ascii_dump()\n'
+        >>> import subprocess
+        >>> proc = subprocess.Popen(['python', '-c', cmd], stderr=subprocess.PIPE)
+        >>> out, err = proc.communicate()
+        >>> print err
+        NOTHING
+        >>> proc.returncode
+        0
         """
         self.thisptr.ascii_dump()
 
@@ -5980,9 +5966,9 @@ cdef class Poly_Gen_Relation(object):
 
         Examples:
 
-            >>> from ppl import Poly_Gen_Relation
-            >>> Poly_Gen_Relation.nothing().__repr__()
-            'nothing'
+        >>> from ppl import Poly_Gen_Relation
+        >>> Poly_Gen_Relation.nothing().__repr__()
+        'nothing'
         """
         if self.implies(Poly_Gen_Relation.subsumes()):
             return 'subsumes'
@@ -6014,32 +6000,32 @@ cdef class Poly_Con_Relation(object):
 
     Examples:
 
-        >>> from ppl import Poly_Con_Relation
-        >>> saturates     = Poly_Con_Relation.saturates();  saturates
-        saturates
-        >>> is_included   = Poly_Con_Relation.is_included(); is_included
-        is_included
-        >>> is_included.implies(saturates)
-        False
-        >>> saturates.implies(is_included)
-        False
-        >>> rels = []
-        >>> rels.append(Poly_Con_Relation.nothing())
-        >>> rels.append(Poly_Con_Relation.is_disjoint())
-        >>> rels.append(Poly_Con_Relation.strictly_intersects())
-        >>> rels.append(Poly_Con_Relation.is_included())
-        >>> rels.append(Poly_Con_Relation.saturates())
-        >>> rels
-        [nothing, is_disjoint, strictly_intersects, is_included, saturates]
-        >>> for i, rel_i in enumerate(rels):
-        ...       for j, rel_j in enumerate(rels):
-        ...           print int(rel_i.implies(rel_j)),
-        ...       print
-        1 0 0 0 0
-        1 1 0 0 0
-        1 0 1 0 0
-        1 0 0 1 0
-        1 0 0 0 1
+    >>> from ppl import Poly_Con_Relation
+    >>> saturates     = Poly_Con_Relation.saturates();  saturates
+    saturates
+    >>> is_included   = Poly_Con_Relation.is_included(); is_included
+    is_included
+    >>> is_included.implies(saturates)
+    False
+    >>> saturates.implies(is_included)
+    False
+    >>> rels = []
+    >>> rels.append(Poly_Con_Relation.nothing())
+    >>> rels.append(Poly_Con_Relation.is_disjoint())
+    >>> rels.append(Poly_Con_Relation.strictly_intersects())
+    >>> rels.append(Poly_Con_Relation.is_included())
+    >>> rels.append(Poly_Con_Relation.saturates())
+    >>> rels
+    [nothing, is_disjoint, strictly_intersects, is_included, saturates]
+    >>> for i, rel_i in enumerate(rels):
+    ...       for j, rel_j in enumerate(rels):
+    ...           print int(rel_i.implies(rel_j)),
+    ...       print
+    1 0 0 0 0
+    1 1 0 0 0
+    1 0 1 0 0
+    1 0 0 1 0
+    1 0 0 0 1
     """
     def __cinit__(self, do_not_construct_manually=False):
         """
@@ -6049,9 +6035,9 @@ cdef class Poly_Con_Relation(object):
 
         Tests:
 
-            >>> from ppl import Poly_Con_Relation
-            >>> Poly_Con_Relation.nothing()
-            nothing
+        >>> from ppl import Poly_Con_Relation
+        >>> Poly_Con_Relation.nothing()
+        nothing
         """
         assert(do_not_construct_manually)
         self.thisptr = NULL
@@ -6095,9 +6081,9 @@ cdef class Poly_Con_Relation(object):
 
         Examples:
 
-            >>> from ppl import Poly_Con_Relation
-            >>> Poly_Con_Relation.nothing()
-            nothing
+        >>> from ppl import Poly_Con_Relation
+        >>> Poly_Con_Relation.nothing()
+        nothing
         """
         return _wrap_Poly_Con_Relation(PPL_Poly_Con_Relation_nothing())
 
@@ -6113,9 +6099,9 @@ cdef class Poly_Con_Relation(object):
 
         Examples:
 
-            >>> from ppl import Poly_Con_Relation
-            >>> Poly_Con_Relation.is_disjoint()
-            is_disjoint
+        >>> from ppl import Poly_Con_Relation
+        >>> Poly_Con_Relation.is_disjoint()
+        is_disjoint
         """
         return _wrap_Poly_Con_Relation(PPL_Poly_Con_Relation_is_disjoint())
 
@@ -6181,8 +6167,9 @@ cdef class Poly_Con_Relation(object):
         >>> cmd  = 'from ppl import Poly_Con_Relation\n'
         >>> cmd += 'Poly_Con_Relation.nothing().ascii_dump()\n'
         >>> import subprocess
-        >>> import sys
-        >>> subprocess.call(['python', '-c', cmd], stderr=subprocess.STDOUT)
+        >>> proc = subprocess.Popen(['python', '-c', cmd], stderr=subprocess.PIPE)
+        >>> out, err = proc.communicate()
+        >>> print err
         NOTHING
         """
         self.thisptr.ascii_dump()
