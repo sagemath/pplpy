@@ -7,4 +7,3 @@ src/pylong.c
 *.swp
 dist/
 pplpy.egg-info/
-sphinx-doc/build/

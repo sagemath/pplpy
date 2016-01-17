@@ -1,0 +1,17 @@
+Results of doctest builder run on 2016-01-17 00:40:31
+=====================================================
+
+Document: index
+---------------
+1 items passed all tests:
+ 1039 tests in default
+1039 tests in 1 items.
+1039 passed and 0 failed.
+Test passed.
+
+Doctest summary
+===============
+ 1039 tests
+    0 failures in tests
+    0 failures in setup code
+    0 failures in cleanup code
