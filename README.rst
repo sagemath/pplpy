@@ -41,6 +41,10 @@ Source
 You can find the latest version of the source code on github:
 https://github.com/videlec/pplpy/
 
+Documentation
+-------------
+
+The documentation is available at http://pythonhosted.org/pplpy/
 
 Requirements
 ------------
