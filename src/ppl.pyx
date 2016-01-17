@@ -340,7 +340,7 @@ cdef class _mutable_or_immutable(object):
 ####################################################
 ### MIP_Problem ####################################
 ####################################################
-cdef class MIP_Problem(_mutable_or_immutable):
+cdef class MIP_Problem(object):
     r"""
     wrapper for PPL's MIP_Problem class
 
@@ -621,37 +621,9 @@ cdef class MIP_Problem(_mutable_or_immutable):
         >>> m.space_dimension()
         7
         """
-        self.assert_mutable("The MIP_Problem is not mutable!");
         sig_on()
         self.thisptr.add_space_dimensions_and_embed(m)
         sig_off()
-
-    def _add_rational_constraint(self, e, denom, lower, upper):
-        """
-        Helper function for adding constraints: add the constraint
-        ``lower <= e/denom <= upper``.
-        
-        INPUT:
-
-        - ``e`` -- a linear expression (type ``Linear_Expression``)
-
-        - ``denom`` -- a positive integer
-
-        - ``lower``, ``upper`` -- a rational number or ``None``, where
-          ``None`` means that there is no constraint
-        """
-        raise NotImplementedError
-#        if lower == upper:
-#            if lower is not None:
-#                rhs = lower * denom
-#                self.add_constraint(e * rhs.denominator() == rhs.numerator())
-#        else:
-#            if lower is not None:
-#                rhs = lower * denom
-#                self.add_constraint(e * rhs.denominator() >= rhs.numerator())
-#            if upper is not None:
-#                rhs = upper * denom
-#                self.add_constraint(e * rhs.denominator() <= rhs.numerator())
 
     def add_constraint(self, Constraint c):
         """
@@ -680,7 +652,6 @@ cdef class MIP_Problem(_mutable_or_immutable):
         ValueError: PPL::MIP_Problem::add_constraint(c):
         c.space_dimension() == 3 exceeds this->space_dimension == 2.
         """
-        self.assert_mutable("The MIP_Problem is not mutable!");
         sig_on()
         try:
             self.thisptr.add_constraint(c.thisptr[0])
@@ -716,7 +687,6 @@ cdef class MIP_Problem(_mutable_or_immutable):
         ValueError: PPL::MIP_Problem::add_constraints(cs):
         cs.space_dimension() == 10 exceeds this->space_dimension() == 2.
         """
-        self.assert_mutable("The MIP_Problem is not mutable!");
         sig_on()
         try:
             self.thisptr.add_constraints(cs.thisptr[0])
@@ -750,7 +720,6 @@ cdef class MIP_Problem(_mutable_or_immutable):
         ValueError: PPL::MIP_Problem::set_objective_function(obj):
         obj.space_dimension() == 3 exceeds this->space_dimension == 2.
         """
-        self.assert_mutable("The MIP_Problem is not mutable!");
         self.thisptr.set_objective_function(obj.thisptr[0])
 
     def set_optimization_mode(self, mode):
