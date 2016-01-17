@@ -54,6 +54,3 @@ cdef class MIP_Problem(_mutable_or_immutable):
 cdef class MIP_Problem_constraints_iterator(object):
     cdef MIP_Problem pb
     cdef mip_cs_iterator_ptr mip_csi_ptr
-
-cdef _wrap_Generator_System(PPL_Generator_System generator_system)
-cdef _wrap_Constraint(PPL_Constraint constraint)
