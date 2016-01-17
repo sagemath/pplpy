@@ -18,12 +18,13 @@ setup(
     ext_modules=[
         Extension('ppl',
             sources=['src/ppl.pyx', 'src/ppl_shim.cc'],
-            depends=['src/ppl_shim.hh', 'src/ppl_decl.pxd'],
+            depends=['src/ppl.pxd', 'src/ppl_shim.hh', 'src/ppl_decl.pxd'],
             libraries=['gmp','gmpxx','ppl','m'],
             language='c++'),
 
         Extension('pylong',
             sources=['src/pylong.pyx'],
+            depends=['src/pylong.pxd'],
             libraries=['gmp'],
             language='c'),
         ],
