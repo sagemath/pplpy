@@ -4,7 +4,7 @@ from setuptools.extension import Extension
 from Cython.Distutils import build_ext
 from Cython.Build import cythonize
 
-VERSION = open('version.txt').read()
+VERSION = open('version.txt').read()[:-1]
 
 setup(
     name='pplpy',
