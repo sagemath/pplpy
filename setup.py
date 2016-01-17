@@ -4,15 +4,17 @@ from setuptools.extension import Extension
 from Cython.Distutils import build_ext
 from Cython.Build import cythonize
 
+VERSION = open('version.txt').read()
+
 setup(
     name='pplpy',
-    version='0.5.beta',
+    version=VERSION,
     description='Python PPL wrapper',
     long_description=open("README.rst").read(),
     author='Vincent Delecroix',
     author_email='vincent.delecroix@labri.fr',
     url = 'https://github.com/videlec/pplpy',
-    download_url = 'https://github.com/videlec/pplpy/archive/0.4.tar.gz',
+    download_url ='https://github.com/videlec/pplpy/archive/{}.tar.gz'.format(VERSION),
     license='GPL v3',
     platforms=['any'],
     ext_modules=[
