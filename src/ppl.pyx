@@ -384,28 +384,25 @@ cdef class MIP_Problem(_mutable_or_immutable):
 
         Examples:
 
-            >>> from ppl import Variable, Constraint_System, MIP_Problem
-            >>> x = Variable(0)
-            >>> y = Variable(1)
-            >>> cs = Constraint_System()
-            >>> cs.insert( x >= 0 )
-            >>> cs.insert( y >= 0 )
-            >>> cs.insert( 3 * x + 5 * y <= 10 )
-            >>> m = MIP_Problem(2, cs, x + y)
-            >>> m
-            A MIP_Problem
-            Maximize: x0+x1
-            Subject to constraints
+        >>> from ppl import Variable, Constraint_System, MIP_Problem
+        >>> x = Variable(0)
+        >>> y = Variable(1)
+        >>> cs = Constraint_System()
+        >>> cs.insert( x >= 0 )
+        >>> cs.insert( y >= 0 )
+        >>> cs.insert( 3 * x + 5 * y <= 10 )
+        >>> m = MIP_Problem(2, cs, x + y)
+        >>> m
+        MIP Problem (maximization, 2 variables, 3 constraints)
         """
-        ret = 'A MIP_Problem\n'
-        if self.optimization_mode() == 'maximization':
-            ret += 'Maximize'
-        else:
-            ret += 'Minimize'
-        ret += ': ' + str(self.objective_function()) + '\n'
-        ret += 'Subject to constraints\n'
-
-        return ret
+        dim = self.space_dimension()
+        ncs = sum(1 for _ in self)
+        return 'MIP Problem ({}, {} variable{}, {} constraint{})'.format(
+                self.optimization_mode(),
+                dim,
+                's' if dim > 1 else '',
+                ncs,
+                's' if ncs > 1 else '')
 
     def __cinit__(self, PPL_dimension_type dim = 0, *args):
         """
@@ -413,31 +410,74 @@ cdef class MIP_Problem(_mutable_or_immutable):
 
         Tests:
 
-            >>> from ppl import Variable, Constraint_System, MIP_Problem
-            >>> MIP_Problem(0)
-            A MIP_Problem
-            Maximize: 0
-            Subject to constraints
+        >>> from ppl import Variable, Constraint_System, MIP_Problem
+        >>> MIP_Problem(0)
+        A MIP_Problem
+        Maximize: 0
+        Subject to constraints
+        >>> x = Variable(0)
+        >>> y = Variable(1)
+        >>> cs = Constraint_System()
+        >>> cs.insert(x + y <= 2)
+        >>> M = MIP_Problem(2, cs, 0)
+        >>> M = MIP_Problem(2, cs, x)
+        >>> M = MIP_Problem(2, None, None)
+        Traceback (most recent call last):
+        ...
+        TypeError: Cannot convert NoneType to sage.libs.ppl.Constraint_System
+        >>> M = MIP_Problem(2, cs, 'hey')
+        Traceback (most recent call last):
+        ...
+        TypeError: unable to convert 'hey' to an integer
+        >>> M = MIP_Problem(2, cs, x, 'middle')
+        Traceback (most recent call last):
+        ...
+        ValueError: unknown mode 'middle'
         """
-        if len(args) == 0:
+        if not args:
             self.thisptr = new PPL_MIP_Problem(dim)
-        elif len(args) == 2:
-            cs = <Constraint_System>args[0]
-            obj = <Linear_Expression>args[1]
-            self.thisptr = new PPL_MIP_Problem(dim, cs.thisptr[0], obj.thisptr[0], MAXIMIZATION)
-        elif len(args) == 3:
-            cs = <Constraint_System>args[0]
-            obj = <Linear_Expression>args[1]
+            return
+        elif len(args) == 1:
+            raise ValueError('cannot initialize from {}'.format(args))
 
-            mode = str(args[2])
-            if mode == 'maximization':
-                self.thisptr = new PPL_MIP_Problem(dim, cs.thisptr[0], obj.thisptr[0], MAXIMIZATION)
-            elif mode == 'minimization':
-                self.thisptr = new PPL_MIP_Problem(dim, cs.thisptr[0], obj.thisptr[0], MINIMIZATION)
+        cdef Constraint_System cs = <Constraint_System?>args[0]
+        cdef Linear_Expression obj
+        try:
+            obj = <Linear_Expression?> args[1]
+        except TypeError:
+            obj = Linear_Expression(args[1])
+
+        cdef PPL_Optimization_Mode mode = MAXIMIZATION
+        if len(args) == 3:
+            if args[2] == 'maximization':
+                mode = MAXIMIZATION
+            elif args[2] == 'minimization':
+                mode = MINIMIZATION
             else:
-                raise ValueError('Unknown value: mode={}'.format(mode))
-        else:
-            raise ValueError('Cannot initialize from {}'.format(args))
+                raise ValueError('unknown mode {!r}'.format(args[2]))
+
+        self.thisptr = new PPL_MIP_Problem(dim, cs.thisptr[0], obj.thisptr[0], mode)
+
+    def __iter__(self):
+        r"""
+        Iterator through the constraints
+
+        Tests:
+
+        >>> from ppl import Variable, MIP_Problem
+        >>> x = Variable(0)
+        >>> y = Variable(1)
+        >>> M = MIP_Problem(2)
+        >>> for c in M: print c
+        >>> M.add_constraint(x + y <= 5)
+        >>> for c in M: print c
+        -x0-x1+5>=0
+        >>> M.add_constraint(3*x - 18*y >= -2)
+        >>> for c in M: print c
+        -x0-x1+5>=0
+        3*x0-18*x1+2>=0
+        """
+        return MIP_Problem_constraints_iterator(self)
 
     def __dealloc__(self):
         """
@@ -875,6 +915,50 @@ cdef class MIP_Problem(_mutable_or_immutable):
         True
         """
         return self.thisptr.OK()
+
+cdef class MIP_Problem_constraints_iterator(object):
+    """
+    Wrapper for PPL's ``Constraint_System::const_iterator`` class.
+    """
+    def __cinit__(self, MIP_Problem pb):
+        """
+        The Cython constructor.
+
+        See :class:`Constraint_System_iterator` for documentation.
+
+        Tests:
+
+        >>> from ppl import Constraint_System, Constraint_System_iterator
+        >>> iter = Constraint_System_iterator( Constraint_System() )   # indirect doctest
+        """
+        self.pb = pb
+        self.mip_csi_ptr = init_mip_cs_iterator(pb.thisptr[0])
+
+    def __dealloc__(self):
+        """
+        The Cython destructor.
+        """
+        delete_mip_cs_iterator(self.mip_csi_ptr)
+
+    def __next__(Constraint_System_iterator self):
+        r"""
+        The next iteration.
+
+        OUTPUT:
+
+        A :class:`Generator`.
+
+        Examples:
+
+        >>> from ppl import Constraint_System, Variable, Constraint_System_iterator
+        >>> x = Variable(0)
+        >>> cs = Constraint_System( 5*x > 0 )
+        >>> next(Constraint_System_iterator(cs))
+        x0>0
+        """
+        if is_end_mip_cs_iterator((<MIP_Problem>self.pb).thisptr[0], self.mip_csi_ptr):
+            raise StopIteration
+        return _wrap_Constraint(next_mip_cs_iterator(self.mip_csi_ptr))
 
 ####################################################
 ### Polyhedron #####################################

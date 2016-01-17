@@ -38,6 +38,12 @@ void delete_cs_iterator(cs_iterator_ptr);
 // workarounds for Cython issues with exceptions while returning references
 Generator* new_MIP_optimizing_point(const MIP_Problem& problem);
 
+// Iterator for MIP_Problem
+typedef MIP_Problem::const_iterator* mip_cs_iterator_ptr;
+mip_cs_iterator_ptr init_mip_cs_iterator(const MIP_Problem& pb);
+Constraint next_mip_cs_iterator(mip_cs_iterator_ptr mip_csi_ptr);
+bool is_end_mip_cs_iterator(const MIP_Problem &pb, mip_cs_iterator_ptr mip_csi_ptr);
+void delete_mip_cs_iterator(mip_cs_iterator_ptr mip_csi_ptr);
 
 
 #endif

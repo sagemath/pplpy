@@ -141,13 +141,13 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         void ascii_dump()
         bint OK()
 
-    cdef enum PPL_Degenerate_Element:
+    cdef enum PPL_Degenerate_Element "Parma_Polyhedra_Library::Degenerate_Element":
         UNIVERSE, EMPTY
 
-    cdef enum PPL_Optimization_Mode:
+    cdef enum PPL_Optimization_Mode "Parma_Polyhedra_Library::Optimization_Mode":
         MINIMIZATION, MAXIMIZATION
 
-    cdef enum MIP_Problem_Status:
+    cdef enum PPL_MIP_Problem_Status "Parma_Polyhedra_Library::MIP_Problem_Status":
         UNFEASIBLE_MIP_PROBLEM, UNBOUNDED_MIP_PROBLEM, OPTIMIZED_MIP_PROBLEM
 
     cdef cppclass PPL_Polyhedron:
@@ -245,7 +245,7 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         void set_optimization_mode(PPL_Optimization_Mode mode)
         PPL_Optimization_Mode optimization_mode()
         bint is_satisfiable()
-        MIP_Problem_Status solve()
+        PPL_MIP_Problem_Status solve()
         void evaluate_objective_function(PPL_Generator evaluating_point, PPL_Coefficient &num, PPL_Coefficient &den) except +ValueError
         PPL_Generator& feasible_point()
         PPL_Generator optimizing_point() except +ValueError
@@ -301,37 +301,23 @@ cdef extern from "ppl_shim.hh":
     cdef bint is_end_gs_iterator(PPL_Generator_System &gs, gs_iterator_ptr gsi_ptr)
     cdef void delete_gs_iterator(gs_iterator_ptr)
 
-
-cdef extern from "ppl_shim.hh":
     ctypedef void* cs_iterator_ptr
     cdef cs_iterator_ptr init_cs_iterator(PPL_Constraint_System &cs)
     cdef PPL_Constraint next_cs_iterator(cs_iterator_ptr)
     cdef bint is_end_cs_iterator(PPL_Constraint_System &cs, cs_iterator_ptr csi_ptr)
     cdef void delete_cs_iterator(cs_iterator_ptr)
 
+    ctypedef void* mip_cs_iterator_ptr
+    cdef mip_cs_iterator_ptr init_mip_cs_iterator(PPL_MIP_Problem& pb)
+    cdef PPL_Constraint next_mip_cs_iterator(mip_cs_iterator_ptr mip_csi_ptr)
+    cdef bint is_end_mip_cs_iterator(PPL_MIP_Problem &pb, mip_cs_iterator_ptr mip_csi_ptr)
+    cdef void delete_mip_cs_iterator(mip_cs_iterator_ptr mip_csi_ptr)
+
 
 cdef PPL_GeneratorType_str(PPL_GeneratorType t)
 
 cdef class _mutable_or_immutable(object):
     cdef bint _is_mutable
-
-cdef class MIP_Problem(_mutable_or_immutable):
-    cdef PPL_MIP_Problem *thisptr
-
-cdef class Polyhedron(_mutable_or_immutable):
-   cdef PPL_Polyhedron *thisptr
-   cdef _relation_with_generator(Polyhedron self, Generator g)
-   cdef _relation_with_constraint(Polyhedron self, Constraint c)
-
-
-
-cdef class C_Polyhedron(Polyhedron):
-    pass
-
-cdef class NNC_Polyhedron(Polyhedron):
-    pass
-
-
 
 cdef class Variable(object):
     cdef PPL_Variable *thisptr
@@ -359,12 +345,29 @@ cdef class Constraint_System_iterator(object):
     cdef Constraint_System cs
     cdef cs_iterator_ptr csi_ptr
 
+cdef class Polyhedron(_mutable_or_immutable):
+   cdef PPL_Polyhedron *thisptr
+   cdef _relation_with_generator(Polyhedron self, Generator g)
+   cdef _relation_with_constraint(Polyhedron self, Constraint c)
+
+cdef class C_Polyhedron(Polyhedron):
+    pass
+
+cdef class NNC_Polyhedron(Polyhedron):
+    pass
 
 cdef class Poly_Gen_Relation(object):
     cdef PPL_Poly_Gen_Relation *thisptr
 
 cdef class Poly_Con_Relation(object):
     cdef PPL_Poly_Con_Relation *thisptr
+
+cdef class MIP_Problem(_mutable_or_immutable):
+    cdef PPL_MIP_Problem *thisptr
+
+cdef class MIP_Problem_constraints_iterator(object):
+    cdef MIP_Problem pb
+    cdef mip_cs_iterator_ptr mip_csi_ptr
 
 cdef _wrap_Generator_System(PPL_Generator_System generator_system)
 cdef _wrap_Constraint(PPL_Constraint constraint)

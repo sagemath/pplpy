@@ -83,8 +83,29 @@ void delete_cs_iterator(cs_iterator_ptr csi_ptr)
 
 
 /************************************************************/
-Generator* new_MIP_optimizing_point(const MIP_Problem& problem)
+typedef MIP_Problem::const_iterator* mip_cs_iterator_ptr;
+
+Generator* new_MIP_optimizing_point(const MIP_Problem& pb)
 {
-  return new Generator(problem.optimizing_point());
+  return new Generator(pb.optimizing_point());
 }
 
+mip_cs_iterator_ptr init_mip_cs_iterator(const MIP_Problem& pb)
+{
+  return new MIP_Problem::const_iterator(pb.constraints_begin());
+}
+
+Constraint next_mip_cs_iterator(mip_cs_iterator_ptr mip_csi_ptr)
+{
+  return *(*mip_csi_ptr)++;
+}
+
+bool is_end_mip_cs_iterator(const MIP_Problem &pb, mip_cs_iterator_ptr mip_csi_ptr)
+{
+  return (*mip_csi_ptr) == pb.constraints_end();
+}
+
+void delete_mip_cs_iterator(mip_cs_iterator_ptr mip_csi_ptr)
+{
+  delete mip_csi_ptr;
+}
