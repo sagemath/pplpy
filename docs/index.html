@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pplpy 0.4 documentation</title>
+    <title>Welcome to pplpy’s documentation! &mdash; pplpy 0.4 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -24,13 +24,19 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="None" href="index.html#document-index" /> 
+    <link rel="top" title="pplpy 0.4 documentation" href="#" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        <li><a href="index.html#document-index">pplpy 0.4 documentation</a> &raquo;</li> 
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="#">pplpy 0.4 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -43,7 +49,7 @@
 <span id="welcome-to-pplpy-s-documentation"></span><h1>Welcome to pplpy&#8217;s documentation!<a class="headerlink" href="#module-ppl" title="Permalink to this headline">¶</a></h1>
 <p>Cython wrapper for the Parma Polyhedra Library (PPL)</p>
 <p>The Parma Polyhedra Library (PPL) is a library for polyhedral computations over
-<cite>QQ</cite>. This interface tries to reproduce the C++ API as faithfully as possible
+<span class="math">\(\mathbb{Q}\)</span>. This interface tries to reproduce the C++ API as faithfully as possible
 in Python. For example, the following C++ excerpt:</p>
 <div class="highlight-c++"><div class="highlight"><pre><span class="n">Variable</span> <span class="nf">x</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 <span class="n">Variable</span> <span class="nf">y</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
@@ -255,12 +261,12 @@ generator, this generator must be a point:</p>
 <p>Wrapper for PPL&#8217;s <tt class="docutils literal"><span class="pre">Constraint</span></tt> class.</p>
 <p>An object of the class <tt class="docutils literal"><span class="pre">Constraint</span></tt> is either:</p>
 <ul class="simple">
-<li>an equality <cite>sum_{i=0}^{n-1} a_i x_i + b = 0</cite></li>
-<li>a non-strict inequality <cite>sum_{i=0}^{n-1} a_i x_i + b geq 0</cite></li>
-<li>a strict inequality <cite>sum_{i=0}^{n-1} a_i x_i + b &gt; 0</cite></li>
+<li>an equality <span class="math">\(\sum_{i=0}^{n-1} a_i x_i + b = 0\)</span></li>
+<li>a non-strict inequality <span class="math">\(\sum_{i=0}^{n-1} a_i x_i + b \geq 0\)</span></li>
+<li>a strict inequality <span class="math">\(\sum_{i=0}^{n-1} a_i x_i + b &gt; 0\)</span></li>
 </ul>
-<p>where <cite>n</cite> is the dimension of the space, <cite>a_i</cite> is the integer
-coefficient of variable <cite>x_i</cite>, and <cite>b_i</cite> is the integer
+<p>where <span class="math">\(n\)</span> is the dimension of the space, <span class="math">\(a_i\)</span> is the integer
+coefficient of variable <span class="math">\(x_i\)</span>, and <span class="math">\(b_i\)</span> is the integer
 inhomogeneous term.</p>
 <p>INPUT/OUTPUT:</p>
 <p>You construct constraints by writing inequalities in
@@ -446,9 +452,9 @@ inconsistent.</p>
 <p>An inconsistent constraint can have either one of the
 following forms:</p>
 <ul class="simple">
-<li>an equality: <cite>sum 0 x_i + b = 0</cite> with <cite>bnot=0</cite>,</li>
-<li>a non-strict inequality: <cite>sum 0 x_i + b geq 0</cite> with <cite>b&lt; 0</cite>, or</li>
-<li>a strict inequality: <cite>sum 0 x_i + b &gt; 0</cite> with <cite>bleq 0</cite>.</li>
+<li>an equality: <span class="math">\(\sum 0 x_i + b = 0\)</span> with <cite>bnot=0</cite>,</li>
+<li>a non-strict inequality: <span class="math">\(\sum 0 x_i + b \geq 0\)</span> with <cite>b&lt; 0</cite>, or</li>
+<li>a strict inequality: <span class="math">\(\sum 0 x_i + b &gt; 0\)</span> with <cite>bleq 0</cite>.</li>
 </ul>
 <p>OUTPUT:</p>
 <p>Boolean. Returns <tt class="docutils literal"><span class="pre">True</span></tt> if and only if <tt class="docutils literal"><span class="pre">self</span></tt> is an
@@ -530,9 +536,9 @@ strict inequality constraint.</p>
 <dd><p>Test whether <tt class="docutils literal"><span class="pre">self</span></tt> is a tautological constraint.</p>
 <p>A tautology can have either one of the following forms:</p>
 <ul class="simple">
-<li>an equality: <cite>sum 0 x_i + 0 = 0</cite>,</li>
-<li>a non-strict inequality: <cite>sum 0 x_i + b geq 0</cite> with <cite>bgeq 0</cite>, or</li>
-<li>a strict inequality: <cite>sum 0 x_i + b &gt; 0</cite> with <cite>b&gt; 0</cite>.</li>
+<li>an equality: <span class="math">\(\sum 0 x_i + 0 = 0\)</span>,</li>
+<li>a non-strict inequality: <span class="math">\(\sum 0 x_i + b \geq 0\)</span> with <cite>bgeq 0</cite>, or</li>
+<li>a strict inequality: <span class="math">\(\sum 0 x_i + b &gt; 0\)</span> with <cite>b&gt; 0</cite>.</li>
 </ul>
 <p>OUTPUT:</p>
 <p>Boolean. Returns <tt class="docutils literal"><span class="pre">True</span></tt> if and only if <tt class="docutils literal"><span class="pre">self</span></tt> is a
@@ -796,14 +802,14 @@ space dimension to 0.</p>
 <p>An object of the class Generator is one of the following:</p>
 <blockquote>
 <div><ul class="simple">
-<li>a line <cite>ell = (a_0, dots, a_{n-1})^T</cite></li>
-<li>a ray <cite>r = (a_0, dots, a_{n-1})^T</cite></li>
-<li>a point <cite>p = (tfrac{a_0}{d}, dots, tfrac{a_{n-1}}{d})^T</cite></li>
-<li>a closure point <cite>c = (tfrac{a_0}{d}, dots, tfrac{a_{n-1}}{d})^T</cite></li>
+<li>a line <span class="math">\(\ell = (a_0, \dots, a_{n-1})^T\)</span></li>
+<li>a ray <span class="math">\(r = (a_0, \dots, a_{n-1})^T\)</span></li>
+<li>a point <span class="math">\(p = (\tfrac{a_0}{d}, \dots, \tfrac{a_{n-1}}{d})^T\)</span></li>
+<li>a closure point <span class="math">\(c = (\tfrac{a_0}{d}, \dots, \tfrac{a_{n-1}}{d})^T\)</span></li>
 </ul>
 </div></blockquote>
-<p>where <cite>n</cite> is the dimension of the space and, for points and
-closure points, <cite>d</cite> is the divisor.</p>
+<p>where <span class="math">\(n\)</span> is the dimension of the space and, for points and
+closure points, <span class="math">\(d\)</span> is the divisor.</p>
 <p>INPUT/OUTPUT:</p>
 <p>Use the helper functions <a class="reference internal" href="#ppl.line" title="ppl.line"><tt class="xref py py-func docutils literal"><span class="pre">line()</span></tt></a>, <a class="reference internal" href="#ppl.ray" title="ppl.ray"><tt class="xref py py-func docutils literal"><span class="pre">ray()</span></tt></a>, <a class="reference internal" href="#ppl.point" title="ppl.point"><tt class="xref py py-func docutils literal"><span class="pre">point()</span></tt></a>,
 and <a class="reference internal" href="#ppl.closure_point" title="ppl.closure_point"><tt class="xref py py-func docutils literal"><span class="pre">closure_point()</span></tt></a> to construct generators. Analogous class
@@ -2681,7 +2687,7 @@ starting from the polyhedron <cite>P</cite> and adding a third space
 dimension, the result will be the polyhedron</p>
 <div class="math">
 \[\Big\{
-(x,y,z)^T \in \RR^3
+(x,y,z)^T \in \mathbb{R}^3
 \Big|
 (x,y)^T \in P
 \Big\}\]</div>
@@ -2727,7 +2733,7 @@ For instance, when starting from the polyhedron <cite>P</cite> and adding
 a third space dimension, the result will be the polyhedron</p>
 <div class="math">
 \[\Big\{
-(x,y,0)^T \in \RR^3
+(x,y,0)^T \in \mathbb{R}^3
 \Big|
 (x,y)^T \in P
 \Big\}\]</div>
@@ -2880,7 +2886,7 @@ order) is the polyhedron such that</p>
 <div class="math">
 \[R =
 \Big\{
-(x_0,\dots,x_{n-1},y_0,\dots,y_{m-1})^T \in \RR^{n+m}
+(x_0,\dots,x_{n-1},y_0,\dots,y_{m-1})^T \in \mathbb{R}^{n+m}
 \Big|
 (x_0,\dots,x_{n-1})^T \in P
 ,~
@@ -4198,6 +4204,24 @@ convertible to it (<a class="reference internal" href="#ppl.Variable" title="ppl
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -4205,7 +4229,13 @@ convertible to it (<a class="reference internal" href="#ppl.Variable" title="ppl
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        <li><a href="index.html#document-index">pplpy 0.4 documentation</a> &raquo;</li> 
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="#">pplpy 0.4 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
