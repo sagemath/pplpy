@@ -18,7 +18,7 @@ setup(
     ext_modules=[
         Extension('ppl',
             sources=['src/ppl.pyx', 'src/ppl_shim.cc'],
-            depends=['src/ppl_shim.hh'],
+            depends=['src/ppl_shim.hh', 'src/ppl_decl.pxd'],
             libraries=['gmp','gmpxx','ppl','m'],
             language='c++'),
 
