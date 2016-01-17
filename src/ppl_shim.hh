@@ -45,5 +45,6 @@ Constraint next_mip_cs_iterator(mip_cs_iterator_ptr mip_csi_ptr);
 bool is_end_mip_cs_iterator(const MIP_Problem &pb, mip_cs_iterator_ptr mip_csi_ptr);
 void delete_mip_cs_iterator(mip_cs_iterator_ptr mip_csi_ptr);
 
+Constraint_System* mip_constraints(const MIP_Problem &pb);
 
 #endif

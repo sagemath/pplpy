@@ -277,3 +277,5 @@ cdef extern from "ppl_shim.hh":
     cdef void delete_mip_cs_iterator(mip_cs_iterator_ptr mip_csi_ptr)
 
 
+    cdef PPL_Constraint_System* mip_constraints(PPL_MIP_Problem &pb)
+

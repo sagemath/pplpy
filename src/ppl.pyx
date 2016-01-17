@@ -218,6 +218,48 @@ cdef PPL_GeneratorType_str(PPL_GeneratorType t):
     else:
         raise RuntimeError
 
+cdef _wrap_Constraint_System(PPL_Constraint_System constraint_system):
+    """
+    Wrap a C++ ``PPL_Constraint_System`` into a Cython ``Constraint_System``.
+    """
+    cdef Constraint_System cs = Constraint_System()
+    del cs.thisptr
+    cs.thisptr = new PPL_Constraint_System(constraint_system)
+    return cs
+
+cdef _wrap_Poly_Gen_Relation(PPL_Poly_Gen_Relation relation):
+    """
+    Wrap a C++ ``PPL_Poly_Gen_Relation`` into a Cython ``Poly_Gen_Relation``.
+    """
+    cdef Poly_Gen_Relation rel = Poly_Gen_Relation(True)
+    rel.thisptr = new PPL_Poly_Gen_Relation(relation)
+    return rel
+
+cdef _wrap_Poly_Con_Relation(PPL_Poly_Con_Relation relation):
+    """
+    Wrap a C++ ``PPL_Poly_Con_Relation`` into a Cython ``Poly_Con_Relation``.
+    """
+    cdef Poly_Con_Relation rel = Poly_Con_Relation(True)
+    rel.thisptr = new PPL_Poly_Con_Relation(relation)
+    return rel
+
+cdef _wrap_Generator_System(PPL_Generator_System generator_system):
+    """
+    Wrap a C++ ``PPL_Generator_System`` into a Cython ``Generator_System``.
+    """
+    cdef Generator_System gs = Generator_System()
+    del gs.thisptr
+    gs.thisptr = new PPL_Generator_System(generator_system)
+    return gs
+
+cdef _wrap_Constraint(PPL_Constraint constraint):
+    """
+    Wrap a C++ ``PPL_Constraint`` into a Cython ``Constraint``.
+    """
+    cdef Constraint c = Constraint(True)
+    c.thisptr = new PPL_Constraint(constraint)
+    return c
+
 ####################################################
 ### _mutable_or_immutable ##########################
 ####################################################
@@ -371,6 +413,8 @@ cdef class MIP_Problem(object):
         >>> cs.insert(y >= 0)
         >>> cs.insert(3 * x + 5 * y <= 10)
         >>> m = MIP_Problem(2, cs, x + y)
+        >>> m
+        MIP Problem (maximization, 2 variables, 3 constraints)
         >>> m.optimal_value()
         Fraction(10, 3)
         >>> float(_)
@@ -458,6 +502,12 @@ cdef class MIP_Problem(object):
 
         self.thisptr = new PPL_MIP_Problem(dim, cs.thisptr[0], obj.thisptr[0], mode)
 
+    def __dealloc__(self):
+        """
+        The Cython destructor
+        """
+        del self.thisptr
+
     def __iter__(self):
         r"""
         Iterator through the constraints
@@ -479,11 +529,36 @@ cdef class MIP_Problem(object):
         """
         return MIP_Problem_constraints_iterator(self)
 
-    def __dealloc__(self):
+    def constraints(self):
+        r"""
+        Return the constraints of this MIP
+
+        The output is an instance of :class:`Constraint_System`.
+
+        Examples:
+
+        >>> from ppl import Variable, MIP_Problem
+        >>> x = Variable(0)
+        >>> y = Variable(1)
+        >>> M = MIP_Problem(2)
+        >>> M.add_constraint(x + y <= 5)
+        >>> M.add_constraint(3*x - 18*y >= -2)
+        >>> M.constraints()
+        Constraint_System {-x0-x1+5>=0, 3*x0-18*x1+2>=0}
+
+        Note that modifying the output of this method will not modify the
+        underlying MIP problem object:
+
+        >>> cs = M.constraints()
+        >>> cs.insert(x <= 3)
+        >>> cs
+        Constraint_System {-x0-x1+5>=0, 3*x0-18*x1+2>=0, -x0+3>=0}
+        >>> M.constraints()
+        Constraint_System {-x0-x1+5>=0, 3*x0-18*x1+2>=0}
         """
-        The Cython destructor
-        """
-        del self.thisptr
+        cdef Constraint_System c = Constraint_System(None)
+        c.thisptr = mip_constraints(self.thisptr[0])
+        return c
 
     def optimization_mode(self):
         """
@@ -5467,14 +5542,6 @@ def equation(expression):
 ####################################################
 ### Constraint_System  ##############################
 ####################################################
-cdef _wrap_Constraint_System(PPL_Constraint_System constraint_system):
-    """
-    Wrap a C++ ``PPL_Constraint_System`` into a Cython ``Constraint_System``.
-    """
-    cdef Constraint_System cs = Constraint_System()
-    del cs.thisptr
-    cs.thisptr = new PPL_Constraint_System(constraint_system)
-    return cs
 
 
 ####################################################
@@ -5513,21 +5580,18 @@ cdef class Constraint_System(object):
         """
         if arg is None:
             self.thisptr = new PPL_Constraint_System()
-            return
-        if isinstance(arg, Constraint):
+        elif isinstance(arg, Constraint):
             g = <Constraint>arg
             self.thisptr = new PPL_Constraint_System(g.thisptr[0])
-            return
-        if isinstance(arg, Constraint_System):
+        elif isinstance(arg, Constraint_System):
             gs = <Constraint_System>arg
             self.thisptr = new PPL_Constraint_System(gs.thisptr[0])
-            return
-        if isinstance(arg, (list,tuple)):
+        elif isinstance(arg, (list,tuple)):
             self.thisptr = new PPL_Constraint_System()
             for constraint in arg:
                 self.insert(constraint)
-            return
-        raise ValueError, 'Cannot initialize with '+str(arg)+'.'
+        else:
+            raise TypeError('cannot initialize from {!r}'.format(arg))
 
     def __dealloc__(self):
         """
@@ -5869,13 +5933,6 @@ cdef class Constraint_System_iterator(object):
             raise StopIteration
         return _wrap_Constraint(next_cs_iterator(self.csi_ptr))
 
-cdef _wrap_Poly_Gen_Relation(PPL_Poly_Gen_Relation relation):
-    """
-    Wrap a C++ ``PPL_Poly_Gen_Relation`` into a Cython ``Poly_Gen_Relation``.
-    """
-    cdef Poly_Gen_Relation rel = Poly_Gen_Relation(True)
-    rel.thisptr = new PPL_Poly_Gen_Relation(relation)
-    return rel
 
 cdef class Poly_Gen_Relation(object):
     r"""
@@ -6029,13 +6086,6 @@ cdef class Poly_Gen_Relation(object):
             return 'nothing'
 
 
-cdef _wrap_Poly_Con_Relation(PPL_Poly_Con_Relation relation):
-    """
-    Wrap a C++ ``PPL_Poly_Con_Relation`` into a Cython ``Poly_Con_Relation``.
-    """
-    cdef Poly_Con_Relation rel = Poly_Con_Relation(True)
-    rel.thisptr = new PPL_Poly_Con_Relation(relation)
-    return rel
 
 
 cdef class Poly_Con_Relation(object):
@@ -6268,21 +6318,4 @@ cdef class Poly_Con_Relation(object):
             return 'nothing'
 
 
-cdef _wrap_Generator_System(PPL_Generator_System generator_system):
-    """
-    Wrap a C++ ``PPL_Generator_System`` into a Cython ``Generator_System``.
-    """
-    cdef Generator_System gs = Generator_System()
-    del gs.thisptr
-    gs.thisptr = new PPL_Generator_System(generator_system)
-    return gs
-
-
-cdef _wrap_Constraint(PPL_Constraint constraint):
-    """
-    Wrap a C++ ``PPL_Constraint`` into a Cython ``Constraint``.
-    """
-    cdef Constraint c = Constraint(True)
-    c.thisptr = new PPL_Constraint(constraint)
-    return c
 
