@@ -4,7 +4,7 @@ r"""
 Cython wrapper for the Parma Polyhedra Library (PPL)
 
 The Parma Polyhedra Library (PPL) is a library for polyhedral computations over
-`\QQ`. This interface tries to reproduce the C++ API as faithfully as possible
+:math:`\mathbb{Q}`. This interface tries to reproduce the C++ API as faithfully as possible
 in Python. For example, the following C++ excerpt:
 
 .. code-block:: c++
@@ -2495,7 +2495,7 @@ cdef class Polyhedron(_mutable_or_immutable):
         .. MATH::
 
             \Big\{
-            (x,y,z)^T \in \RR^3
+            (x,y,z)^T \in \mathbb{R}^3
             \Big|
             (x,y)^T \in P
             \Big\}
@@ -2550,7 +2550,7 @@ cdef class Polyhedron(_mutable_or_immutable):
         .. MATH::
 
             \Big\{
-            (x,y,0)^T \in \RR^3
+            (x,y,0)^T \in \mathbb{R}^3
             \Big|
             (x,y)^T \in P
             \Big\}
@@ -2607,7 +2607,7 @@ cdef class Polyhedron(_mutable_or_immutable):
 
             R =
             \Big\{
-            (x_0,\dots,x_{n-1},y_0,\dots,y_{m-1})^T \in \RR^{n+m}
+            (x_0,\dots,x_{n-1},y_0,\dots,y_{m-1})^T \in \mathbb{R}^{n+m}
             \Big|
             (x_0,\dots,x_{n-1})^T \in P
             ,~
@@ -3982,16 +3982,16 @@ cdef class Generator(object):
 
     An object of the class Generator is one of the following:
 
-      * a line `\ell = (a_0, \dots, a_{n-1})^T`
+      * a line :math:`\ell = (a_0, \dots, a_{n-1})^T`
 
-      * a ray `r = (a_0, \dots, a_{n-1})^T`
+      * a ray :math:`r = (a_0, \dots, a_{n-1})^T`
 
-      * a point `p = (\tfrac{a_0}{d}, \dots, \tfrac{a_{n-1}}{d})^T`
+      * a point :math:`p = (\tfrac{a_0}{d}, \dots, \tfrac{a_{n-1}}{d})^T`
 
-      * a closure point `c = (\tfrac{a_0}{d}, \dots, \tfrac{a_{n-1}}{d})^T`
+      * a closure point :math:`c = (\tfrac{a_0}{d}, \dots, \tfrac{a_{n-1}}{d})^T`
 
-    where `n` is the dimension of the space and, for points and
-    closure points, `d` is the divisor.
+    where :math:`n` is the dimension of the space and, for points and
+    closure points, :math:`d` is the divisor.
 
     INPUT/OUTPUT:
 
@@ -4997,14 +4997,14 @@ cdef class Constraint(object):
 
     An object of the class ``Constraint`` is either:
 
-    * an equality `\sum_{i=0}^{n-1} a_i x_i + b = 0`
+    * an equality :math:`\sum_{i=0}^{n-1} a_i x_i + b = 0`
 
-    * a non-strict inequality `\sum_{i=0}^{n-1} a_i x_i + b \geq 0`
+    * a non-strict inequality :math:`\sum_{i=0}^{n-1} a_i x_i + b \geq 0`
 
-    * a strict inequality `\sum_{i=0}^{n-1} a_i x_i + b > 0`
+    * a strict inequality :math:`\sum_{i=0}^{n-1} a_i x_i + b > 0`
 
-    where `n` is the dimension of the space, `a_i` is the integer
-    coefficient of variable `x_i`, and `b_i` is the integer
+    where :math:`n` is the dimension of the space, :math:`a_i` is the integer
+    coefficient of variable :math:`x_i`, and :math:`b_i` is the integer
     inhomogeneous term.
 
     INPUT/OUTPUT:
@@ -5318,11 +5318,11 @@ cdef class Constraint(object):
 
         A tautology can have either one of the following forms:
 
-        * an equality: `\sum 0 x_i + 0 = 0`,
+        * an equality: :math:`\sum 0 x_i + 0 = 0`,
 
-        * a non-strict inequality: `\sum 0 x_i + b \geq 0` with `b\geq 0`, or
+        * a non-strict inequality: :math:`\sum 0 x_i + b \geq 0` with `b\geq 0`, or
 
-        * a strict inequality: `\sum 0 x_i + b > 0` with `b> 0`.
+        * a strict inequality: :math:`\sum 0 x_i + b > 0` with `b> 0`.
 
         OUTPUT:
 
@@ -5347,11 +5347,11 @@ cdef class Constraint(object):
         An inconsistent constraint can have either one of the
         following forms:
 
-        * an equality: `\sum 0 x_i + b = 0` with `b\not=0`,
+        * an equality: :math:`\sum 0 x_i + b = 0` with `b\not=0`,
 
-        * a non-strict inequality: `\sum 0 x_i + b \geq 0` with `b< 0`, or
+        * a non-strict inequality: :math:`\sum 0 x_i + b \geq 0` with `b< 0`, or
 
-        * a strict inequality: `\sum 0 x_i + b > 0` with `b\leq 0`.
+        * a strict inequality: :math:`\sum 0 x_i + b > 0` with `b\leq 0`.
 
         OUTPUT:
 
