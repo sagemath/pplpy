@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pplpy 0.3 documentation</title>
+    <title>pplpy 0.4 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.3',
+        VERSION:     '0.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +30,7 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        <li><a href="index.html#document-index">pplpy 0.3 documentation</a> &raquo;</li> 
+        <li><a href="index.html#document-index">pplpy 0.4 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -317,8 +317,9 @@ constraints.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39;e = (3*x+2*y+1 &gt; 0)</span><span class="se">\n</span><span class="s">&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39;e.ascii_dump()</span><span class="se">\n</span><span class="s">&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">subprocess</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sys</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="s">&#39;python&#39;</span><span class="p">,</span> <span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="n">cmd</span><span class="p">],</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">STDOUT</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">proc</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">([</span><span class="s">&#39;python&#39;</span><span class="p">,</span> <span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="n">cmd</span><span class="p">],</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">proc</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">err</span>
 <span class="go">size 4 1 3 2 -1 &gt; (NNC)</span>
 </pre></div>
 </div>
@@ -634,8 +635,9 @@ in the system are defined on the same vector space.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39;cs = Constraint_System( 3*x &gt; 2*y+1 )</span><span class="se">\n</span><span class="s">&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39;cs.ascii_dump()</span><span class="se">\n</span><span class="s">&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">subprocess</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sys</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="s">&#39;python&#39;</span><span class="p">,</span> <span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="n">cmd</span><span class="p">],</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">STDOUT</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">proc</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">([</span><span class="s">&#39;python&#39;</span><span class="p">,</span> <span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="n">cmd</span><span class="p">],</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">proc</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">err</span>
 <span class="go">topology NOT_NECESSARILY_CLOSED</span>
 <span class="go">1 x 2 SPARSE (sorted)</span>
 <span class="go">index_first_pending 1</span>
@@ -854,8 +856,9 @@ inhomogeneous term is always silently discarded.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39;p = point(3*x+2*y)</span><span class="se">\n</span><span class="s">&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39;p.ascii_dump()</span><span class="se">\n</span><span class="s">&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">subprocess</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sys</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="s">&#39;python&#39;</span><span class="p">,</span> <span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="n">cmd</span><span class="p">],</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">STDOUT</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">proc</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">([</span><span class="s">&#39;python&#39;</span><span class="p">,</span> <span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="n">cmd</span><span class="p">],</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">proc</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">err</span>
 <span class="go">size 3 1 3 2 P (C)</span>
 </pre></div>
 </div>
@@ -1290,8 +1293,9 @@ points in the topological closure of the NNC polyhedron).</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39;gs = Generator_System( point(3*x+2*y+1) )</span><span class="se">\n</span><span class="s">&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39;gs.ascii_dump()</span><span class="se">\n</span><span class="s">&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">subprocess</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sys</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="s">&#39;python&#39;</span><span class="p">,</span> <span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="n">cmd</span><span class="p">],</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">STDOUT</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">proc</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">([</span><span class="s">&#39;python&#39;</span><span class="p">,</span> <span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="n">cmd</span><span class="p">],</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">proc</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">err</span>
 <span class="go">topology NECESSARILY_CLOSED</span>
 <span class="go">1 x 2 SPARSE (sorted)</span>
 <span class="go">index_first_pending 1</span>
@@ -1491,8 +1495,9 @@ expression.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39;e = 3*x+2*y+1</span><span class="se">\n</span><span class="s">&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39;e.ascii_dump()</span><span class="se">\n</span><span class="s">&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">subprocess</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sys</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="s">&#39;python&#39;</span><span class="p">,</span> <span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="n">cmd</span><span class="p">],</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">STDOUT</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">proc</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">([</span><span class="s">&#39;python&#39;</span><span class="p">,</span> <span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="n">cmd</span><span class="p">],</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">proc</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">err</span>
 <span class="go">size 3 1 3 2</span>
 </pre></div>
 </div>
@@ -1619,6 +1624,8 @@ For each element, any one of the following is accepted:<ul>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cs</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">y</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cs</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">y</span> <span class="o">&lt;=</span> <span class="mi">10</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">MIP_Problem</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">cs</span><span class="p">,</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span>
+<span class="go">MIP Problem (maximization, 2 variables, 3 constraints)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">optimal_value</span><span class="p">()</span>
 <span class="go">Fraction(10, 3)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">float</span><span class="p">(</span><span class="n">_</span><span class="p">)</span>
@@ -1755,6 +1762,34 @@ For each element, any one of the following is accepted:<ul>
 </dd></dl>
 
 <dl class="method">
+<dt id="ppl.MIP_Problem.constraints">
+<tt class="descname">constraints</tt><big>(</big><big>)</big><a class="headerlink" href="#ppl.MIP_Problem.constraints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the constraints of this MIP</p>
+<p>The output is an instance of <a class="reference internal" href="#ppl.Constraint_System" title="ppl.Constraint_System"><tt class="xref py py-class docutils literal"><span class="pre">Constraint_System</span></tt></a>.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ppl</span> <span class="kn">import</span> <span class="n">Variable</span><span class="p">,</span> <span class="n">MIP_Problem</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">MIP_Problem</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">M</span><span class="o">.</span><span class="n">add_constraint</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">&lt;=</span> <span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">M</span><span class="o">.</span><span class="n">add_constraint</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">x</span> <span class="o">-</span> <span class="mi">18</span><span class="o">*</span><span class="n">y</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">M</span><span class="o">.</span><span class="n">constraints</span><span class="p">()</span>
+<span class="go">Constraint_System {-x0-x1+5&gt;=0, 3*x0-18*x1+2&gt;=0}</span>
+</pre></div>
+</div>
+<p>Note that modifying the output of this method will not modify the
+underlying MIP problem object:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cs</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">constraints</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cs</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cs</span>
+<span class="go">Constraint_System {-x0-x1+5&gt;=0, 3*x0-18*x1+2&gt;=0, -x0+3&gt;=0}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">M</span><span class="o">.</span><span class="n">constraints</span><span class="p">()</span>
+<span class="go">Constraint_System {-x0-x1+5&gt;=0, 3*x0-18*x1+2&gt;=0}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
 <dt id="ppl.MIP_Problem.evaluate_objective_function">
 <tt class="descname">evaluate_objective_function</tt><big>(</big><big>)</big><a class="headerlink" href="#ppl.MIP_Problem.evaluate_objective_function" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the result of evaluating the objective function on evaluating_point. ValueError thrown
@@ -1839,7 +1874,7 @@ have an optimizing point, i.e., if the MIP problem is unbounded or not satisfiab
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cs</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">y</span> <span class="o">&lt;=</span> <span class="mi">10</span> <span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">MIP_Problem</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">cs</span><span class="p">,</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">optimal_value</span><span class="p">()</span>
-<span class="go">10/3</span>
+<span class="go">Fraction(10, 3)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cs</span> <span class="o">=</span> <span class="n">Constraint_System</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cs</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">MIP_Problem</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">cs</span><span class="p">,</span> <span class="n">x</span> <span class="o">+</span> <span class="n">x</span> <span class="p">)</span>
@@ -1990,6 +2025,19 @@ to MAXIMIZATION mode, and &#8220;minimization&#8221; otherwise.</p>
 </dd></dl>
 
 <dl class="class">
+<dt id="ppl.MIP_Problem_constraints_iterator">
+<em class="property">class </em><tt class="descclassname">ppl.</tt><tt class="descname">MIP_Problem_constraints_iterator</tt><a class="headerlink" href="#ppl.MIP_Problem_constraints_iterator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.python.org/library/functions.html#object" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></a></p>
+<p>Wrapper for PPL&#8217;s <tt class="docutils literal"><span class="pre">Constraint_System::const_iterator</span></tt> class.</p>
+<dl class="attribute">
+<dt id="ppl.MIP_Problem_constraints_iterator.next">
+<tt class="descname">next</tt><a class="headerlink" href="#ppl.MIP_Problem_constraints_iterator.next" title="Permalink to this definition">¶</a></dt>
+<dd><p>x.next() -&gt; the next value, or raise StopIteration</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="ppl.NNC_Polyhedron">
 <em class="property">class </em><tt class="descclassname">ppl.</tt><tt class="descname">NNC_Polyhedron</tt><a class="headerlink" href="#ppl.NNC_Polyhedron" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#ppl.Polyhedron" title="ppl.Polyhedron"><tt class="xref py py-class docutils literal"><span class="pre">ppl.Polyhedron</span></tt></a></p>
@@ -2121,8 +2169,9 @@ pre-defined relations from the class methods <a class="reference internal" href=
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cmd</span>  <span class="o">=</span> <span class="s">&#39;from ppl import Poly_Con_Relation</span><span class="se">\n</span><span class="s">&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39;Poly_Con_Relation.nothing().ascii_dump()</span><span class="se">\n</span><span class="s">&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">subprocess</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sys</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="s">&#39;python&#39;</span><span class="p">,</span> <span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="n">cmd</span><span class="p">],</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">STDOUT</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">proc</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">([</span><span class="s">&#39;python&#39;</span><span class="p">,</span> <span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="n">cmd</span><span class="p">],</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">proc</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">err</span>
 <span class="go">NOTHING</span>
 </pre></div>
 </div>
@@ -2272,9 +2321,12 @@ pre-defined relations from the class methods <a class="reference internal" href=
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cmd</span>  <span class="o">=</span> <span class="s">&#39;from ppl import Poly_Gen_Relation</span><span class="se">\n</span><span class="s">&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39;Poly_Gen_Relation.nothing().ascii_dump()</span><span class="se">\n</span><span class="s">&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">subprocess</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sys</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="s">&#39;python&#39;</span><span class="p">,</span> <span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="n">cmd</span><span class="p">],</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">STDOUT</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">proc</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">([</span><span class="s">&#39;python&#39;</span><span class="p">,</span> <span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="n">cmd</span><span class="p">],</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">proc</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">err</span>
 <span class="go">NOTHING</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">proc</span><span class="o">.</span><span class="n">returncode</span>
+<span class="go">0</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2738,33 +2790,10 @@ the affine dimension of <tt class="docutils literal"><span class="pre">self</spa
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39;p.minimized_generators()</span><span class="se">\n</span><span class="s">&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39;p.ascii_dump()</span><span class="se">\n</span><span class="s">&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">subprocess</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sys</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">out</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="s">&#39;python&#39;</span><span class="p">,</span> <span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="n">cmd</span><span class="p">],</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">STDOUT</span><span class="p">)</span>
-<span class="go">space_dim 2</span>
-<span class="go">-ZE -EM  +CM +GM  +CS +GS  -CP -GP  -SC +SG</span>
-<span class="go">con_sys (up-to-date)</span>
-<span class="go">topology NECESSARILY_CLOSED</span>
-<span class="go">2 x 2 SPARSE (sorted)</span>
-<span class="go">index_first_pending 2</span>
-<span class="go">size 3 -1 3 2 = (C)</span>
-<span class="go">size 3 1 0 0 &gt;= (C)</span>
-
-<span class="go">gen_sys (up-to-date)</span>
-<span class="go">topology NECESSARILY_CLOSED</span>
-<span class="go">2 x 2 DENSE (not_sorted)</span>
-<span class="go">index_first_pending 2</span>
-<span class="go">size 3 0 2 -3 L (C)</span>
-<span class="go">size 3 2 0 1 P (C)</span>
-
-<span class="go">sat_c</span>
-<span class="go">0 x 0</span>
-
-<span class="go">sat_g</span>
-<span class="go">2 x 2</span>
-<span class="go">0 0</span>
-<span class="go">0 1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">out</span>
-<span class="go">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">proc</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">([</span><span class="s">&#39;python&#39;</span><span class="p">,</span> <span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="n">cmd</span><span class="p">],</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">proc</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">err</span>
+<span class="go">&#39;space_dim 2\n-ZE -EM  +CM +GM  +CS +GS  -CP -GP  -SC +SG \ncon_sys (up-to-date)\ntopology NECESSARILY_CLOSED\n2 x 2 SPARSE (sorted)\nindex_first_pending 2\nsize 3 -1 3 2 = (C)\nsize 3 1 0 0 &gt;= (C)\n\ngen_sys (up-to-date)\ntopology NECESSARILY_CLOSED\n2 x 2 DENSE (not_sorted)\nindex_first_pending 2\nsize 3 0 2 -3 L (C)\nsize 3 2 0 1 P (C)\n\nsat_c\n0 x 0\n\nsat_g\n2 x 2\n0 0 \n0 1 \n\n&#39;</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -3333,11 +3362,8 @@ closed subset of the ambient vector space.</p>
 <p>Integer.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ppl</span> <span class="kn">import</span> <span class="n">C_Polyhedron</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">C_Polyhedron</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#39;empty&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">max_space_dimension</span><span class="p">()</span>   <span class="c"># random output</span>
-<span class="go">1152921504606846974</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">C_Polyhedron</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#39;empty&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">max_space_dimension</span><span class="p">()</span>
-<span class="go">357913940            # 32-bit</span>
-<span class="go">1152921504606846974  # 64-bit</span>
+<span class="go">1152921504606846974</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -3391,17 +3417,17 @@ point where expr reaches its supremum value.</li>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cs</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">NNC_Polyhedron</span><span class="p">(</span><span class="n">cs</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">maximize</span><span class="p">(</span><span class="o">+</span><span class="n">x</span><span class="p">)</span>
-<span class="go">{&#39;bounded&#39;: False}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pm</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">maximize</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">pm</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">print</span> <span class="n">key</span><span class="p">,</span> <span class="n">pm</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
-<span class="go">bounded True</span>
-<span class="go">generator closure_point(0/1)</span>
-<span class="go">maximum False</span>
-<span class="go">sup_d 1</span>
-<span class="go">sup_n 0</span>
 </pre></div>
 </div>
+<p>{&#8216;bounded&#8217;: False}
+&gt;&gt;&gt; pm = p.maximize(-x)
+&gt;&gt;&gt; for key in pm:
+...     print key, pm[key]
+bounded True
+generator closure_point(0/1)
+maximum False
+sup_d 1
+sup_n 0</p>
 </dd></dl>
 
 <dl class="method">
@@ -4179,7 +4205,7 @@ convertible to it (<a class="reference internal" href="#ppl.Variable" title="ppl
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        <li><a href="index.html#document-index">pplpy 0.3 documentation</a> &raquo;</li> 
+        <li><a href="index.html#document-index">pplpy 0.4 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
