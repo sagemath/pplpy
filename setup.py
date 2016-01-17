@@ -6,7 +6,7 @@ from Cython.Build import cythonize
 
 setup(
     name='pplpy',
-    version='0.3',
+    version='0.4.beta',
     description='Python PPL wrapper',
     long_description=open("README.rst").read(),
     author='Vincent Delecroix',
