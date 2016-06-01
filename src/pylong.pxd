@@ -7,7 +7,6 @@ cdef extern from "longintrepr.h":
     cdef long PyLong_SHIFT
     ctypedef unsigned int digit
     ctypedef struct PyLongObject:
-        Py_ssize_t ob_size
         digit* ob_digit
 
 from mpz cimport mpz_srcptr, mpz_ptr
