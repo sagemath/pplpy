@@ -35,6 +35,13 @@ can be installed with pip::
 
     $ pip install pplpy
 
+Note that if you have gmp and ppl installed in a non standard directory (e.g. you use brew
+on MacOSX) then you need to set appropriately the variables `CFLAGS` before calling `pip`. For
+example::
+
+    $ export CFLAGS="-I/path/to/gmp/include/ -L/path/to/gmp/lib/ -I/path/to/ppl/include/ -L/path/to/ppl/lib $CFLAGS"
+    $ pip install pplpy
+
 Source
 ------
 
@@ -49,7 +56,7 @@ The documentation is available at http://pythonhosted.org/pplpy/
 Requirements
 ------------
 
-- PPL library with headers files
+- `PPL <http://bugseng.com/products/ppl/>`_
 
 - `gmp <https://gmplib.org/>`_
 
