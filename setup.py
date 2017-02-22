@@ -2,9 +2,22 @@
 from setuptools import setup
 from setuptools.extension import Extension
 from Cython.Distutils import build_ext
-from Cython.Build import cythonize
 
 VERSION = open('version.txt').read()[:-1]
+
+extensions = [
+    Extension("cygmp.utils",
+        ["src/cygmp/utils.pyx"],
+        depends = ["src/cygmp/*"],
+        libraries = ["gmp"],
+        language = 'c'),
+    Extension('ppl',
+        sources=['src/ppl.pyx', 'src/ppl_shim.cc'],
+        depends=['src/ppl.pxd', 'src/ppl_shim.hh', 'src/ppl_decl.pxd'],
+        libraries=['gmp','gmpxx','ppl','m'],
+        language='c++'),
+    ]
+
 
 setup(
     name='pplpy',
@@ -17,19 +30,10 @@ setup(
     download_url ='https://github.com/videlec/pplpy/archive/{}.tar.gz'.format(VERSION),
     license='GPL v3',
     platforms=['any'],
-    ext_modules=[
-        Extension('ppl',
-            sources=['src/ppl.pyx', 'src/ppl_shim.cc'],
-            depends=['src/ppl.pxd', 'src/ppl_shim.hh', 'src/ppl_decl.pxd'],
-            libraries=['gmp','gmpxx','ppl','m'],
-            language='c++'),
-
-        Extension('pylong',
-            sources=['src/pylong.pyx'],
-            depends=['src/pylong.pxd'],
-            libraries=['gmp'],
-            language='c'),
-        ],
+    packages=["ppl"],
+    package_dir={'ppl': 'src'},
+    package_data={'ppl': ['*.pxd', '*.h']},
+    ext_modules=extensions,
     classifiers=[
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Programming Language :: C++",
