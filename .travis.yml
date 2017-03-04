@@ -1,0 +1,14 @@
+language: python
+python:
+  - "2.7"
+  - "3.4"
+  - "3.5"
+  - "3.6"
+# non python dependencies
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install libgmp-dev libppl-dev
+# command to install dependencies
+install: "pip install Cython"
+# command to run tests
+script: pytest
