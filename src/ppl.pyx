@@ -143,7 +143,7 @@ AUTHORS:
 from cpython.int cimport PyInt_CheckExact
 from cpython.long cimport PyLong_CheckExact
 
-from pylong cimport mpz_get_pyintlong, mpz_set_pylong
+from cygmp.pylong cimport mpz_get_pyintlong, mpz_set_pylong
 
 try:
     from sage.all import Rational
