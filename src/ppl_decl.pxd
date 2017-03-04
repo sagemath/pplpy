@@ -1,7 +1,7 @@
 from libcpp cimport bool as cppbool
 
-from mpz cimport *
-from gmpxx cimport *
+from cygmp.mpz cimport *
+from cygmp.gmpxx cimport *
 
 cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library::Generator":
     ctypedef enum PPL_GeneratorType "Parma_Polyhedra_Library::Generator::Type":

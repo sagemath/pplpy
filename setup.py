@@ -1,13 +1,18 @@
 #!/usr/bin/env python
 from setuptools import setup
-from setuptools.extension import Extension
+from distutils.extension import Extension
 from Cython.Distutils import build_ext
 
 VERSION = open('version.txt').read()[:-1]
 
 extensions = [
     Extension("cygmp.utils",
-        ["src/cygmp/utils.pyx"],
+        sources = ["src/cygmp/utils.pyx"],
+        depends = ["src/cygmp/*"],
+        libraries = ["gmp"],
+        language = 'c'),
+    Extension("cygmp.pylong",
+        sources = ["src/cygmp/pylong.pyx"],
         depends = ["src/cygmp/*"],
         libraries = ["gmp"],
         language = 'c'),
