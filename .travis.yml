@@ -9,10 +9,11 @@ before_install:
   - sudo apt-get -qq update
   - sudo apt-get install libgmp-dev libppl-dev
 # command to install dependencies
-install: "pip install Cython"
+install: 
+  - pip install Cython
+  - python setup.py build_ext
+  - pip install . --upgrade
 # command to run tests
 script:
-  - python setup.py build_ext
-  - pip install .
   - pytest
   - python rundoctest.py
