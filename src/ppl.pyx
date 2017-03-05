@@ -142,7 +142,6 @@ AUTHORS:
 #*****************************************************************************
 from cpython.int cimport PyInt_CheckExact
 from cpython.long cimport PyLong_CheckExact
-
 from cygmp.pylong cimport mpz_get_pyintlong, mpz_set_pylong
 
 try:
@@ -177,12 +176,10 @@ except ImportError:
 # These can only be triggered by methods in the Polyhedron class
 # they need to be wrapped in sig_on() / sig_off()
 ####################################################
-
 cdef sig_on():
     pass
 cdef sig_off():
     pass
-
 ####################################################
 # PPL can use floating-point arithmetic to compute integers
 cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
@@ -194,12 +191,12 @@ restore_pre_PPL_rounding()
 
 cdef PPL_Coefficient PPL_Coefficient_from_pyobject(c):
     cdef mpz_t coeff
-    if PyInt_CheckExact(c):
-        return PPL_Coefficient(<long> c)
-    elif PyLong_CheckExact(c):
+    if PyLong_CheckExact(c):
         mpz_init(coeff)
         mpz_set_pylong(coeff, c)
         return PPL_Coefficient(coeff)
+    elif PyInt_CheckExact(c):
+        return PPL_Coefficient(<long> c)
     else:
         try:
             return PPL_Coefficient_from_pyobject(c.__long__())
@@ -5265,8 +5262,8 @@ cdef class Constraint(object):
         3
         >>> y = Variable(1)
         >>> ineq = 3**50 * y + 2 > 1
-        >>> ineq.coefficient(y)
-        717897987691852588770249L
+        >>> str(ineq.coefficient(y))
+        '717897987691852588770249'
         >>> ineq.coefficient(x)
         0
         """
@@ -5316,8 +5313,8 @@ cdef class Constraint(object):
         >>> ineq.inhomogeneous_term()
         1
         >>> ineq = 2**66 + y > 0
-        >>> ineq.inhomogeneous_term()
-        73786976294838206464L
+        >>> str(ineq.inhomogeneous_term())
+        '73786976294838206464'
         """
         return mpz_get_pyintlong(self.thisptr.inhomogeneous_term().get_mpz_t())
 
@@ -6135,12 +6132,12 @@ cdef class Poly_Con_Relation(object):
     ...       s = ""
     ...       for j, rel_j in enumerate(rels):
     ...           s=s+str(int(rel_i.implies(rel_j))) + ' '
-    ...       print(s)
-    1 0 0 0 0 
-    1 1 0 0 0 
-    1 0 1 0 0 
-    1 0 0 1 0 
-    1 0 0 0 1 
+    ...       print(" ".join(str(int(rel_i.implies(rel_j))) for j, rel_j in enumerate(rels)))
+    1 0 0 0 0
+    1 1 0 0 0
+    1 0 1 0 0
+    1 0 0 1 0
+    1 0 0 0 1
     """
     def __cinit__(self, do_not_construct_manually=False):
         """
