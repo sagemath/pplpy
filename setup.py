@@ -2,6 +2,7 @@
 from setuptools import setup
 from distutils.extension import Extension
 from Cython.Distutils import build_ext
+import sys
 
 VERSION = open('version.txt').read()[:-1]
 
@@ -10,19 +11,24 @@ extensions = [
         sources = ["src/cygmp/utils.pyx"],
         depends = ["src/cygmp/*"],
         libraries = ["gmp"],
-        language = 'c'),
+        language = 'c',
+        include_dirs=sys.path,
+        include_path=sys.path),
     Extension("cygmp.pylong",
         sources = ["src/cygmp/pylong.pyx"],
         depends = ["src/cygmp/*"],
         libraries = ["gmp"],
-        language = 'c'),
+        language = 'c',
+        include_dirs=sys.path,
+        include_path=sys.path),
     Extension('ppl',
         sources=['src/ppl.pyx', 'src/ppl_shim.cc'],
         depends=['src/ppl.pxd', 'src/ppl_shim.hh', 'src/ppl_decl.pxd'],
         libraries=['gmp','gmpxx','ppl','m'],
-        language='c++'),
+        language='c++',
+        include_dirs=sys.path,
+        include_path=sys.path),
     ]
-
 
 setup(
     name='pplpy',

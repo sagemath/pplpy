@@ -142,7 +142,6 @@ AUTHORS:
 #*****************************************************************************
 from cpython.int cimport PyInt_CheckExact
 from cpython.long cimport PyLong_CheckExact
-
 from cygmp.pylong cimport mpz_get_pyintlong, mpz_set_pylong
 
 try:
@@ -177,12 +176,10 @@ except ImportError:
 # These can only be triggered by methods in the Polyhedron class
 # they need to be wrapped in sig_on() / sig_off()
 ####################################################
-
 cdef sig_on():
     pass
 cdef sig_off():
     pass
-
 ####################################################
 # PPL can use floating-point arithmetic to compute integers
 cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
@@ -194,12 +191,12 @@ restore_pre_PPL_rounding()
 
 cdef PPL_Coefficient PPL_Coefficient_from_pyobject(c):
     cdef mpz_t coeff
-    if PyInt_CheckExact(c):
-        return PPL_Coefficient(<long> c)
-    elif PyLong_CheckExact(c):
+    if PyLong_CheckExact(c):
         mpz_init(coeff)
         mpz_set_pylong(coeff, c)
         return PPL_Coefficient(coeff)
+    elif PyInt_CheckExact(c):
+        return PPL_Coefficient(<long> c)
     else:
         try:
             return PPL_Coefficient_from_pyobject(c.__long__())
@@ -518,12 +515,12 @@ cdef class MIP_Problem(object):
         >>> x = Variable(0)
         >>> y = Variable(1)
         >>> M = MIP_Problem(2)
-        >>> for c in M: print c
+        >>> for c in M: print(c)
         >>> M.add_constraint(x + y <= 5)
-        >>> for c in M: print c
+        >>> for c in M: print(c)
         -x0-x1+5>=0
         >>> M.add_constraint(3*x - 18*y >= -2)
-        >>> for c in M: print c
+        >>> for c in M: print(c)
         -x0-x1+5>=0
         3*x0-18*x1+2>=0
         """
@@ -1059,14 +1056,14 @@ cdef class Polyhedron(_mutable_or_immutable):
         >>> from ppl import Variable, C_Polyhedron
         >>> x = Variable(0)
         >>> y = Variable(1)
-        >>> C_Polyhedron( 5*x-2*y >=  x+y-1 )._repr_()
+        >>> C_Polyhedron( 5*x-2*y >=  x+y-1 ).__repr__()
         'A 2-dimensional polyhedron in QQ^2 defined as the convex hull of 1 point, 1 ray, 1 line'
 
         Special cases::
 
-        >>> C_Polyhedron(3, 'empty')._repr_()
+        >>> C_Polyhedron(3, 'empty').__repr__()
         'The empty polyhedron in QQ^3'
-        >>> C_Polyhedron(3, 'universe')._repr_()
+        >>> C_Polyhedron(3, 'universe').__repr__()
         'The space-filling polyhedron in QQ^3'
         """
         dim = self.affine_dimension()
@@ -1496,6 +1493,7 @@ cdef class Polyhedron(_mutable_or_immutable):
         ...
         ValueError: PPL::C_Polyhedron::intersection_assign(y):
         y is a NNC_Polyhedron.
+        <BLANKLINE>
         >>> NNC_Polyhedron(c_poly).is_disjoint_from(nnc_poly)
         True
         """
@@ -1744,7 +1742,7 @@ cdef class Polyhedron(_mutable_or_immutable):
         >>> p = C_Polyhedron(cs)
         >>> pm = p.maximize(x+y)
         >>> for key in sorted(pm):
-        ...     print key, pm[key]
+        ...     print("{} {}".format(key, pm[key]))
         bounded True
         generator point(10/3, 0/3)
         maximum True
@@ -1759,8 +1757,8 @@ cdef class Polyhedron(_mutable_or_immutable):
         >>> p.maximize(+x)
         {'bounded': False}
         >>> pm = p.maximize(-x)
-        >>> for key in pm:
-        ...     print key, pm[key]
+        >>> for key in sorted(pm):
+        ...     print("{} {}".format(key, pm[key]))
         bounded True
         generator closure_point(0/1)
         maximum False
@@ -1824,7 +1822,7 @@ cdef class Polyhedron(_mutable_or_immutable):
         >>> p = C_Polyhedron(cs)
         >>> pm = p.minimize( x+y )
         >>> for key in sorted(pm):
-        ...     print key, pm[key]
+        ...     print("{} {}".format(key, pm[key]))
         bounded True
         generator point(0/1, 0/1)
         inf_d 1
@@ -1838,7 +1836,7 @@ cdef class Polyhedron(_mutable_or_immutable):
         >>> p = NNC_Polyhedron(cs)
         >>> pm = p.minimize(+x)
         >>> for key in sorted(pm):
-        ...    print key, pm[key]
+        ...    print("{} {}".format(key, pm[key]))
         bounded True
         generator closure_point(0/1)
         inf_d 1
@@ -1902,6 +1900,7 @@ cdef class Polyhedron(_mutable_or_immutable):
         ...
         ValueError: PPL::C_Polyhedron::contains(y):
         y is a NNC_Polyhedron.
+        <BLANKLINE>
         """
         cdef bint result
         sig_on()
@@ -1951,6 +1950,7 @@ cdef class Polyhedron(_mutable_or_immutable):
         ...
         ValueError: PPL::C_Polyhedron::contains(y):
         y is a NNC_Polyhedron.
+        <BLANKLINE>
         """
         cdef bint result
         sig_on()
@@ -2283,6 +2283,7 @@ cdef class Polyhedron(_mutable_or_immutable):
         ...
         ValueError: PPL::C_Polyhedron::intersection_assign(y):
         y is a NNC_Polyhedron.
+        <BLANKLINE>
         """
         self.assert_mutable('The Polyhedron is not mutable!')
         sig_on()
@@ -2336,6 +2337,7 @@ cdef class Polyhedron(_mutable_or_immutable):
         ...
         ValueError: PPL::C_Polyhedron::poly_hull_assign(y):
         y is a NNC_Polyhedron.
+        <BLANKLINE>
         """
         self.assert_mutable('The Polyhedron is not mutable!')
         sig_on()
@@ -2407,6 +2409,7 @@ cdef class Polyhedron(_mutable_or_immutable):
         ...
         ValueError: PPL::C_Polyhedron::poly_difference_assign(y):
         y is a NNC_Polyhedron.
+        <BLANKLINE>
         """
         self.assert_mutable('The Polyhedron is not mutable!')
         sig_on()
@@ -2651,6 +2654,7 @@ cdef class Polyhedron(_mutable_or_immutable):
         ...
         ValueError: PPL::C_Polyhedron::concatenate_assign(y):
         y is a NNC_Polyhedron.
+        <BLANKLINE>
         >>> p1.concatenate_assign( C_Polyhedron(p1.max_space_dimension(), 'empty') )
         Traceback (most recent call last):
         ...
@@ -2714,7 +2718,7 @@ cdef class Polyhedron(_mutable_or_immutable):
         >>> import subprocess
         >>> proc = subprocess.Popen(['python', '-c', cmd], stderr=subprocess.PIPE)
         >>> out, err = proc.communicate()
-        >>> err
+        >>> str(err.decode('ascii'))
         'space_dim 2\n-ZE -EM  +CM +GM  +CS +GS  -CP -GP  -SC +SG \ncon_sys (up-to-date)\ntopology NECESSARILY_CLOSED\n2 x 2 SPARSE (sorted)\nindex_first_pending 2\nsize 3 -1 3 2 = (C)\nsize 3 1 0 0 >= (C)\n\ngen_sys (up-to-date)\ntopology NECESSARILY_CLOSED\n2 x 2 DENSE (not_sorted)\nindex_first_pending 2\nsize 3 0 2 -3 L (C)\nsize 3 2 0 1 P (C)\n\nsat_c\n0 x 0\n\nsat_g\n2 x 2\n0 0 \n0 1 \n\n'
         """
         sig_on()
@@ -3004,8 +3008,8 @@ cdef class C_Polyhedron(Polyhedron):
         Pickle object
 
         Tests:
-
         >>> from ppl import C_Polyhedron, Variable
+        >>> from pickle import loads, dumps
         >>> P = C_Polyhedron(3, 'empty')
         >>> loads(dumps(P))
         The empty polyhedron in QQ^3
@@ -3178,6 +3182,7 @@ cdef class NNC_Polyhedron(Polyhedron):
         Tests:
 
         >>> from ppl import NNC_Polyhedron, Variable
+        >>> from pickle import loads, dumps
         >>> P = NNC_Polyhedron(3, 'empty')
         >>> loads(dumps(P))
         The empty polyhedron in QQ^3
@@ -3190,8 +3195,7 @@ cdef class NNC_Polyhedron(Polyhedron):
         >>> y = Variable(1)
         >>> H = NNC_Polyhedron( 5*x-2*y >  x+y-1 )
         >>> loads(dumps(H))
-        A 2-dimensional polyhedron in QQ^2 defined as the convex hull of 1 point,
-        1 closure_point, 1 ray, 1 line
+        A 2-dimensional polyhedron in QQ^2 defined as the convex hull of 1 point, 1 closure_point, 1 ray, 1 line
         """
         if self.is_empty():
             return (NNC_Polyhedron, (self.space_dimension(), 'empty'))
@@ -3719,7 +3723,7 @@ cdef class Linear_Expression(object):
         >>> import subprocess
         >>> proc = subprocess.Popen(['python', '-c', cmd], stderr=subprocess.PIPE)
         >>> out, err = proc.communicate()
-        >>> print err
+        >>> print(str(err.decode('ascii')))
         size 3 1 3 2
         """
         self.thisptr.ascii_dump()
@@ -3956,6 +3960,7 @@ cdef class Linear_Expression(object):
         Examples:
 
         >>> from ppl import Linear_Expression
+        >>> from pickle import loads, dumps
         >>> le = loads(dumps(Linear_Expression([1,2,3],4)))
         >>> le.coefficients() == (1,2,3)
         True
@@ -4545,7 +4550,7 @@ cdef class Generator(object):
         >>> import subprocess
         >>> proc = subprocess.Popen(['python', '-c', cmd], stderr=subprocess.PIPE)
         >>> out, err = proc.communicate()
-        >>> print err
+        >>> print(str(err.decode('ascii')))
         size 3 1 3 2 P (C)
         <BLANKLINE>
         """
@@ -4767,7 +4772,7 @@ cdef class Generator_System(_mutable_or_immutable):
         >>> import subprocess
         >>> proc = subprocess.Popen(['python', '-c', cmd], stderr=subprocess.PIPE)
         >>> out, err = proc.communicate()
-        >>> print err
+        >>> print(str(err.decode('ascii')))
         topology NECESSARILY_CLOSED
         1 x 2 SPARSE (sorted)
         index_first_pending 1
@@ -4892,6 +4897,7 @@ cdef class Generator_System(_mutable_or_immutable):
         Tests:
 
         >>> from ppl import Generator_System, Variable, point, ray
+        >>> from pickle import loads, dumps
         >>> x = Variable(0)
         >>> y = Variable(1)
         >>> gs = Generator_System((point(3*x+2*y+1), ray(x)));  gs
@@ -5256,8 +5262,8 @@ cdef class Constraint(object):
         3
         >>> y = Variable(1)
         >>> ineq = 3**50 * y + 2 > 1
-        >>> ineq.coefficient(y)
-        717897987691852588770249L
+        >>> str(ineq.coefficient(y))
+        '717897987691852588770249'
         >>> ineq.coefficient(x)
         0
         """
@@ -5307,8 +5313,8 @@ cdef class Constraint(object):
         >>> ineq.inhomogeneous_term()
         1
         >>> ineq = 2**66 + y > 0
-        >>> ineq.inhomogeneous_term()
-        73786976294838206464L
+        >>> str(ineq.inhomogeneous_term())
+        '73786976294838206464'
         """
         return mpz_get_pyintlong(self.thisptr.inhomogeneous_term().get_mpz_t())
 
@@ -5415,7 +5421,7 @@ cdef class Constraint(object):
         >>> import subprocess
         >>> proc = subprocess.Popen(['python', '-c', cmd], stderr=subprocess.PIPE)
         >>> out, err = proc.communicate()
-        >>> print err
+        >>> print(str(err.decode('ascii')))
         size 4 1 3 2 -1 > (NNC)
         <BLANKLINE>
         """
@@ -5443,6 +5449,7 @@ cdef class Constraint(object):
         Examples:
 
         >>> from ppl import Linear_Expression, Variable
+        >>> from pickle import loads, dumps
         >>> x = Variable(0)
         >>> y = Variable(1)
         >>> loads(dumps(3*x+2*y+1>=5))
@@ -5737,7 +5744,7 @@ cdef class Constraint_System(object):
         >>> import subprocess
         >>> proc = subprocess.Popen(['python', '-c', cmd], stderr=subprocess.PIPE)
         >>> out, err = proc.communicate()
-        >>> print err
+        >>> print(str(err.decode('ascii')))
         topology NOT_NECESSARILY_CLOSED
         1 x 2 SPARSE (sorted)
         index_first_pending 1
@@ -5861,6 +5868,7 @@ cdef class Constraint_System(object):
         Tests:
 
         >>> from ppl import Constraint_System, Variable
+        >>> from pickle import loads, dumps
         >>> x = Variable(0)
         >>> y = Variable(1)
         >>> cs = Constraint_System([3*x+2*y+1 < 3, 0*x>x+1]);  cs
@@ -6047,7 +6055,7 @@ cdef class Poly_Gen_Relation(object):
         >>> import subprocess
         >>> proc = subprocess.Popen(['python', '-c', cmd], stderr=subprocess.PIPE)
         >>> out, err = proc.communicate()
-        >>> print err
+        >>> print(str(err.decode('ascii')))
         NOTHING
         >>> proc.returncode
         0
@@ -6121,9 +6129,10 @@ cdef class Poly_Con_Relation(object):
     >>> rels
     [nothing, is_disjoint, strictly_intersects, is_included, saturates]
     >>> for i, rel_i in enumerate(rels):
+    ...       s = ""
     ...       for j, rel_j in enumerate(rels):
-    ...           print int(rel_i.implies(rel_j)),
-    ...       print
+    ...           s=s+str(int(rel_i.implies(rel_j))) + ' '
+    ...       print(" ".join(str(int(rel_i.implies(rel_j))) for j, rel_j in enumerate(rels)))
     1 0 0 0 0
     1 1 0 0 0
     1 0 1 0 0
@@ -6272,7 +6281,7 @@ cdef class Poly_Con_Relation(object):
         >>> import subprocess
         >>> proc = subprocess.Popen(['python', '-c', cmd], stderr=subprocess.PIPE)
         >>> out, err = proc.communicate()
-        >>> print err
+        >>> print(str(err.decode('ascii')))
         NOTHING
         """
         self.thisptr.ascii_dump()
