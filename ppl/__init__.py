@@ -130,7 +130,9 @@ AUTHORS:
 - Vincent Klein (2017): improve doctest support and Python 3 compatibility
 """
 
-from .ppl import (
+from __future__ import absolute_import
+
+from .wrappers import (
         Variable,
         Generator, Constraint,
         Constraint_System,

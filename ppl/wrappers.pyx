@@ -141,7 +141,7 @@ cdef class _mutable_or_immutable(object):
 
     Examples:
 
-        >>> from ppl.ppl import _mutable_or_immutable as ExampleObj
+        >>> from ppl.wrappers import _mutable_or_immutable as ExampleObj
         >>> x = ExampleObj()
         >>> x.is_mutable()
         True
@@ -157,7 +157,7 @@ cdef class _mutable_or_immutable(object):
 
         Tests:
 
-            >>> from ppl.ppl import _mutable_or_immutable as ExampleObj
+            >>> from ppl.wrappers import _mutable_or_immutable as ExampleObj
             >>> x = ExampleObj()    # indirect doctest
             >>> x.is_mutable()
             True
@@ -172,7 +172,7 @@ cdef class _mutable_or_immutable(object):
 
         Examples:
 
-        >>> from ppl.ppl import _mutable_or_immutable as ExampleObj
+        >>> from ppl.wrappers import _mutable_or_immutable as ExampleObj
         >>> x = ExampleObj()
         >>> x.is_mutable()
         True
@@ -195,7 +195,7 @@ cdef class _mutable_or_immutable(object):
 
         Examples:
 
-        >>> from ppl.ppl import _mutable_or_immutable as ExampleObj
+        >>> from ppl.wrappers import _mutable_or_immutable as ExampleObj
         >>> x = ExampleObj()
         >>> x.is_mutable()
         True
@@ -212,7 +212,7 @@ cdef class _mutable_or_immutable(object):
 
         Examples:
 
-        >>> from ppl.ppl import _mutable_or_immutable as ExampleObj
+        >>> from ppl.wrappers import _mutable_or_immutable as ExampleObj
         >>> x = ExampleObj()
         >>> x.is_immutable()
         False
@@ -235,7 +235,7 @@ cdef class _mutable_or_immutable(object):
 
         Examples:
 
-        >>> from ppl.ppl import _mutable_or_immutable as ExampleObj
+        >>> from ppl.wrappers import _mutable_or_immutable as ExampleObj
         >>> x = ExampleObj()
         >>> x.assert_mutable("this will not trigger")
         >>> x.set_immutable()
@@ -841,7 +841,7 @@ cdef class MIP_Problem_constraints_iterator(object):
         Tests:
 
         >>> from ppl import Constraint_System
-        >>> from ppl.ppl import Constraint_System_iterator
+        >>> from ppl.wrappers import Constraint_System_iterator
         >>> iter = Constraint_System_iterator( Constraint_System() )   # indirect doctest
         """
         self.pb = pb
@@ -864,7 +864,7 @@ cdef class MIP_Problem_constraints_iterator(object):
         Examples:
 
         >>> from ppl import Constraint_System, Variable
-        >>> from ppl.ppl import Constraint_System_iterator
+        >>> from ppl.wrappers import Constraint_System_iterator
         >>> x = Variable(0)
         >>> cs = Constraint_System( 5*x > 2 )
         >>> cs.insert( x <= -1)
@@ -1232,7 +1232,7 @@ cdef class Polyhedron(_mutable_or_immutable):
         or :meth:`~ppl.Poly_Con_Relation.implies`, for
         example:
 
-        >>> from ppl.ppl import Poly_Con_Relation
+        >>> from ppl.wrappers import Poly_Con_Relation
         >>> p.relation_with( x+y<1 ).implies(Poly_Con_Relation.saturates())
         True
 
@@ -4816,7 +4816,7 @@ cdef class Generator_System_iterator(object):
     Examples:
 
     >>> from ppl import Generator_System, Variable, line, ray, point, closure_point
-    >>> from ppl.ppl import Generator_System_iterator
+    >>> from ppl.wrappers import Generator_System_iterator
     >>> x = Variable(0)
     >>> y = Variable(1)
     >>> gs = Generator_System( line(5*x-2*y) )
@@ -4835,7 +4835,7 @@ cdef class Generator_System_iterator(object):
         Tests:
 
         >>> from ppl import Generator_System
-        >>> from ppl.ppl import Generator_System_iterator
+        >>> from ppl.wrappers import Generator_System_iterator
         >>> iter = Generator_System_iterator(Generator_System())   # indirect doctest
         """
         self.gs = gs
@@ -4858,7 +4858,7 @@ cdef class Generator_System_iterator(object):
         Examples:
 
         >>> from ppl import Generator_System, Variable, point
-        >>> from ppl.ppl import Generator_System_iterator
+        >>> from ppl.wrappers import Generator_System_iterator
         >>> x = Variable(0)
         >>> y = Variable(1)
         >>> gs = Generator_System( point(5*x-2*y) )
@@ -5789,7 +5789,7 @@ cdef class Constraint_System_iterator(object):
     Examples:
 
         >>> from ppl import Constraint_System, Variable
-        >>> from ppl.ppl import Constraint_System_iterator
+        >>> from ppl.wrappers import Constraint_System_iterator
         >>> x = Variable(0)
         >>> y = Variable(1)
         >>> cs = Constraint_System( 5*x < 2*y )
@@ -5809,7 +5809,7 @@ cdef class Constraint_System_iterator(object):
         Tests:
 
         >>> from ppl import Constraint_System
-        >>> from ppl.ppl import Constraint_System_iterator
+        >>> from ppl.wrappers import Constraint_System_iterator
         >>> iter = Constraint_System_iterator( Constraint_System() )   # indirect doctest
         """
         self.cs = cs
@@ -5832,7 +5832,7 @@ cdef class Constraint_System_iterator(object):
         Examples:
 
         >>> from ppl import Constraint_System, Variable
-        >>> from ppl.ppl import Constraint_System_iterator
+        >>> from ppl.wrappers import Constraint_System_iterator
         >>> x = Variable(0)
         >>> cs = Constraint_System( x > 0 )
         >>> cs.insert ( 2*x <= -3)

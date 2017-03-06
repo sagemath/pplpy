@@ -41,8 +41,8 @@ extensions = [
     Extension("ppl.cygmp.pylong",
         sources = ["ppl/cygmp/pylong.pyx"],
         depends = ["ppl/cygmp/*"]),
-    Extension('ppl.ppl',
-        sources=['ppl/ppl.pyx', 'ppl/ppl_shim.cc'],
+    Extension('ppl.wrappers',
+        sources=['ppl/wrappers.pyx', 'ppl/ppl_shim.cc'],
         depends=['ppl/*'])
     ]
 
