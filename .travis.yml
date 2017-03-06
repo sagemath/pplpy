@@ -11,6 +11,7 @@ before_install:
 # command to install dependencies
 install: 
   - pip install Cython
+  - pip install cysignals
   - python setup.py build_ext
   - pip install . --upgrade
 # command to run tests
