@@ -1,6 +1,11 @@
 build/*
 ppl.so
-ppl/*
+ppl/*.c
+ppl/*.cpp
+ppl/*.so
+ppl/cygmp/*.c
+ppl/cygmp/*.cpp
+ppl/cygmp/*.so
 *.so
 *.pyc
 *.c
