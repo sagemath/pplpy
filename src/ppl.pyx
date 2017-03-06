@@ -4,7 +4,7 @@ r"""
 Cython wrapper for the Parma Polyhedra Library (PPL)
 
 The Parma Polyhedra Library (PPL) is a library for polyhedral computations over
-:math:`\mathbb{Q}`. This interface tries to reproduce the C++ API as faithfully as possible
+,:math:`\mathbb{Q}`. This interface tries to reproduce the C++ API as faithfully as possible
 in Python. For example, the following C++ excerpt:
 
 .. code-block:: c++
@@ -993,9 +993,11 @@ cdef class MIP_Problem_constraints_iterator(object):
 
         >>> from ppl import Constraint_System, Variable, Constraint_System_iterator
         >>> x = Variable(0)
-        >>> cs = Constraint_System( 5*x > 0 )
-        >>> next(Constraint_System_iterator(cs))
-        x0>0
+        >>> cs = Constraint_System( 5*x > 2 )
+        >>> cs.insert( x <= -1)
+        >>> for cons in cs: print(cons)
+        5*x0-2>0
+        -x0-1>=0
         """
         if is_end_mip_cs_iterator((<MIP_Problem>self.pb).thisptr[0], self.mip_csi_ptr):
             raise StopIteration
@@ -2715,11 +2717,27 @@ cdef class Polyhedron(_mutable_or_immutable):
         >>> cmd += 'p = C_Polyhedron(3*x+2*y==1)\n'
         >>> cmd += 'p.minimized_generators()\n'
         >>> cmd += 'p.ascii_dump()\n'
-        >>> import subprocess
-        >>> proc = subprocess.Popen(['python', '-c', cmd], stderr=subprocess.PIPE)
+        >>> from subprocess import Popen, PIPE
+        >>> proc = Popen(['python', '-c', cmd], stdout=PIPE, stderr=PIPE)
         >>> out, err = proc.communicate()
-        >>> str(err.decode('ascii'))
-        'space_dim 2\n-ZE -EM  +CM +GM  +CS +GS  -CP -GP  -SC +SG \ncon_sys (up-to-date)\ntopology NECESSARILY_CLOSED\n2 x 2 SPARSE (sorted)\nindex_first_pending 2\nsize 3 -1 3 2 = (C)\nsize 3 1 0 0 >= (C)\n\ngen_sys (up-to-date)\ntopology NECESSARILY_CLOSED\n2 x 2 DENSE (not_sorted)\nindex_first_pending 2\nsize 3 0 2 -3 L (C)\nsize 3 2 0 1 P (C)\n\nsat_c\n0 x 0\n\nsat_g\n2 x 2\n0 0 \n0 1 \n\n'
+        >>> len(out)
+        0
+        >>> print(str(err.decode('ascii')))
+        space_dim 2
+        ...
+        con_sys (up-to-date)
+        topology NECESSARILY_CLOSED
+        ...
+        <BLANKLINE>
+        sat_c
+        0 x 0
+        <BLANKLINE>
+        sat_g
+        2 x 2
+        0 0 
+        0 1 
+        <BLANKLINE>
+        <BLANKLINE>
         """
         sig_on()
         self.thisptr.ascii_dump()
@@ -2736,8 +2754,8 @@ cdef class Polyhedron(_mutable_or_immutable):
         Examples:
 
         >>> from ppl import C_Polyhedron
-        >>> C_Polyhedron(1, 'empty').max_space_dimension()
-        1152921504606846974
+        >>> C_Polyhedron(1, 'empty').max_space_dimension() > 2**20
+        True
         """
         return self.thisptr.max_space_dimension()
 
@@ -3720,11 +3738,13 @@ cdef class Linear_Expression(object):
         >>> cmd += 'y = Variable(1)\n'
         >>> cmd += 'e = 3*x+2*y+1\n'
         >>> cmd += 'e.ascii_dump()\n'
-        >>> import subprocess
-        >>> proc = subprocess.Popen(['python', '-c', cmd], stderr=subprocess.PIPE)
+        >>> from subprocess import Popen, PIPE
+        >>> proc = Popen(['python', '-c', cmd], stdout=PIPE, stderr=PIPE)
         >>> out, err = proc.communicate()
-        >>> print(str(err.decode('ascii')))
-        size 3 1 3 2
+        >>> len(out) == 0
+        True
+        >>> len(err) > 0
+        True
         """
         self.thisptr.ascii_dump()
 
@@ -4551,7 +4571,7 @@ cdef class Generator(object):
         >>> proc = subprocess.Popen(['python', '-c', cmd], stderr=subprocess.PIPE)
         >>> out, err = proc.communicate()
         >>> print(str(err.decode('ascii')))
-        size 3 1 3 2 P (C)
+        size 3 1 3 2 P ...
         <BLANKLINE>
         """
         self.thisptr.ascii_dump()
@@ -4774,9 +4794,7 @@ cdef class Generator_System(_mutable_or_immutable):
         >>> out, err = proc.communicate()
         >>> print(str(err.decode('ascii')))
         topology NECESSARILY_CLOSED
-        1 x 2 SPARSE (sorted)
-        index_first_pending 1
-        size 3 1 3 2 P (C)
+        ...
         <BLANKLINE>
         """
         self.thisptr.ascii_dump()
@@ -5422,7 +5440,7 @@ cdef class Constraint(object):
         >>> proc = subprocess.Popen(['python', '-c', cmd], stderr=subprocess.PIPE)
         >>> out, err = proc.communicate()
         >>> print(str(err.decode('ascii')))
-        size 4 1 3 2 -1 > (NNC)
+        size 4 1 3 2 -1 ...
         <BLANKLINE>
         """
         self.thisptr.ascii_dump()
@@ -5568,10 +5586,12 @@ cdef class Constraint_System(object):
         >>> x = Variable(0)
         >>> y = Variable(1)
         >>> cs = Constraint_System( 5*x-2*y > 0 )
-        >>> cs.insert( 6*x<3*y )
+        >>> cs.insert( 6*x < 3*y )
         >>> cs.insert( x >= 2*x-7*y )
         >>> cs
-        Constraint_System {5*x0-2*x1>0, -2*x0+x1>0, -x0+7*x1>=0}
+        Constraint_System {5*x0-2*x1>0, ...}
+        >>> cs[0]
+        5*x0-2*x1>0
     """
     def __cinit__(self, arg=None):
         """
@@ -5746,9 +5766,7 @@ cdef class Constraint_System(object):
         >>> out, err = proc.communicate()
         >>> print(str(err.decode('ascii')))
         topology NOT_NECESSARILY_CLOSED
-        1 x 2 SPARSE (sorted)
-        index_first_pending 1
-        size 4 -1 3 -2 -1 > (NNC)
+        ...
         <BLANKLINE>
         """
         self.thisptr.ascii_dump()
@@ -5894,12 +5912,12 @@ cdef class Constraint_System_iterator(object):
         >>> x = Variable(0)
         >>> y = Variable(1)
         >>> cs = Constraint_System( 5*x < 2*y )
-        >>> cs.insert( 6*x-3*y==0 )
+        >>> cs.insert( 6*x-y == 0 )
         >>> cs.insert( x >= 2*x-7*y )
         >>> next(Constraint_System_iterator(cs))
         -5*x0+2*x1>0
         >>> list(cs)
-        [-5*x0+2*x1>0, 2*x0-x1==0, -x0+7*x1>=0]
+        [-5*x0+2*x1>0, 6*x0-x1==0, -x0+7*x1>=0]
     """
     def __cinit__(self, Constraint_System cs):
         """
@@ -5933,9 +5951,17 @@ cdef class Constraint_System_iterator(object):
 
         >>> from ppl import Constraint_System, Variable, Constraint_System_iterator
         >>> x = Variable(0)
-        >>> cs = Constraint_System( 5*x > 0 )
-        >>> next(Constraint_System_iterator(cs))
+        >>> cs = Constraint_System( x > 0 )
+        >>> cs.insert ( 2*x <= -3)
+        >>> it = iter(cs)
+        >>> next(it)
         x0>0
+        >>> next(it)
+        -2*x0-3>=0
+        >>> next(it)
+        Traceback (most recent call last):
+        ...
+        StopIteration
         """
         if is_end_cs_iterator((<Constraint_System>self.cs).thisptr[0], self.csi_ptr):
             raise StopIteration
@@ -6052,8 +6078,8 @@ cdef class Poly_Gen_Relation(object):
 
         >>> cmd  = 'from ppl import Poly_Gen_Relation\n'
         >>> cmd += 'Poly_Gen_Relation.nothing().ascii_dump()\n'
-        >>> import subprocess
-        >>> proc = subprocess.Popen(['python', '-c', cmd], stderr=subprocess.PIPE)
+        >>> from subprocess import Popen, PIPE
+        >>> proc = Popen(['python', '-c', cmd], stderr=PIPE)
         >>> out, err = proc.communicate()
         >>> print(str(err.decode('ascii')))
         NOTHING
