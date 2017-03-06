@@ -143,6 +143,7 @@ AUTHORS:
 from cpython.int cimport PyInt_CheckExact
 from cpython.long cimport PyLong_CheckExact
 from cygmp.pylong cimport mpz_get_pyintlong, mpz_set_pylong
+include "cysignals/signals.pxi"
 
 try:
     from sage.all import Rational
@@ -176,10 +177,7 @@ except ImportError:
 # These can only be triggered by methods in the Polyhedron class
 # they need to be wrapped in sig_on() / sig_off()
 ####################################################
-cdef sig_on():
-    pass
-cdef sig_off():
-    pass
+
 ####################################################
 # PPL can use floating-point arithmetic to compute integers
 cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
