@@ -598,7 +598,7 @@ cdef class MIP_Problem(object):
         Traceback (most recent call last):
         ...
         ValueError: PPL::MIP_Problem::optimizing_point():
-        *this does not have an optimizing point.
+        *this ... have an optimizing point.
         """
         cdef PPL_Coefficient sup_n
         cdef PPL_Coefficient sup_d
@@ -4569,7 +4569,7 @@ cdef class Generator(object):
         >>> proc = subprocess.Popen(['python', '-c', cmd], stderr=subprocess.PIPE)
         >>> out, err = proc.communicate()
         >>> print(str(err.decode('ascii')))
-        size 3 1 3 2 P ...
+        size 3 1 3 2 ...
         <BLANKLINE>
         """
         self.thisptr.ascii_dump()
