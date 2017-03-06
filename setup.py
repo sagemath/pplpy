@@ -60,7 +60,6 @@ setup(
     packages=["ppl"],
     package_dir={'ppl': 'ppl'},
     package_data={'ppl': ['*.pxd', '*.h', '*.hh', 'cygmp/*.pxd', 'cygmp/*.h', 'cygmp/*.hh']},
-    package_data={'ppl': ['*.pxd', '*.h']},
     install_requires=['Cython', 'cysignals'],  # For pip install, pip can't read setup_requires
     ext_modules=extensions,
     classifiers=[
