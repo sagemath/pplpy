@@ -1,4 +1,4 @@
-from mpz cimport mpz_t
+from .mpz cimport mpz_t
 
 cdef extern from "gmpxx.h":
     cdef cppclass mpz_class:

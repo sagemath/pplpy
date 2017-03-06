@@ -9,7 +9,7 @@ cdef extern from "longintrepr.h":
     ctypedef struct PyLongObject:
         digit* ob_digit
 
-from mpz cimport mpz_srcptr, mpz_ptr
+from .mpz cimport mpz_srcptr, mpz_ptr
 
 cdef mpz_get_pylong(mpz_srcptr z)
 cdef mpz_get_pyintlong(mpz_srcptr z)

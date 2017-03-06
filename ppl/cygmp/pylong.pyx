@@ -1,3 +1,5 @@
+# distutils: language = c
+# distutils: libraries = gmp
 """
 Various functions to deal with conversion mpz <-> Python int/long
 
@@ -24,11 +26,12 @@ AUTHORS:
 #                  http://www.gnu.org/licenses/
 #*****************************************************************************
 
+from __future__ import absolute_import, print_function
 
 from cpython.object cimport PyObject, Py_SIZE
 from cpython.int cimport PyInt_FromLong
 from cpython.long cimport PyLong_CheckExact, PyLong_FromLong
-from mpz cimport *
+from .mpz cimport *
 
 cdef extern from "python_extra.h":
     cdef void Py_SET_SIZE(PyObject *, size_t)

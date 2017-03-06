@@ -1,136 +1,5 @@
 # distutils: language = c++
 # distutils: libraries = gmp gmpxx ppl m
-r"""
-Cython wrapper for the Parma Polyhedra Library (PPL)
-
-The Parma Polyhedra Library (PPL) is a library for polyhedral computations over
-,:math:`\mathbb{Q}`. This interface tries to reproduce the C++ API as faithfully as possible
-in Python. For example, the following C++ excerpt:
-
-.. code-block:: c++
-
-    Variable x(0);
-    Variable y(1);
-    Constraint_System cs;
-    cs.insert(x >= 0);
-    cs.insert(x <= 3);
-    cs.insert(y >= 0);
-    cs.insert(y <= 3);
-    C_Polyhedron poly_from_constraints(cs);
-
-translates into:
-
->>> from ppl import Variable, Constraint_System, C_Polyhedron
->>> x = Variable(0)
->>> y = Variable(1)
->>> cs = Constraint_System()
->>> cs.insert(x >= 0)
->>> cs.insert(x <= 3)
->>> cs.insert(y >= 0)
->>> cs.insert(y <= 3)
->>> poly_from_constraints = C_Polyhedron(cs)
-
-The same polyhedron constructed from generators:
-
->>> from ppl import Variable, Generator_System, C_Polyhedron, point
->>> gs = Generator_System()
->>> gs.insert(point(0*x + 0*y))
->>> gs.insert(point(0*x + 3*y))
->>> gs.insert(point(3*x + 0*y))
->>> gs.insert(point(3*x + 3*y))
->>> poly_from_generators = C_Polyhedron(gs)
-
-Rich comparisons test equality/inequality and strict/non-strict
-containment:
-
->>> poly_from_generators == poly_from_constraints
-True
->>> poly_from_generators >= poly_from_constraints
-True
->>> poly_from_generators <  poly_from_constraints
-False
->>> poly_from_constraints.minimized_generators()
-Generator_System {point(0/1, 0/1), point(0/1, 3/1), point(3/1, 0/1), point(3/1, 3/1)}
->>> poly_from_constraints.minimized_constraints()
-Constraint_System {-x0+3>=0, -x1+3>=0, x0>=0, x1>=0}
-
-As we see above, the library is generally easy to use. There are a few
-pitfalls that are not entirely obvious without consulting the
-documentation, in particular:
-
-* There are no vectors used to describe :class:`Generator` (points,
-  closure points, rays, lines) or :class:`Constraint` (strict
-  inequalities, non-strict inequalities, or equations). Coordinates
-  are always specified via linear polynomials in :class:`Variable`
-
-* All coordinates of rays and lines as well as all coefficients of
-  constraint relations are (arbitrary precision) integers. Only the
-  generators :func:`point` and :func:`closure_point` allow one to
-  specify an overall divisor of the otherwise integral
-  coordinates. For example:
-
-  >>> from ppl import Variable, point
-  >>> x = Variable(0); y = Variable(1)
-  >>> p = point( 2*x+3*y, 5 ); p
-  point(2/5, 3/5)
-  >>> p.coefficient(x)
-  2
-  >>> p.coefficient(y)
-  3
-  >>> p.divisor()
-  5
-
-* PPL supports (topologically) closed polyhedra
-  (:class:`C_Polyhedron`) as well as not neccesarily closed polyhedra
-  (:class:`NNC_Polyhedron`). Only the latter allows closure points
-  (=points of the closure but not of the actual polyhedron) and strict
-  inequalities (``>`` and ``<``)
-
-The naming convention for the C++ classes is that they start with
-``PPL_``, for example, the original ``Linear_Expression`` becomes
-``PPL_Linear_Expression``. The Python wrapper has the same name as the
-original library class, that is, just ``Linear_Expression``. In short:
-
-* If you are using the Python wrapper (if in doubt: thats you), then
-  you use the same names as the PPL C++ class library.
-
-* If you are writing your own Cython code, you can access the
-  underlying C++ classes by adding the prefix ``PPL_``.
-
-Finally, PPL is fast. For example, here is the permutahedron of 5
-basis vectors:
-
->>> from ppl import Variable, Generator_System, point, C_Polyhedron
->>> basis = range(0,5)
->>> x = [ Variable(i) for i in basis ]
->>> gs = Generator_System();
->>> from itertools import permutations
->>> for coeff in permutations(basis):
-...    gs.insert(point( sum( (coeff[i]+1)*x[i] for i in basis ) ))
->>> C_Polyhedron(gs)
-A 4-dimensional polyhedron in QQ^5 defined as the convex hull of 120 points
-
-DIFFERENCES VS. C++
-
-Since Python and C++ syntax are not always compatible, there are
-necessarily some differences. The main ones are:
-
-* The :class:`Linear_Expression` also accepts an iterable as input for
-  the homogeneous cooefficients.
-
-* :class:`Polyhedron` and its subclasses as well as
-  :class:`Generator_System` and :class:`Constraint_System` can be set
-  immutable via a ``set_immutable()`` method. This is the analog of
-  declaring a C++ instance ``const``. All other classes are immutable
-  by themselves.
-
-AUTHORS:
-
-- Volker Braun (2010-10-08): initial version (within Sage).
-- Risan (2012-02-19): extension for MIP_Problem class (within Sage)
-- Vincent Delecroix (2016): convert Sage files into a standalone Python package
-"""
-
 #*****************************************************************************
 #       Copyright (C) 2010 Volker Braun  <vbraun.name@gmail.com>
 #                     2016 Vincent Delecroix <vincent.delecroix@labri.fr>
@@ -140,10 +9,14 @@ AUTHORS:
 #  the License, or (at youroption) any later version.
 #                  http://www.gnu.org/licenses/
 #*****************************************************************************
+
+from __future__ import absolute_import, print_function
+
 from cpython.int cimport PyInt_CheckExact
 from cpython.long cimport PyLong_CheckExact
-from cygmp.pylong cimport mpz_get_pyintlong, mpz_set_pylong
 include "cysignals/signals.pxi"
+
+from .cygmp.pylong cimport mpz_get_pyintlong, mpz_set_pylong
 
 try:
     from sage.all import Rational
@@ -268,7 +141,7 @@ cdef class _mutable_or_immutable(object):
 
     Examples:
 
-        >>> from ppl import _mutable_or_immutable as ExampleObj
+        >>> from ppl.ppl import _mutable_or_immutable as ExampleObj
         >>> x = ExampleObj()
         >>> x.is_mutable()
         True
@@ -284,7 +157,7 @@ cdef class _mutable_or_immutable(object):
 
         Tests:
 
-            >>> from ppl import _mutable_or_immutable as ExampleObj
+            >>> from ppl.ppl import _mutable_or_immutable as ExampleObj
             >>> x = ExampleObj()    # indirect doctest
             >>> x.is_mutable()
             True
@@ -299,7 +172,7 @@ cdef class _mutable_or_immutable(object):
 
         Examples:
 
-        >>> from ppl import _mutable_or_immutable as ExampleObj
+        >>> from ppl.ppl import _mutable_or_immutable as ExampleObj
         >>> x = ExampleObj()
         >>> x.is_mutable()
         True
@@ -322,7 +195,7 @@ cdef class _mutable_or_immutable(object):
 
         Examples:
 
-        >>> from ppl import _mutable_or_immutable as ExampleObj
+        >>> from ppl.ppl import _mutable_or_immutable as ExampleObj
         >>> x = ExampleObj()
         >>> x.is_mutable()
         True
@@ -339,7 +212,7 @@ cdef class _mutable_or_immutable(object):
 
         Examples:
 
-        >>> from ppl import _mutable_or_immutable as ExampleObj
+        >>> from ppl.ppl import _mutable_or_immutable as ExampleObj
         >>> x = ExampleObj()
         >>> x.is_immutable()
         False
@@ -362,7 +235,7 @@ cdef class _mutable_or_immutable(object):
 
         Examples:
 
-        >>> from ppl import _mutable_or_immutable as ExampleObj
+        >>> from ppl.ppl import _mutable_or_immutable as ExampleObj
         >>> x = ExampleObj()
         >>> x.assert_mutable("this will not trigger")
         >>> x.set_immutable()
@@ -967,7 +840,8 @@ cdef class MIP_Problem_constraints_iterator(object):
 
         Tests:
 
-        >>> from ppl import Constraint_System, Constraint_System_iterator
+        >>> from ppl import Constraint_System
+        >>> from ppl.ppl import Constraint_System_iterator
         >>> iter = Constraint_System_iterator( Constraint_System() )   # indirect doctest
         """
         self.pb = pb
@@ -989,7 +863,8 @@ cdef class MIP_Problem_constraints_iterator(object):
 
         Examples:
 
-        >>> from ppl import Constraint_System, Variable, Constraint_System_iterator
+        >>> from ppl import Constraint_System, Variable
+        >>> from ppl.ppl import Constraint_System_iterator
         >>> x = Variable(0)
         >>> cs = Constraint_System( 5*x > 2 )
         >>> cs.insert( x <= -1)
@@ -1332,7 +1207,7 @@ cdef class Polyhedron(_mutable_or_immutable):
 
         Examples:
 
-        >>> from ppl import Variable, C_Polyhedron, point, ray, Poly_Con_Relation
+        >>> from ppl import Variable, C_Polyhedron, point, ray
         >>> x = Variable(0);  y = Variable(1)
         >>> p = C_Polyhedron(2, 'empty')
         >>> p.add_generator( point(1*x+0*y) )
@@ -1357,6 +1232,7 @@ cdef class Polyhedron(_mutable_or_immutable):
         or :meth:`~ppl.Poly_Con_Relation.implies`, for
         example:
 
+        >>> from ppl.ppl import Poly_Con_Relation
         >>> p.relation_with( x+y<1 ).implies(Poly_Con_Relation.saturates())
         True
 
@@ -4936,7 +4812,8 @@ cdef class Generator_System_iterator(object):
 
     Examples:
 
-    >>> from ppl import Generator_System, Variable, line, ray, point, closure_point, Generator_System_iterator
+    >>> from ppl import Generator_System, Variable, line, ray, point, closure_point
+    >>> from ppl.ppl import Generator_System_iterator
     >>> x = Variable(0)
     >>> y = Variable(1)
     >>> gs = Generator_System( line(5*x-2*y) )
@@ -4954,7 +4831,8 @@ cdef class Generator_System_iterator(object):
 
         Tests:
 
-        >>> from ppl import Generator_System, Generator_System_iterator
+        >>> from ppl import Generator_System
+        >>> from ppl.ppl import Generator_System_iterator
         >>> iter = Generator_System_iterator(Generator_System())   # indirect doctest
         """
         self.gs = gs
@@ -4976,7 +4854,8 @@ cdef class Generator_System_iterator(object):
 
         Examples:
 
-        >>> from ppl import Generator_System, Variable, point, Generator_System_iterator
+        >>> from ppl import Generator_System, Variable, point
+        >>> from ppl.ppl import Generator_System_iterator
         >>> x = Variable(0)
         >>> y = Variable(1)
         >>> gs = Generator_System( point(5*x-2*y) )
@@ -5906,7 +5785,8 @@ cdef class Constraint_System_iterator(object):
 
     Examples:
 
-        >>> from ppl import Constraint_System, Variable, Constraint_System_iterator
+        >>> from ppl import Constraint_System, Variable
+        >>> from ppl.ppl import Constraint_System_iterator
         >>> x = Variable(0)
         >>> y = Variable(1)
         >>> cs = Constraint_System( 5*x < 2*y )
@@ -5925,7 +5805,8 @@ cdef class Constraint_System_iterator(object):
 
         Tests:
 
-        >>> from ppl import Constraint_System, Constraint_System_iterator
+        >>> from ppl import Constraint_System
+        >>> from ppl.ppl import Constraint_System_iterator
         >>> iter = Constraint_System_iterator( Constraint_System() )   # indirect doctest
         """
         self.cs = cs
@@ -5947,7 +5828,8 @@ cdef class Constraint_System_iterator(object):
 
         Examples:
 
-        >>> from ppl import Constraint_System, Variable, Constraint_System_iterator
+        >>> from ppl import Constraint_System, Variable
+        >>> from ppl.ppl import Constraint_System_iterator
         >>> x = Variable(0)
         >>> cs = Constraint_System( x > 0 )
         >>> cs.insert ( 2*x <= -3)

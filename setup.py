@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 from setuptools import setup
-from distutils.extension import Extension
-from Cython.Distutils import build_ext as _build_ext
+from distutils.command.build_ext import build_ext as _build_ext
+from setuptools.extension import Extension
+
 import sys
 
 # Adapted from Cython's new_build_ext
@@ -34,21 +35,15 @@ class build_ext(_build_ext):
 VERSION = open('version.txt').read()[:-1]
 
 extensions = [
-    Extension("cygmp.utils",
-        sources = ["src/cygmp/utils.pyx"],
-        depends = ["src/cygmp/*"],
-        libraries = ["gmp"],
-        language = 'c'),
-    Extension("cygmp.pylong",
-        sources = ["src/cygmp/pylong.pyx"],
-        depends = ["src/cygmp/*"],
-        libraries = ["gmp"],
-        language = 'c'),
-    Extension('ppl',
-        sources=['src/ppl.pyx', 'src/ppl_shim.cc'],
-        depends=['src/ppl.pxd', 'src/ppl_shim.hh', 'src/ppl_decl.pxd'],
-        libraries=['gmp','gmpxx','ppl','m'],
-        language='c++'),
+    Extension("ppl.cygmp.utils",
+        sources = ["ppl/cygmp/utils.pyx"],
+        depends = ["ppl/cygmp/*"]),
+    Extension("ppl.cygmp.pylong",
+        sources = ["ppl/cygmp/pylong.pyx"],
+        depends = ["ppl/cygmp/*"]),
+    Extension('ppl.ppl',
+        sources=['ppl/ppl.pyx', 'ppl/ppl_shim.cc'],
+        depends=['ppl/*'])
     ]
 
 setup(
@@ -63,7 +58,8 @@ setup(
     license='GPL v3',
     platforms=['any'],
     packages=["ppl"],
-    package_dir={'ppl': 'src'},
+    package_dir={'ppl': 'ppl'},
+    package_data={'ppl': ['*.pxd', '*.h', '*.hh', 'cygmp/*.pxd', 'cygmp/*.h', 'cygmp/*.hh']},
     package_data={'ppl': ['*.pxd', '*.h']},
     install_requires=['Cython', 'cysignals'],  # For pip install, pip can't read setup_requires
     ext_modules=extensions,
