@@ -2592,7 +2592,8 @@ cdef class Polyhedron(_mutable_or_immutable):
         >>> cmd += 'p.minimized_generators()\n'
         >>> cmd += 'p.ascii_dump()\n'
         >>> from subprocess import Popen, PIPE
-        >>> proc = Popen(['python', '-c', cmd], stdout=PIPE, stderr=PIPE)
+        >>> import sys
+        >>> proc = Popen([sys.executable, '-c', cmd], stdout=PIPE, stderr=PIPE)
         >>> out, err = proc.communicate()
         >>> len(out)
         0
@@ -3613,7 +3614,8 @@ cdef class Linear_Expression(object):
         >>> cmd += 'e = 3*x+2*y+1\n'
         >>> cmd += 'e.ascii_dump()\n'
         >>> from subprocess import Popen, PIPE
-        >>> proc = Popen(['python', '-c', cmd], stdout=PIPE, stderr=PIPE)
+        >>> import sys
+        >>> proc = Popen([sys.executable, '-c', cmd], stdout=PIPE, stderr=PIPE)
         >>> out, err = proc.communicate()
         >>> len(out) == 0
         True
@@ -4442,7 +4444,8 @@ cdef class Generator(object):
         >>> cmd += 'p = point(3*x+2*y)\n'
         >>> cmd += 'p.ascii_dump()\n'
         >>> import subprocess
-        >>> proc = subprocess.Popen(['python', '-c', cmd], stderr=subprocess.PIPE)
+        >>> import sys
+        >>> proc = subprocess.Popen([sys.executable, '-c', cmd], stderr=subprocess.PIPE)
         >>> out, err = proc.communicate()
         >>> print(str(err.decode('ascii')))
         size 3 1 3 2 ...
@@ -4663,8 +4666,8 @@ cdef class Generator_System(_mutable_or_immutable):
         >>> cmd += 'y = Variable(1)\n'
         >>> cmd += 'gs = Generator_System( point(3*x+2*y+1) )\n'
         >>> cmd += 'gs.ascii_dump()\n'
-        >>> import subprocess
-        >>> proc = subprocess.Popen(['python', '-c', cmd], stderr=subprocess.PIPE)
+        >>> import subprocess, sys
+        >>> proc = subprocess.Popen([sys.executable, '-c', cmd], stderr=subprocess.PIPE)
         >>> out, err = proc.communicate()
         >>> print(str(err.decode('ascii')))
         topology NECESSARILY_CLOSED
@@ -5313,8 +5316,8 @@ cdef class Constraint(object):
         >>> cmd += 'y = Variable(1)\n'
         >>> cmd += 'e = (3*x+2*y+1 > 0)\n'
         >>> cmd += 'e.ascii_dump()\n'
-        >>> import subprocess
-        >>> proc = subprocess.Popen(['python', '-c', cmd], stderr=subprocess.PIPE)
+        >>> import subprocess, sys
+        >>> proc = subprocess.Popen([sys.executable, '-c', cmd], stderr=subprocess.PIPE)
         >>> out, err = proc.communicate()
         >>> print(str(err.decode('ascii')))
         size 4 1 3 2 -1 ...
@@ -5638,8 +5641,8 @@ cdef class Constraint_System(object):
         >>> cmd += 'y = Variable(1)\n'
         >>> cmd += 'cs = Constraint_System( 3*x > 2*y+1 )\n'
         >>> cmd += 'cs.ascii_dump()\n'
-        >>> import subprocess
-        >>> proc = subprocess.Popen(['python', '-c', cmd], stderr=subprocess.PIPE)
+        >>> import subprocess, sys
+        >>> proc = subprocess.Popen([sys.executable, '-c', cmd], stderr=subprocess.PIPE)
         >>> out, err = proc.communicate()
         >>> print(str(err.decode('ascii')))
         topology NOT_NECESSARILY_CLOSED
@@ -5959,7 +5962,8 @@ cdef class Poly_Gen_Relation(object):
         >>> cmd  = 'from ppl import Poly_Gen_Relation\n'
         >>> cmd += 'Poly_Gen_Relation.nothing().ascii_dump()\n'
         >>> from subprocess import Popen, PIPE
-        >>> proc = Popen(['python', '-c', cmd], stderr=PIPE)
+        >>> import sys
+        >>> proc = Popen([sys.executable, '-c', cmd], stderr=PIPE)
         >>> out, err = proc.communicate()
         >>> print(str(err.decode('ascii')))
         NOTHING
@@ -6184,8 +6188,8 @@ cdef class Poly_Con_Relation(object):
 
         >>> cmd  = 'from ppl import Poly_Con_Relation\n'
         >>> cmd += 'Poly_Con_Relation.nothing().ascii_dump()\n'
-        >>> import subprocess
-        >>> proc = subprocess.Popen(['python', '-c', cmd], stderr=subprocess.PIPE)
+        >>> import subprocess, sys
+        >>> proc = subprocess.Popen([sys.executable, '-c', cmd], stderr=subprocess.PIPE)
         >>> out, err = proc.communicate()
         >>> print(str(err.decode('ascii')))
         NOTHING

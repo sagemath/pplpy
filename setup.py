@@ -61,6 +61,7 @@ setup(
     package_dir={'ppl': 'ppl'},
     package_data={'ppl': ['*.pxd', '*.h', '*.hh', 'cygmp/*.pxd', 'cygmp/*.h', 'cygmp/*.hh']},
     install_requires=['Cython', 'cysignals'],  # For pip install, pip can't read setup_requires
+    include_dirs=['ppl'],
     ext_modules=extensions,
     classifiers=[
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
