@@ -1,4 +1,8 @@
 language: python
+notifications:
+  slack:
+    on_success: never
+    on_failure : never
 python:
   - "2.7"
   - "3.4"
