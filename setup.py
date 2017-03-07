@@ -24,10 +24,6 @@ class build_ext(_build_ext):
             sys.stderr.write("The installation of ppl requires cysignals\n")
             sys.exit(1)
 
-        # Generate auto-generated sources from pari.desc
-        #from autogen import rebuild
-        #rebuild()
-
         self.distribution.ext_modules[:] = cythonize(
             self.distribution.ext_modules, include_path=sys.path)
         _build_ext.finalize_options(self)
@@ -57,9 +53,10 @@ setup(
     download_url ='https://github.com/videlec/pplpy/archive/{}.tar.gz'.format(VERSION),
     license='GPL v3',
     platforms=['any'],
-    packages=["ppl", "ppl.cygmp"],
-    package_dir={'ppl': 'ppl'},
-    package_data={'ppl': ['*.pxd', '*.h', '*.hh', 'cygmp/*.pxd', 'cygmp/*.h', 'cygmp/*.hh']},
+    packages=['ppl', 'ppl.cygmp'],
+    package_dir={'ppl': 'ppl', 'ppl.cygmp': 'ppl/cygmp'},
+    package_data={'ppl': ['*.pxd', '*.h', '*.hh'],
+                  'ppl.cygmp': ['*.pxd', '*.h', '*.hh']},
     install_requires=['Cython', 'cysignals'],  # For pip install, pip can't read setup_requires
     include_dirs=['ppl'],
     ext_modules=extensions,
