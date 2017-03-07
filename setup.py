@@ -57,7 +57,7 @@ setup(
     download_url ='https://github.com/videlec/pplpy/archive/{}.tar.gz'.format(VERSION),
     license='GPL v3',
     platforms=['any'],
-    packages=["ppl"],
+    packages=["ppl", "ppl.cygmp"],
     package_dir={'ppl': 'ppl'},
     package_data={'ppl': ['*.pxd', '*.h', '*.hh', 'cygmp/*.pxd', 'cygmp/*.h', 'cygmp/*.hh']},
     install_requires=['Cython', 'cysignals'],  # For pip install, pip can't read setup_requires
