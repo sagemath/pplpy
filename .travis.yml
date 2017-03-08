@@ -23,3 +23,5 @@ script:
   - python rundoctest.py
   - python setup.py build_ext --inplace
   - python -c "import testpplpy"
+  - python setup2.py build_ext --inplace
+  - python -c "import testpplpy2"
