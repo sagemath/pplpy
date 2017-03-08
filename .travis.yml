@@ -21,3 +21,5 @@ install:
 script:
   - cd tests
   - python rundoctest.py
+  - python setup.py build_ext --inplace
+  - python -c "import testpplpy"
