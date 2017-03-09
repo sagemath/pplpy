@@ -42,6 +42,14 @@ example::
     $ export CFLAGS="-I/path/to/gmp/include/ -L/path/to/gmp/lib/ -I/path/to/ppl/include/ -L/path/to/ppl/lib $CFLAGS"
     $ pip install pplpy
 
+Using from Cython
+-----------------
+
+TODO
+
+- Needs explanation
+- link to examples
+
 Source
 ------
 
