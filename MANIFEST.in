@@ -2,4 +2,4 @@ include README.rst
 include *.txt
 include docs/*
 include docs/_static/*
-include src/*.pxd
+include ppl/*.pxd
