@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 from setuptools import setup
 from distutils.command.build_ext import build_ext as _build_ext
+from distutils.cmd import Command
 from setuptools.extension import Extension
-
 import sys
 
 # Adapted from Cython's new_build_ext
@@ -27,6 +27,23 @@ class build_ext(_build_ext):
         self.distribution.ext_modules[:] = cythonize(
             self.distribution.ext_modules, include_path=sys.path)
         _build_ext.finalize_options(self)
+
+class TestCommand(Command):
+    user_options = []
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        import sys, subprocess, os
+        
+        os.chdir('./tests')
+        raise SystemExit(
+            subprocess.call([sys.executable,
+                            'rundoctest.py']))
 
 VERSION = open('version.txt').read()[:-1]
 
@@ -75,5 +92,5 @@ setup(
         'Programming Language :: Python :: 3.6',
     ],
     keywords=['polyhedron', 'polytope', 'convex', 'mathematics', 'ppl', 'milp', 'linear-programming'],
-    cmdclass = {'build_ext': build_ext}
+    cmdclass = {'build_ext': build_ext, 'test': TestCommand}
 )
