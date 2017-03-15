@@ -41,6 +41,15 @@ class TestCommand(Command):
         import sys, subprocess, os
         
         os.chdir('./tests')
+        print('Starting cython compilation tests')
+        subprocess.call([sys.executable, 'setup.py', 'build_ext', '--inplace'])
+        res=subprocess.call([sys.executable, '-c', '"import testpplpy"'])
+        subprocess.call([sys.executable, 'setup2.py', 'build_ext', '--inplace'])
+        res2=subprocess.call([sys.executable, '-c', '"import testpplpy2"'])
+        if res+res2 == 0:
+            print("Cython compilation tests success")
+        else :
+            print("Cython compilatyion tests failure")
         raise SystemExit(
             subprocess.call([sys.executable,
                             'rundoctest.py']))
