@@ -41,18 +41,18 @@ class TestCommand(Command):
         import sys, subprocess, os
         
         os.chdir('./tests')
+
         print('Starting cython compilation tests')
-        subprocess.call([sys.executable, 'setup.py', 'build_ext', '--inplace'])
-        res=subprocess.call([sys.executable, '-c', '"import testpplpy"'])
-        subprocess.call([sys.executable, 'setup2.py', 'build_ext', '--inplace'])
-        res2=subprocess.call([sys.executable, '-c', '"import testpplpy2"'])
-        if res+res2 == 0:
-            print("Cython compilation tests success")
+        if subprocess.call([sys.executable, 'setup.py', 'build_ext', '--inplace']) or \
+           subprocess.call([sys.executable, '-c', '"import testpplpy"']) or \
+           subprocess.call([sys.executable, 'setup2.py', 'build_ext', '--inplace']) or \
+           subprocess.call([sys.executable, '-c', '"import testpplpy2"']):
+            print("Cython compilation tests failure")
+            raise SystemExit("error in tests")
         else :
-            print("Cython compilatyion tests failure")
-        raise SystemExit(
-            subprocess.call([sys.executable,
-                            'rundoctest.py']))
+            print("Cython compilation tests success")
+
+        subprocess.call([sys.executable, 'rundoctest.py'])
 
 VERSION = open('version.txt').read()[:-1]
 
