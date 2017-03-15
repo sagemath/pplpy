@@ -140,6 +140,7 @@ from .wrappers import (
         Polyhedron, C_Polyhedron ,NNC_Polyhedron,
         point, closure_point, ray, line,
         inequality, equation, strict_inequality,
-        MIP_Problem,
         Linear_Expression,
         Poly_Gen_Relation, Poly_Con_Relation)
+
+from .mip_problem import MIP_Problem

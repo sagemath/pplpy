@@ -2,6 +2,10 @@ from ppl_decl cimport *
 
 cdef PPL_GeneratorType_str(PPL_GeneratorType t)
 
+cdef _wrap_Generator(PPL_Generator generator)
+
+cdef _wrap_Constraint(PPL_Constraint constraint)
+
 cdef class _mutable_or_immutable(object):
     cdef bint _is_mutable
 
@@ -47,10 +51,3 @@ cdef class Poly_Gen_Relation(object):
 
 cdef class Poly_Con_Relation(object):
     cdef PPL_Poly_Con_Relation *thisptr
-
-cdef class MIP_Problem(_mutable_or_immutable):
-    cdef PPL_MIP_Problem *thisptr
-
-cdef class MIP_Problem_constraints_iterator(object):
-    cdef MIP_Problem pb
-    cdef mip_cs_iterator_ptr mip_csi_ptr

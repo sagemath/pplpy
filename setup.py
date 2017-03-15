@@ -64,6 +64,9 @@ extensions = [
         depends = ["ppl/cygmp/*"]),
     Extension('ppl.wrappers',
         sources=['ppl/wrappers.pyx', 'ppl/ppl_shim.cc'],
+        depends=['ppl/*']),
+    Extension('ppl.mip_problem',
+        sources=['ppl/mip_problem.pyx', 'ppl/ppl_shim.cc'],
         depends=['ppl/*'])
     ]
 
