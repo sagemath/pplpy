@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 from setuptools import setup
 from distutils.command.build_ext import build_ext as _build_ext
+from distutils.cmd import Command
 from setuptools.extension import Extension
-
 import sys
 
 # Adapted from Cython's new_build_ext
@@ -27,6 +27,32 @@ class build_ext(_build_ext):
         self.distribution.ext_modules[:] = cythonize(
             self.distribution.ext_modules, include_path=sys.path)
         _build_ext.finalize_options(self)
+
+class TestCommand(Command):
+    user_options = []
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        import sys, subprocess, os
+        
+        os.chdir('./tests')
+
+        print('Starting cython compilation tests')
+        if subprocess.call([sys.executable, 'setup.py', 'build_ext', '--inplace']) or \
+           subprocess.call([sys.executable, '-c', '"import testpplpy"']) or \
+           subprocess.call([sys.executable, 'setup2.py', 'build_ext', '--inplace']) or \
+           subprocess.call([sys.executable, '-c', '"import testpplpy2"']):
+            print("Cython compilation tests failure")
+            raise SystemExit("error in tests")
+        else :
+            print("Cython compilation tests success")
+
+        subprocess.call([sys.executable, 'rundoctest.py'])
 
 VERSION = open('version.txt').read()[:-1]
 
@@ -67,7 +93,13 @@ setup(
         "Development Status :: 3 - Alpha",
         "Operating System :: Unix",
         "Intended Audience :: Science/Research",
+        "Programming Language :: Python :: 2",
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
     ],
     keywords=['polyhedron', 'polytope', 'convex', 'mathematics', 'ppl', 'milp', 'linear-programming'],
-    cmdclass = {'build_ext': build_ext}
+    cmdclass = {'build_ext': build_ext, 'test': TestCommand}
 )
