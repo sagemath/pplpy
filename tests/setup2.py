@@ -8,10 +8,11 @@ extensions = [
     Extension("testpplpy2", ["testpplpy2.pyx"],
         include_dirs=ppl.__path__,
         libraries=['ppl'],
+        language='c++'
         )
 ]
 
 setup(
     name="test pplpy2",
-    ext_modules=cythonize(extensions, include_path=sys.path, language='c++')
+    ext_modules=cythonize(extensions, include_path=sys.path)
 )

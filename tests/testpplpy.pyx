@@ -10,18 +10,9 @@ ppl.cygmp.pylong
 ppl.cygmp.utils
 """
 
-from ppl.wrappers import _mutable_or_immutable as ExampleObj
 from ppl.wrappers cimport Variable, Constraint_System, MIP_Problem
-"""
-By default, any object is mutable. It can then be `set_immutable`.
-"""
-def f():
-    x = ExampleObj()
-    assert(x.is_mutable())
-    assert(not x.is_immutable())
-    x.set_immutable()
-    assert(x.is_immutable())
 
+def test():
     x = Variable(0)
     y = Variable(1)
     cs = Constraint_System()
@@ -30,6 +21,10 @@ def f():
     cs.insert( 3 * x + 5 * y <= 10 )
     m = MIP_Problem(2, cs, x + y)
     m.objective_function()
-    #x0+x1
-    print("cython call of pplpy is a success")
-f()
+
+    from ppl import C_Polyhedron
+    C_Polyhedron( 5*x-2*y >=  x+y-1 )
+
+    print("-"*80)
+    print("Cython test 1 OK")
+    print("-"*80)

@@ -12,5 +12,5 @@ extensions = [
 
 setup(
     name="test pplpy",
-    ext_modules=cythonize(extensions, include_path=sys.path, language='c++')
+    ext_modules=cythonize(extensions, include_path=sys.path)
 )
