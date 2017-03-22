@@ -8,7 +8,8 @@ ppl.cygmp.pylong
 ppl.cygmp.utils
 """
 
-from ppl.wrappers cimport Variable, Constraint_System, MIP_Problem
+from ppl.wrappers cimport Variable, Constraint_System
+from ppl.mip_problem cimport MIP_Problem
 
 def test():
     x = Variable(0)
