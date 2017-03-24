@@ -143,7 +143,6 @@ cdef class MIP_Problem(object):
                 mode = MINIMIZATION
             else:
                 raise ValueError('unknown mode {!r}'.format(args[2]))
-        print('boo')
         self.thisptr = new PPL_MIP_Problem(dim, cs.thisptr[0], obj.thisptr[0], mode)
 
     def __dealloc__(self):
@@ -257,7 +256,6 @@ cdef class MIP_Problem(object):
             self.thisptr.optimal_value(sup_n, sup_d)
         finally:
             sig_off()
-        print("New File yatatoo")
         return Fraction(mpz_get_pyintlong(sup_n.get_mpz_t()), mpz_get_pyintlong(sup_d.get_mpz_t()))
 
     def space_dimension(self):
@@ -616,8 +614,7 @@ cdef class MIP_Problem_constraints_iterator(object):
 
         Tests:
 
-        >>> from ppl import Constraint_System
-        >>> from ppl.wrappers import Constraint_System_iterator
+        >>> from ppl import Constraint_System, Constraint_System_iterator
         >>> iter = Constraint_System_iterator( Constraint_System() )   # indirect doctest
         """
         self.pb = pb
@@ -639,8 +636,7 @@ cdef class MIP_Problem_constraints_iterator(object):
 
         Examples:
 
-        >>> from ppl import Constraint_System, Variable
-        >>> from ppl.wrappers import Constraint_System_iterator
+        >>> from ppl import Constraint_System, Variable, Constraint_System_iterator
         >>> x = Variable(0)
         >>> cs = Constraint_System( 5*x > 2 )
         >>> cs.insert( x <= -1)

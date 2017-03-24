@@ -114,7 +114,7 @@ Since Python and C++ syntax are not always compatible, there are
 necessarily some differences. The main ones are:
 
 * The :class:`Linear_Expression` also accepts an iterable as input for
-  the homogeneous cooefficients.
+  the homogeneous coefficients.
 
 * :class:`Polyhedron` and its subclasses as well as
   :class:`Generator_System` and :class:`Constraint_System` can be set
@@ -128,19 +128,23 @@ AUTHORS:
 - Risan (2012-02-19): extension for MIP_Problem class (within Sage)
 - Vincent Delecroix (2016): convert Sage files into a standalone Python package
 - Vincent Klein (2017): improve doctest support and Python 3 compatibility
+    Split the main code into several files.
 """
-
 from __future__ import absolute_import
 
 from .wrappers import (
-        Variable,
-        Generator, Constraint,
-        Constraint_System,
-        Generator_System,
-        Polyhedron, C_Polyhedron ,NNC_Polyhedron,
-        point, closure_point, ray, line,
-        inequality, equation, strict_inequality,
-        Linear_Expression,
+        Variable, Linear_Expression,
         Poly_Gen_Relation, Poly_Con_Relation)
 
 from .mip_problem import MIP_Problem
+
+from .polyhedron import Polyhedron, C_Polyhedron, NNC_Polyhedron
+
+from .generator import (
+        Generator, Generator_System,
+        point, closure_point, ray, line)
+
+from .constraint import (
+        Constraint, Constraint_System,
+        Constraint_System_iterator, inequality,
+        equation, strict_inequality)

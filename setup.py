@@ -67,6 +67,15 @@ extensions = [
         depends=['ppl/*']),
     Extension('ppl.mip_problem',
         sources=['ppl/mip_problem.pyx', 'ppl/ppl_shim.cc'],
+        depends=['ppl/*']),
+    Extension('ppl.polyhedron',
+        sources = ['ppl/polyhedron.pyx', 'ppl/ppl_shim.cc'],
+        depends=['ppl/*']),
+    Extension('ppl.generator',
+        sources = ['ppl/generator.pyx', 'ppl/ppl_shim.cc'],
+        depends=['ppl/*']),
+    Extension('ppl.constraint',
+        sources = ['ppl/constraint.pyx', 'ppl/ppl_shim.cc'],
         depends=['ppl/*'])
     ]
 
