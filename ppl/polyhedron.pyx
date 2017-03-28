@@ -380,7 +380,7 @@ cdef class Polyhedron(object):
         or :meth:`~ppl.Poly_Con_Relation.implies`, for
         example:
 
-        >>> from ppl.wrappers import Poly_Con_Relation
+        >>> from ppl import Poly_Con_Relation
         >>> p.relation_with( x+y<1 ).implies(Poly_Con_Relation.saturates())
         True
 

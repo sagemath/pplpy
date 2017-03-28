@@ -129,17 +129,17 @@ from __future__ import absolute_import
 
 from .wrappers import (
         Variable, Linear_Expression,
-        Poly_Gen_Relation, Poly_Con_Relation)
+        )
 
 from .mip_problem import MIP_Problem
 
 from .polyhedron import Polyhedron, C_Polyhedron, NNC_Polyhedron
 
 from .generator import (
-        Generator, Generator_System,
+        Generator, Generator_System, Poly_Gen_Relation,
         point, closure_point, ray, line)
 
 from .constraint import (
-        Constraint, Constraint_System,
+        Constraint, Constraint_System, Poly_Con_Relation,
         Constraint_System_iterator, inequality,
         equation, strict_inequality)

@@ -1043,3 +1043,163 @@ cdef _wrap_Generator_System(PPL_Generator_System generator_system):
     del gs.thisptr
     gs.thisptr = new PPL_Generator_System(generator_system)
     return gs
+
+cdef class Poly_Gen_Relation(object):
+    r"""
+    Wrapper for PPL's ``Poly_Con_Relation`` class.
+
+    INPUT/OUTPUT:
+
+    You must not construct :class:`Poly_Gen_Relation` objects
+    manually. You will usually get them from
+    :meth:`~sage.libs.ppl.Polyhedron.relation_with`. You can also get
+    pre-defined relations from the class methods :meth:`nothing` and
+    :meth:`subsumes`.
+
+    Examples:
+
+    >>> from ppl import Poly_Gen_Relation
+    >>> nothing = Poly_Gen_Relation.nothing(); nothing
+    nothing
+    >>> subsumes = Poly_Gen_Relation.subsumes(); subsumes
+    subsumes
+    >>> nothing.implies( subsumes )
+    False
+    >>> subsumes.implies( nothing )
+    True
+    """
+    def __cinit__(self, do_not_construct_manually=False):
+        """
+        The Cython constructor.
+
+        See :class:`Poly_Gen_Relation` for documentation.
+
+        Tests:
+
+        >>> from ppl import Poly_Gen_Relation
+        >>> Poly_Gen_Relation.nothing()
+        nothing
+        """
+        assert(do_not_construct_manually)
+        self.thisptr = NULL
+
+    def __dealloc__(self):
+        """
+        The Cython destructor.
+        """
+        assert self.thisptr!=NULL, 'Do not construct Poly_Gen_Relation objects manually!'
+        del self.thisptr
+
+    def implies(self, Poly_Gen_Relation y):
+        r"""
+        Test whether ``self`` implies ``y``.
+
+        INPUT:
+
+        - ``y`` -- a :class:`Poly_Gen_Relation`.
+
+        OUTPUT:
+
+        Boolean. ``True`` if and only if ``self`` implies ``y``.
+
+        Examples:
+
+        >>> from ppl import Poly_Gen_Relation
+        >>> nothing = Poly_Gen_Relation.nothing()
+        >>> nothing.implies( nothing )
+        True
+        """
+        return self.thisptr.implies(y.thisptr[0])
+
+    @classmethod
+    def nothing(cls):
+        r"""
+        Return the assertion that says nothing.
+
+        OUTPUT:
+
+        A :class:`Poly_Gen_Relation`.
+
+        Examples:
+
+        >>> from ppl import Poly_Gen_Relation
+        >>> Poly_Gen_Relation.nothing()
+        nothing
+        """
+        return _wrap_Poly_Gen_Relation(PPL_Poly_Gen_Relation_nothing())
+
+    @classmethod
+    def subsumes(cls):
+        r"""
+        Return the assertion "Adding the generator would not change
+        the polyhedron".
+
+        OUTPUT:
+
+        A :class:`Poly_Gen_Relation`.
+
+        Examples:
+
+        >>> from ppl import Poly_Gen_Relation
+        >>> Poly_Gen_Relation.subsumes()
+        subsumes
+        """
+        return _wrap_Poly_Gen_Relation(PPL_Poly_Gen_Relation_subsumes())
+
+    def ascii_dump(self):
+        r"""
+        Write an ASCII dump to stderr.
+
+        Examples:
+
+        >>> cmd  = 'from ppl import Poly_Gen_Relation\n'
+        >>> cmd += 'Poly_Gen_Relation.nothing().ascii_dump()\n'
+        >>> from subprocess import Popen, PIPE
+        >>> import sys
+        >>> proc = Popen([sys.executable, '-c', cmd], stderr=PIPE)
+        >>> out, err = proc.communicate()
+        >>> print(str(err.decode('ascii')))
+        NOTHING
+        >>> proc.returncode
+        0
+        """
+        self.thisptr.ascii_dump()
+
+    def OK(self, check_non_empty=False):
+        """
+        Check if all the invariants are satisfied.
+
+        Examples:
+
+            >>> from ppl import Poly_Gen_Relation
+            >>> Poly_Gen_Relation.nothing().OK()
+            True
+        """
+        return self.thisptr.OK()
+
+    def __repr__(self):
+        r"""
+        Return a string representation.
+
+        OUTPUT:
+
+        String.
+
+        Examples:
+
+        >>> from ppl import Poly_Gen_Relation
+        >>> Poly_Gen_Relation.nothing().__repr__()
+        'nothing'
+        """
+        if self.implies(Poly_Gen_Relation.subsumes()):
+            return 'subsumes'
+        else:
+            return 'nothing'
+
+cdef _wrap_Poly_Gen_Relation(PPL_Poly_Gen_Relation relation):
+    """
+    Wrap a C++ ``PPL_Poly_Gen_Relation`` into a Cython ``Poly_Gen_Relation``.
+    """
+    cdef Poly_Gen_Relation rel = Poly_Gen_Relation(True)
+    rel.thisptr = new PPL_Poly_Gen_Relation(relation)
+    return rel

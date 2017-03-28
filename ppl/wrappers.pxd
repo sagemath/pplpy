@@ -5,13 +5,3 @@ cdef class Variable(object):
 
 cdef class Linear_Expression(object):
     cdef PPL_Linear_Expression *thisptr
-
-cdef class Poly_Gen_Relation(object):
-    cdef PPL_Poly_Gen_Relation *thisptr
-
-cdef class Poly_Con_Relation(object):
-    cdef PPL_Poly_Con_Relation *thisptr
-    
-cdef _wrap_Constraint(PPL_Constraint constraint)
-
-cdef _wrap_Constraint_System(PPL_Constraint_System constraint_system)

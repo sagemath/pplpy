@@ -977,3 +977,276 @@ cdef class Constraint_System_iterator(object):
         if is_end_cs_iterator((<Constraint_System>self.cs).thisptr[0], self.csi_ptr):
             raise StopIteration
         return _wrap_Constraint(next_cs_iterator(self.csi_ptr))
+    
+cdef class Poly_Con_Relation(object):
+    r"""
+    Wrapper for PPL's ``Poly_Con_Relation`` class.
+
+    INPUT/OUTPUT:
+
+    You must not construct :class:`Poly_Con_Relation` objects
+    manually. You will usually get them from
+    :meth:`~sage.libs.ppl.Polyhedron.relation_with`. You can also get
+    pre-defined relations from the class methods :meth:`nothing`,
+    :meth:`is_disjoint`, :meth:`strictly_intersects`,
+    :meth:`is_included`, and :meth:`saturates`.
+
+    Examples:
+
+    >>> from ppl import Poly_Con_Relation
+    >>> saturates     = Poly_Con_Relation.saturates();  saturates
+    saturates
+    >>> is_included   = Poly_Con_Relation.is_included(); is_included
+    is_included
+    >>> is_included.implies(saturates)
+    False
+    >>> saturates.implies(is_included)
+    False
+    >>> rels = []
+    >>> rels.append(Poly_Con_Relation.nothing())
+    >>> rels.append(Poly_Con_Relation.is_disjoint())
+    >>> rels.append(Poly_Con_Relation.strictly_intersects())
+    >>> rels.append(Poly_Con_Relation.is_included())
+    >>> rels.append(Poly_Con_Relation.saturates())
+    >>> rels
+    [nothing, is_disjoint, strictly_intersects, is_included, saturates]
+    >>> for i, rel_i in enumerate(rels):
+    ...       s = ""
+    ...       for j, rel_j in enumerate(rels):
+    ...           s=s+str(int(rel_i.implies(rel_j))) + ' '
+    ...       print(" ".join(str(int(rel_i.implies(rel_j))) for j, rel_j in enumerate(rels)))
+    1 0 0 0 0
+    1 1 0 0 0
+    1 0 1 0 0
+    1 0 0 1 0
+    1 0 0 0 1
+    """
+    def __cinit__(self, do_not_construct_manually=False):
+        """
+        The Cython constructor.
+
+        See :class:`Poly_Con_Relation` for documentation.
+
+        Tests:
+
+        >>> from ppl import Poly_Con_Relation
+        >>> Poly_Con_Relation.nothing()
+        nothing
+        """
+        assert(do_not_construct_manually)
+        self.thisptr = NULL
+
+    def __dealloc__(self):
+        """
+        The Cython destructor.
+        """
+        assert self.thisptr!=NULL, 'Do not construct Poly_Con_Relation objects manually!'
+        del self.thisptr
+
+    def implies(self, Poly_Con_Relation y):
+        r"""
+        Test whether ``self`` implies ``y``.
+
+        INPUT:
+
+        - ``y`` -- a :class:`Poly_Con_Relation`.
+
+        OUTPUT:
+
+        Boolean. ``True`` if and only if ``self`` implies ``y``.
+
+        Examples:
+
+            >>> from ppl import Poly_Con_Relation
+            >>> nothing = Poly_Con_Relation.nothing()
+            >>> nothing.implies( nothing )
+            True
+        """
+        return self.thisptr.implies(y.thisptr[0])
+
+    @classmethod
+    def nothing(cls):
+        r"""
+        Return the assertion that says nothing.
+
+        OUTPUT:
+
+        A :class:`Poly_Con_Relation`.
+
+        Examples:
+
+        >>> from ppl import Poly_Con_Relation
+        >>> Poly_Con_Relation.nothing()
+        nothing
+        """
+        return _wrap_Poly_Con_Relation(PPL_Poly_Con_Relation_nothing())
+
+    @classmethod
+    def is_disjoint(cls):
+        r"""
+        Return the assertion "The polyhedron and the set of points
+        satisfying the constraint are disjoint".
+
+        OUTPUT:
+
+        A :class:`Poly_Con_Relation`.
+
+        Examples:
+
+        >>> from ppl import Poly_Con_Relation
+        >>> Poly_Con_Relation.is_disjoint()
+        is_disjoint
+        """
+        return _wrap_Poly_Con_Relation(PPL_Poly_Con_Relation_is_disjoint())
+
+    @classmethod
+    def strictly_intersects(cls):
+        r"""
+        Return the assertion "The polyhedron intersects the set of
+        points satisfying the constraint, but it is not included in
+        it".
+
+        :return: a :class:`Poly_Con_Relation`.
+
+        Examples:
+
+        >>> from ppl import Poly_Con_Relation
+        >>> Poly_Con_Relation.strictly_intersects()
+        strictly_intersects
+        """
+        return _wrap_Poly_Con_Relation(PPL_Poly_Con_Relation_strictly_intersects())
+
+
+    @classmethod
+    def is_included(cls):
+        r"""
+        Return the assertion "The polyhedron is included in the set of
+        points satisfying the constraint".
+
+        OUTPUT:
+
+        A :class:`Poly_Con_Relation`.
+
+        Examples:
+
+        >>> from ppl import Poly_Con_Relation
+        >>> Poly_Con_Relation.is_included()
+        is_included
+        """
+        return _wrap_Poly_Con_Relation(PPL_Poly_Con_Relation_is_included())
+
+    @classmethod
+    def saturates(cls):
+        r"""
+        Return the assertion "".
+
+        OUTPUT:
+
+        A :class:`Poly_Con_Relation`.
+
+        Examples:
+
+        >>> from ppl import Poly_Con_Relation
+        >>> Poly_Con_Relation.saturates()
+        saturates
+        """
+        return _wrap_Poly_Con_Relation(PPL_Poly_Con_Relation_saturates())
+
+    def ascii_dump(self):
+        r"""
+        Write an ASCII dump to stderr.
+
+        Examples:
+
+        >>> cmd  = 'from ppl import Poly_Con_Relation\n'
+        >>> cmd += 'Poly_Con_Relation.nothing().ascii_dump()\n'
+        >>> import subprocess, sys
+        >>> proc = subprocess.Popen([sys.executable, '-c', cmd], stderr=subprocess.PIPE)
+        >>> out, err = proc.communicate()
+        >>> print(str(err.decode('ascii')))
+        NOTHING
+        """
+        self.thisptr.ascii_dump()
+
+    def OK(self, check_non_empty=False):
+        """
+        Check if all the invariants are satisfied.
+
+        Examples:
+
+        >>> from ppl import Poly_Con_Relation
+        >>> Poly_Con_Relation.nothing().OK()
+        True
+        """
+        return self.thisptr.OK()
+
+    def __repr__(self):
+        r"""
+        Return a string representation.
+
+        OUTPUT:
+
+        String.
+
+        Examples:
+
+        >>> from ppl import Poly_Con_Relation
+        >>> Poly_Con_Relation.nothing().__repr__()
+        'nothing'
+        """
+        rel = []
+        if self.implies(Poly_Con_Relation.is_disjoint()):
+            rel.append('is_disjoint')
+        if self.implies(Poly_Con_Relation.strictly_intersects()):
+            rel.append('strictly_intersects')
+        if self.implies(Poly_Con_Relation.is_included()):
+            rel.append('is_included')
+        if self.implies(Poly_Con_Relation.saturates()):
+            rel.append('saturates')
+        if rel:
+            return ', '.join(rel)
+        else:
+            return 'nothing'
+
+cdef _make_Constraint_from_richcmp(lhs_, rhs_, op):
+    cdef Linear_Expression lhs = Linear_Expression(lhs_)
+    cdef Linear_Expression rhs = Linear_Expression(rhs_)
+    if op==0:      # <   0
+        return _wrap_Constraint(lhs.thisptr[0] <  rhs.thisptr[0])
+    elif op==1:    # <=  1
+        return _wrap_Constraint(lhs.thisptr[0] <= rhs.thisptr[0])
+    elif op==2:    # ==  2
+        return _wrap_Constraint(lhs.thisptr[0] == rhs.thisptr[0])
+    elif op==4:    # >   4
+        return _wrap_Constraint(lhs.thisptr[0] >  rhs.thisptr[0])
+    elif op==5:    # >=  5
+        return _wrap_Constraint(lhs.thisptr[0] >= rhs.thisptr[0])
+    elif op==3:    # !=  3
+        raise NotImplementedError
+    else:
+        assert(False)
+        
+cdef _wrap_Constraint(PPL_Constraint constraint):
+    """
+    Wrap a C++ ``PPL_Constraint`` into a Cython ``Constraint``.
+    """
+    cdef Constraint c = Constraint(True)
+    c.thisptr = new PPL_Constraint(constraint)
+    return c
+
+cdef _wrap_Constraint_System(PPL_Constraint_System constraint_system):
+    """
+    Wrap a C++ ``PPL_Constraint_System`` into a Cython ``Constraint_System``.
+    """
+    cdef Constraint_System cs = Constraint_System()
+    del cs.thisptr
+    cs.thisptr = new PPL_Constraint_System(constraint_system)
+    return cs
+
+cdef _wrap_Poly_Con_Relation(PPL_Poly_Con_Relation relation):
+    """
+    Wrap a C++ ``PPL_Poly_Con_Relation`` into a Cython ``Poly_Con_Relation``.
+    """
+    cdef Poly_Con_Relation rel = Poly_Con_Relation(True)
+    rel.thisptr = new PPL_Poly_Con_Relation(relation)
+    return rel
