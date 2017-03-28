@@ -27,7 +27,7 @@ from .generator import point
 ####################################################
 ################# Polyhedron #######################
 ####################################################
-cdef class Polyhedron(_mutable_or_immutable):
+cdef class Polyhedron(object):
     r"""
     Wrapper for PPL's ``Polyhedron`` class.
 
@@ -1034,7 +1034,6 @@ cdef class Polyhedron(_mutable_or_immutable):
         ValueError: PPL::C_Polyhedron::add_constraint(c):
         c is a strict inequality.
         """
-        self.assert_mutable('The Polyhedron is not mutable!')
         sig_on()
         try:
             self.thisptr.add_constraint(c.thisptr[0])
@@ -1101,7 +1100,6 @@ cdef class Polyhedron(_mutable_or_immutable):
         ValueError: PPL::C_Polyhedron::add_generator(g):
         *this is an empty polyhedron and g is not a point.
         """
-        self.assert_mutable('The Polyhedron is not mutable!')
         sig_on()
         try:
             self.thisptr.add_generator(g.thisptr[0])
@@ -1161,7 +1159,6 @@ cdef class Polyhedron(_mutable_or_immutable):
         ValueError: PPL::C_Polyhedron::add_recycled_constraints(cs):
         cs contains strict inequalities.
         """
-        self.assert_mutable('The Polyhedron is not mutable!')
         sig_on()
         try:
             self.thisptr.add_constraints(cs.thisptr[0])
@@ -1224,7 +1221,6 @@ cdef class Polyhedron(_mutable_or_immutable):
         ValueError: PPL::C_Polyhedron::add_recycled_generators(gs):
         gs contains closure points.
         """
-        self.assert_mutable('The Polyhedron is not mutable!')
         sig_on()
         try:
             self.thisptr.add_generators(gs.thisptr[0])
@@ -1309,7 +1305,6 @@ cdef class Polyhedron(_mutable_or_immutable):
         y is a NNC_Polyhedron.
         <BLANKLINE>
         """
-        self.assert_mutable('The Polyhedron is not mutable!')
         sig_on()
         try:
             self.thisptr.intersection_assign(y.thisptr[0])
@@ -1363,7 +1358,6 @@ cdef class Polyhedron(_mutable_or_immutable):
         y is a NNC_Polyhedron.
         <BLANKLINE>
         """
-        self.assert_mutable('The Polyhedron is not mutable!')
         sig_on()
         try:
             self.thisptr.poly_hull_assign(y.thisptr[0])
@@ -1435,7 +1429,6 @@ cdef class Polyhedron(_mutable_or_immutable):
         y is a NNC_Polyhedron.
         <BLANKLINE>
         """
-        self.assert_mutable('The Polyhedron is not mutable!')
         sig_on()
         try:
             self.thisptr.poly_difference_assign(y.thisptr[0])
@@ -1480,7 +1473,6 @@ cdef class Polyhedron(_mutable_or_immutable):
         >>> p.minimized_generators()
         Generator_System {point(0/1, 0/1), point(0/1, 2/1), point(4/3, 0/3)}
         """
-        self.assert_mutable('The Polyhedron is not mutable!')
         sig_on()
         self.thisptr.drop_some_non_integer_points()
         sig_off()
@@ -1502,7 +1494,6 @@ cdef class Polyhedron(_mutable_or_immutable):
         >>> p.minimized_constraints()
         Constraint_System {x0>=0}
         """
-        self.assert_mutable('The Polyhedron is not mutable!')
         sig_on()
         self.thisptr.topological_closure_assign()
         sig_off()
@@ -1554,7 +1545,6 @@ cdef class Polyhedron(_mutable_or_immutable):
         ValueError: PPL::C_Polyhedron::add_space_dimensions_and_embed(m):
         adding m new space dimensions exceeds the maximum allowed space dimension.
         """
-        self.assert_mutable('The Polyhedron is not mutable!')
         m = int(m)
         sig_on()
         try:
@@ -1609,7 +1599,6 @@ cdef class Polyhedron(_mutable_or_immutable):
         ValueError: PPL::C_Polyhedron::add_space_dimensions_and_project(m):
         adding m new space dimensions exceeds the maximum allowed space dimension.
         """
-        self.assert_mutable('The Polyhedron is not mutable!')
         m = int(m)
         sig_on()
         try:
@@ -1685,7 +1674,6 @@ cdef class Polyhedron(_mutable_or_immutable):
         ValueError: PPL::C_Polyhedron::concatenate_assign(y):
         concatenation exceeds the maximum allowed space dimension.
         """
-        self.assert_mutable('The Polyhedron is not mutable!')
         sig_on()
         try:
             self.thisptr.concatenate_assign(y.thisptr[0])
@@ -1719,7 +1707,6 @@ cdef class Polyhedron(_mutable_or_immutable):
         ValueError: PPL::C_Polyhedron::remove_higher_space_dimensions(nd):
         this->space_dimension() == 1, required space dimension == 2.
         """
-        self.assert_mutable('The Polyhedron is not mutable!')
         new_dimension = int(new_dimension)
         sig_on()
         try:
@@ -1827,7 +1814,6 @@ cdef class Polyhedron(_mutable_or_immutable):
         >>> from ppl import Constraint_System, Variable, C_Polyhedron
         >>> x = Variable(0)
         >>> p = C_Polyhedron( 5*x >= 3 )
-        >>> p.set_immutable()
         >>> hash(p)
         1
 
@@ -1836,18 +1822,9 @@ cdef class Polyhedron(_mutable_or_immutable):
         >>> cs.insert( x >= 0 )
         >>> cs.insert( y >= 0 )
         >>> p = C_Polyhedron(cs)
-        >>> p.set_immutable()
         >>> hash(p)
         2
-
-        >>> hash(C_Polyhedron(x >= 0))
-        Traceback (most recent call last):
-        ...
-        TypeError: mutable polyhedra are unhashable
-        """
-        if self.is_mutable():
-            raise TypeError("mutable polyhedra are unhashable")
-        # TODO: the hash code from PPL looks like being the dimension!
+        """        
         return self.thisptr[0].hash_code()
 
     def __richcmp__(Polyhedron lhs, Polyhedron rhs, op):

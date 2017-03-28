@@ -719,7 +719,6 @@ cdef class Constraint_System(object):
         >>> cs
         Constraint_System {}
         """
-        self.assert_mutable('The Constraint_System is not mutable!')
         self.thisptr.clear()
 
     def insert(self, Constraint c):
@@ -739,7 +738,6 @@ cdef class Constraint_System(object):
         >>> cs
         Constraint_System {x0>0}
         """
-        self.assert_mutable('The Constraint_System is not mutable!')
         self.thisptr.insert(c.thisptr[0])
 
     def empty(self):

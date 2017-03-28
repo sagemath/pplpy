@@ -116,12 +116,6 @@ necessarily some differences. The main ones are:
 * The :class:`Linear_Expression` also accepts an iterable as input for
   the homogeneous coefficients.
 
-* :class:`Polyhedron` and its subclasses as well as
-  :class:`Generator_System` and :class:`Constraint_System` can be set
-  immutable via a ``set_immutable()`` method. This is the analog of
-  declaring a C++ instance ``const``. All other classes are immutable
-  by themselves.
-
 AUTHORS:
 
 - Volker Braun (2010-10-08): initial version (within Sage).
@@ -129,6 +123,7 @@ AUTHORS:
 - Vincent Delecroix (2016): convert Sage files into a standalone Python package
 - Vincent Klein (2017): improve doctest support and Python 3 compatibility
     Split the main code into several files.
+    remove the _mutable_immutable classe.
 """
 from __future__ import absolute_import
 

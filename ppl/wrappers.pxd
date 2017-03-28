@@ -1,8 +1,5 @@
 from ppl_decl cimport * 
 
-cdef class _mutable_or_immutable(object):
-    cdef bint _is_mutable
-
 cdef class Variable(object):
     cdef PPL_Variable *thisptr
 

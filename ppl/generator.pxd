@@ -10,7 +10,7 @@ cdef PPL_GeneratorType_str(PPL_GeneratorType t)
 cdef class Generator(object):
     cdef PPL_Generator *thisptr
 
-cdef class Generator_System(_mutable_or_immutable):
+cdef class Generator_System(object):
     cdef PPL_Generator_System *thisptr
 
 cdef class Generator_System_iterator(object):

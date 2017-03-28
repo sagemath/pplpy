@@ -660,7 +660,7 @@ closure_point = Generator.closure_point
 ### Generator_System  ##############################
 ####################################################
 ####################################################
-cdef class Generator_System(_mutable_or_immutable):
+cdef class Generator_System(object):
     """
     Wrapper for PPL's ``Generator_System`` class.
 
@@ -756,7 +756,6 @@ cdef class Generator_System(_mutable_or_immutable):
         >>> gs
         Generator_System {}
         """
-        self.assert_mutable('The Generator_System is not mutable!')
         self.thisptr.clear()
 
     def insert(self, Generator g):
@@ -778,7 +777,6 @@ cdef class Generator_System(_mutable_or_immutable):
         >>> gs
         Generator_System {point(3/1), point(-3/1)}
         """
-        self.assert_mutable('The Generator_System is not mutable!')
         self.thisptr.insert(g.thisptr[0])
 
     def empty(self):
