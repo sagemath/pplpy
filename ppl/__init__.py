@@ -127,7 +127,7 @@ AUTHORS:
 """
 from __future__ import absolute_import
 
-from .wrappers import (
+from .linear_algebra import (
         Variable, Linear_Expression,
         )
 

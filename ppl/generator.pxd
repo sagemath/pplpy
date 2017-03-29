@@ -1,5 +1,5 @@
 from ppl_decl cimport *
-from .wrappers cimport *
+from .linear_algebra cimport *
 
 cdef _wrap_Generator(PPL_Generator generator)
 

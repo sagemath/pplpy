@@ -1,4 +1,4 @@
-from .wrappers cimport *
+from .linear_algebra cimport *
 from .generator cimport * 
 from .constraint cimport * 
 

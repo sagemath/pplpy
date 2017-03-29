@@ -1,4 +1,4 @@
-from .wrappers cimport *
+from .linear_algebra cimport *
 
 cdef _wrap_Constraint(PPL_Constraint constraint)
 
