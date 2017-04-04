@@ -1,5 +1,15 @@
 # distutils: language = c++
 # distutils: libraries = gmp gmpxx ppl m
+#*****************************************************************************
+#       Copyright (C) 2010 Volker Braun  <vbraun.name@gmail.com>
+#                     2016 Vincent Delecroix <vincent.delecroix@labri.fr>
+#                     2017 Vincent Klein <vinklein@gmail.com>
+#
+#  Distributed under the terms of the GNU General Public License (GPL)
+#  as published by the Free Software Foundation; either version 2 of
+#  the License, or (at youroption) any later version.
+#                  http://www.gnu.org/licenses/
+#*****************************************************************************
 from __future__ import absolute_import, print_function
 
 from cpython.int cimport PyInt_CheckExact
