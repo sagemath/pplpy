@@ -38,20 +38,29 @@ class TestCommand(Command):
         pass
 
     def run(self):
-        import sys, subprocess, os
+        import sys, subprocess, os, tempfile
+        from shutil import rmtree
+        from distutils.dir_util import copy_tree
 
-        os.chdir('./tests')
+        old_path = os.getcwd()
+        tempdir_path = tempfile.mkdtemp()
+        try:
+            copy_tree('./tests', tempdir_path)
+            os.chdir(tempdir_path)
 
-        if subprocess.call([sys.executable, 'rundoctest.py']):
-            raise SystemExit("Doctest failures")
+            if subprocess.call([sys.executable, 'rundoctest.py']):
+                raise SystemExit("Doctest failures")
 
-        if subprocess.call([sys.executable, 'setup.py', 'build_ext', '--inplace']) or \
-            subprocess.call([sys.executable, '-c', "import testpplpy; testpplpy.test()"]):
-            raise SystemExit("Cython test 1 failure")
+            if subprocess.call([sys.executable, 'setup.py', 'build_ext', '--inplace']) or \
+                    subprocess.call([sys.executable, '-c', "import testpplpy; testpplpy.test()"]):
+                raise SystemExit("Cython test 1 failure")
 
-        if subprocess.call([sys.executable, 'setup2.py', 'build_ext', '--inplace']) or \
-            subprocess.call([sys.executable, '-c', "import testpplpy2; testpplpy2.test()"]):
-            raise SystemExit("Cython test 2 failure")
+            if subprocess.call([sys.executable, 'setup2.py', 'build_ext', '--inplace']) or \
+                    subprocess.call([sys.executable, '-c', "import testpplpy2; testpplpy2.test()"]):
+                raise SystemExit("Cython test 2 failure")
+        finally:
+            os.chdir(old_path)
+            rmtree(tempdir_path)
 
 VERSION = open('version.txt').read()[:-1]
 
