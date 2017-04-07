@@ -1,6 +1,6 @@
 from .linear_algebra cimport *
-from .generator cimport * 
-from .constraint cimport * 
+from .generator cimport *
+from .constraint cimport *
 
 cdef class Polyhedron(object):
    cdef PPL_Polyhedron *thisptr

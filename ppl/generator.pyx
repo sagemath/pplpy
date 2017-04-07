@@ -1035,7 +1035,7 @@ cdef PPL_GeneratorType_str(PPL_GeneratorType t):
         return 'closure_point'
     else:
         raise RuntimeError
-    
+
 cdef _wrap_Generator(PPL_Generator generator):
     """
     Wrap a C++ ``PPL_Generator`` into a Cython ``Generator``.

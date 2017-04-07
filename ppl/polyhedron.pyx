@@ -1834,7 +1834,7 @@ cdef class Polyhedron(object):
         >>> p = C_Polyhedron(cs)
         >>> hash(p)
         2
-        """        
+        """
         return self.thisptr[0].hash_code()
 
     def __richcmp__(Polyhedron lhs, Polyhedron rhs, op):

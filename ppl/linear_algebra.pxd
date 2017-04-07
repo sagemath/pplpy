@@ -1,4 +1,4 @@
-from ppl_decl cimport * 
+from ppl_decl cimport *
 
 cdef class Variable(object):
     cdef PPL_Variable *thisptr

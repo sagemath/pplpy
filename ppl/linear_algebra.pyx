@@ -15,7 +15,7 @@ from __future__ import absolute_import, print_function
 
 from cpython.int cimport PyInt_CheckExact
 from cpython.long cimport PyLong_CheckExact
-from .constraint cimport Constraint, Constraint_System, _make_Constraint_from_richcmp 
+from .constraint cimport Constraint, Constraint_System, _make_Constraint_from_richcmp
 include "cysignals/signals.pxi"
 
 from .cygmp.pylong cimport mpz_get_pyintlong, mpz_set_pylong

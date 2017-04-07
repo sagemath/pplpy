@@ -15,6 +15,6 @@ cdef class Constraint_System(object):
 cdef class Constraint_System_iterator(object):
     cdef Constraint_System cs
     cdef cs_iterator_ptr csi_ptr
-    
+
 cdef class Poly_Con_Relation(object):
     cdef PPL_Poly_Con_Relation *thisptr

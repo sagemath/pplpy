@@ -987,7 +987,7 @@ cdef class Constraint_System_iterator(object):
         if is_end_cs_iterator((<Constraint_System>self.cs).thisptr[0], self.csi_ptr):
             raise StopIteration
         return _wrap_Constraint(next_cs_iterator(self.csi_ptr))
-    
+
 cdef class Poly_Con_Relation(object):
     r"""
     Wrapper for PPL's ``Poly_Con_Relation`` class.
@@ -1235,7 +1235,7 @@ cdef _make_Constraint_from_richcmp(lhs_, rhs_, op):
         raise NotImplementedError
     else:
         assert(False)
-        
+
 cdef _wrap_Constraint(PPL_Constraint constraint):
     """
     Wrap a C++ ``PPL_Constraint`` into a Cython ``Constraint``.
