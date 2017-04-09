@@ -15,3 +15,4 @@ ppl/cygmp/*.so
 dist/
 pplpy.egg-info/
 sphinx-doc/build/
+.idea/*
