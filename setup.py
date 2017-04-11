@@ -99,12 +99,12 @@ setup(
     download_url ='https://github.com/videlec/pplpy/archive/{}.tar.gz'.format(VERSION),
     license='GPL v3',
     platforms=['any'],
-    packages=['ppl', 'ppl.cygmp'],
-    package_dir={'ppl': 'ppl', 'ppl.cygmp': 'ppl/cygmp'},
+    packages=['ppl', 'ppl.cygmp', 'ppl.gmpy2'], # TODO gmpy2 is a temporary package. Goal is to install .h files 
+    package_dir={'ppl': 'ppl', 'ppl.cygmp': 'ppl/cygmp', 'ppl.gmpy2' : 'ppl/gmpy2'},
     package_data={'ppl': ['*.pxd', '*.h', '*.hh'],
-                  'ppl.cygmp': ['*.pxd', '*.h', '*.hh']},
+                  'ppl.cygmp': ['*.pxd', '*.h', '*.hh'],
+                  'ppl.gmpy2': ['*.h']},
     install_requires=['Cython', 'cysignals'],  # For pip install, pip can't read setup_requires
-    include_dirs=['ppl'],
     ext_modules=extensions,
     classifiers=[
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
