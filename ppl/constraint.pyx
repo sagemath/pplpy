@@ -12,11 +12,11 @@
 #*****************************************************************************
 from __future__ import absolute_import, print_function
 
-from cpython.int cimport PyInt_CheckExact
-from cpython.long cimport PyLong_CheckExact
 include "cysignals/signals.pxi"
 
-from .gmpy2_wrap.gmpy2_wrap cimport get_gmpy_mpz 
+from cpython.int cimport PyInt_CheckExact
+from cpython.long cimport PyLong_CheckExact
+from .gmpy2_wrap cimport GMPy_MPZ_From_mpz 
 
 try:
     from sage.all import Rational
@@ -309,7 +309,7 @@ cdef class Constraint(object):
         >>> ineq.coefficient(x)
         mpz(0)
         """
-        return get_gmpy_mpz(self.thisptr.coefficient(v.thisptr[0]).get_mpz_t())
+        return GMPy_MPZ_From_mpz(self.thisptr.coefficient(v.thisptr[0]).get_mpz_t())
 
     def coefficients(self):
         """
@@ -334,7 +334,7 @@ cdef class Constraint(object):
         cdef int i
         coeffs = []
         for i in range(0,d):
-            coeffs.append(get_gmpy_mpz(self.thisptr.coefficient(PPL_Variable(i)).get_mpz_t()))
+            coeffs.append(GMPy_MPZ_From_mpz(self.thisptr.coefficient(PPL_Variable(i)).get_mpz_t()))
         return tuple(coeffs)
 
     def inhomogeneous_term(self):
@@ -358,7 +358,7 @@ cdef class Constraint(object):
         >>> str(ineq.inhomogeneous_term())
         '73786976294838206464'
         """
-        return get_gmpy_mpz(self.thisptr.inhomogeneous_term().get_mpz_t())
+        return GMPy_MPZ_From_mpz(self.thisptr.inhomogeneous_term().get_mpz_t())
 
     def is_tautological(self):
         r"""

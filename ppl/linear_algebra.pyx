@@ -13,12 +13,12 @@
 
 from __future__ import absolute_import, print_function
 
+include "cysignals/signals.pxi"
 from cpython.int cimport PyInt_CheckExact
 from cpython.long cimport PyLong_CheckExact
 from .constraint cimport Constraint, Constraint_System, _make_Constraint_from_richcmp
-include "cysignals/signals.pxi"
-
-from .cygmp.pylong cimport mpz_get_pyintlong, mpz_set_pylong
+from .cygmp.pylong cimport mpz_set_pylong
+from .gmpy2_wrap cimport GMPy_MPZ_From_mpz, GMPy_MPZ_From_PyIntOrLong
 
 try:
     from sage.all import Rational
@@ -27,7 +27,6 @@ try:
 except ImportError:
     from fractions import Fraction
 
-#TODO: find out whether it would be easy to switch between mpir and gmp
 # these are just gmp declarations
 # TODO:
 # here we need to allow to branch this code with integer and rational classes.
@@ -67,6 +66,7 @@ cdef PPL_Coefficient PPL_Coefficient_from_pyobject(c):
     if PyLong_CheckExact(c):
         mpz_init(coeff)
         mpz_set_pylong(coeff, c)
+        # coeff = GMPy_MPZ_From_PyIntOrLong(c, NULL)
         return PPL_Coefficient(coeff)
     elif PyInt_CheckExact(c):
         return PPL_Coefficient(<long> c)
@@ -403,16 +403,16 @@ cdef class Linear_Expression(object):
     >>> Linear_Expression()
     0
     >>> Linear_Expression(10).inhomogeneous_term()
-    10
+    mpz(10)
     >>> x = Variable(123)
     >>> expr = x+1; expr
     x123+1
     >>> expr.OK()
     True
     >>> expr.coefficient(x)
-    1
+    mpz(1)
     >>> expr.coefficient( Variable(124) )
-    0
+    mpz(0)
     """
     def __cinit__(self, *args):
         """
@@ -503,9 +503,9 @@ cdef class Linear_Expression(object):
         >>> x = Variable(0)
         >>> e = 3*x+1
         >>> e.coefficient(x)
-        3
+        mpz(3)
         """
-        return mpz_get_pyintlong(self.thisptr.coefficient(v.thisptr[0]).get_mpz_t())
+        return GMPy_MPZ_From_mpz(self.thisptr.coefficient(v.thisptr[0]).get_mpz_t())
 
     def coefficients(self):
         """
@@ -521,13 +521,13 @@ cdef class Linear_Expression(object):
         >>> x = Variable(0);  y = Variable(1)
         >>> e = 3*x+5*y+1
         >>> e.coefficients()
-        (3, 5)
+        (mpz(3), mpz(5))
         """
         cdef int d = self.space_dimension()
         cdef int i
         cdef list coeffs = [None]*d
         for i in range(d):
-            coeffs[i] = mpz_get_pyintlong(self.thisptr.coefficient(PPL_Variable(i)).get_mpz_t())
+            coeffs[i] = GMPy_MPZ_From_mpz(self.thisptr.coefficient(PPL_Variable(i)).get_mpz_t())
         return tuple(coeffs)
 
     def inhomogeneous_term(self):
@@ -542,9 +542,9 @@ cdef class Linear_Expression(object):
 
         >>> from ppl import Variable, Linear_Expression
         >>> Linear_Expression(10).inhomogeneous_term()
-        10
+        mpz(10)
         """
-        return mpz_get_pyintlong(self.thisptr.inhomogeneous_term().get_mpz_t())
+        return GMPy_MPZ_From_mpz(self.thisptr.inhomogeneous_term().get_mpz_t())
 
     def is_zero(self):
         """

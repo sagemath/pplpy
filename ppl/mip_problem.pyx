@@ -12,12 +12,12 @@
 #*****************************************************************************
 from __future__ import absolute_import, print_function
 
-from cpython.int cimport PyInt_CheckExact
-from cpython.long cimport PyLong_CheckExact
 include "cysignals/signals.pxi"
 
+from cpython.int cimport PyInt_CheckExact
+from cpython.long cimport PyLong_CheckExact
 from .cygmp.pylong cimport mpz_get_pyintlong
-from .gmpy2_wrap.gmpy2_wrap cimport get_gmpy_mpz
+from .gmpy2_wrap cimport GMPy_MPZ_From_mpz
 
 try:
     from sage.all import Rational

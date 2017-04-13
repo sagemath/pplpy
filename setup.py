@@ -73,9 +73,9 @@ extensions = [
     Extension("ppl.cygmp.pylong",
         sources = ["ppl/cygmp/pylong.pyx"],
         depends = ["ppl/cygmp/*"]),
-    Extension("ppl.gmpy2_wrap.gmpy2_wrap",
-        sources = ["ppl/gmpy2_wrap/gmpy2_wrap.pyx"],
-        depends = ["ppl/gmpy2_wrap/*"]),
+    Extension("ppl.gmpy2_wrap",
+        sources = ["ppl/gmpy2_wrap.pyx"],
+        depends = ["ppl/*"]),
     Extension('ppl.linear_algebra',
         sources=['ppl/linear_algebra.pyx', 'ppl/ppl_shim.cc'],
         depends=['ppl/*']),
@@ -104,13 +104,12 @@ setup(
     download_url ='https://github.com/videlec/pplpy/archive/{}.tar.gz'.format(VERSION),
     license='GPL v3',
     platforms=['any'],
-    packages=['ppl', 'ppl.cygmp', 'ppl.gmpy2_wrap'], # TODO gmpy2 is a temporary package. Goal is to install .h files 
-    package_dir={'ppl': 'ppl', 'ppl.cygmp': 'ppl/cygmp', 'ppl.gmpy2_wrap' : 'ppl/gmpy2_wrap'},
+    packages=['ppl', 'ppl.cygmp'],
+    package_dir={'ppl': 'ppl', 'ppl.cygmp': 'ppl/cygmp'},
     package_data={'ppl': ['*.pxd', '*.h', '*.hh'],
-                  'ppl.cygmp': ['*.pxd', '*.h', '*.hh'],
-                  'ppl.gmpy2_wrap': ['*.h', '*.pxd']},
-    install_requires=['Cython', 'cysignals'],  # For pip install, pip can't read setup_requires
-    include_dirs=['ppl'],
+                  'ppl.cygmp': ['*.pxd', '*.h', '*.hh']},
+    install_requires=['Cython', 'cysignals', 'gmpy2'],  # For pip install, pip can't read setup_requires
+    include_dirs=['ppl', '/home/vklein/.local/lib/python2.7/site-packages/gmpy2'],
     ext_modules=extensions,
     classifiers=[
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",

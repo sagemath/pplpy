@@ -14,7 +14,7 @@ from __future__ import absolute_import, print_function
 
 include "cysignals/signals.pxi"
 
-from .gmpy2_wrap.gmpy2_wrap cimport get_gmpy_mpz
+from .gmpy2_wrap cimport GMPy_MPZ_From_mpz
 
 try:
     from sage.all import Rational
@@ -805,8 +805,8 @@ cdef class Polyhedron(object):
         rc = self.thisptr.maximize(<PPL_Linear_Expression&>expr.thisptr[0], sup_n, sup_d, maximum, g.thisptr[0])
         sig_off()
 
-        mpz_sup_n = get_gmpy_mpz(sup_n.get_mpz_t())
-        mpz_sup_d = get_gmpy_mpz(sup_d.get_mpz_t())
+        mpz_sup_n = GMPy_MPZ_From_mpz(sup_n.get_mpz_t())
+        mpz_sup_d = GMPy_MPZ_From_mpz(sup_d.get_mpz_t())
 
         if rc:
             return { 'bounded':True, 'sup_n':mpz_sup_n, 'sup_d':mpz_sup_d, 'maximum':maximum, 'generator':g }
@@ -885,8 +885,8 @@ cdef class Polyhedron(object):
         rc = self.thisptr.minimize(<PPL_Linear_Expression&>expr.thisptr[0], inf_n, inf_d, minimum, g.thisptr[0])
         sig_off()
 
-        mpz_inf_n = get_gmpy_mpz(inf_n.get_mpz_t())
-        mpz_inf_d = get_gmpy_mpz(inf_d.get_mpz_t())
+        mpz_inf_n = GMPy_MPZ_From_mpz(inf_n.get_mpz_t())
+        mpz_inf_d = GMPy_MPZ_From_mpz(inf_d.get_mpz_t())
         
         if rc:
             return { 'bounded':True, 'inf_n':mpz_inf_n, 'inf_d':mpz_inf_d, 'minimum':minimum, 'generator':g }
