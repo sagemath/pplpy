@@ -72,7 +72,7 @@ cdef PPL_Coefficient PPL_Coefficient_from_pyobject(c):
         return PPL_Coefficient(<long> c)
     else:
         try:
-            return PPL_Coefficient_from_pyobject(c.__long__())
+            return PPL_Coefficient_from_pyobject(c.__int__())
         except AttributeError:
             raise ValueError("unknown input type {}".format(type(c)))
 

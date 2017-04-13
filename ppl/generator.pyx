@@ -16,8 +16,7 @@ from cpython.int cimport PyInt_CheckExact
 from cpython.long cimport PyLong_CheckExact
 include "cysignals/signals.pxi"
 
-from .cygmp.pylong cimport mpz_get_pyintlong
-from .gmpy2.gmpy2 cimport get_gmpy_mpz
+from .gmpy2_wrap.gmpy2_wrap cimport get_gmpy_mpz
 
 try:
     from sage.all import Rational
@@ -503,9 +502,9 @@ cdef class Generator(object):
         >>> line
         line(1)
         >>> line.coefficient(x)
-        1
+        mpz(1)
         """
-        return mpz_get_pyintlong(self.thisptr.coefficient(v.thisptr[0]).get_mpz_t())
+        return get_gmpy_mpz(self.thisptr.coefficient(v.thisptr[0]).get_mpz_t())
 
     def coefficients(self):
         """
@@ -524,13 +523,13 @@ cdef class Generator(object):
             >>> p = point(3*x+5*y+1, 2); p
             point(3/2, 5/2)
             >>> p.coefficients()
-            (3, 5)
+            (mpz(3), mpz(5))
         """
         cdef int d = self.space_dimension()
         cdef int i
         coeffs = []
         for i in range(0,d):
-            coeffs.append(mpz_get_pyintlong(self.thisptr.coefficient(PPL_Variable(i)).get_mpz_t()))
+            coeffs.append(get_gmpy_mpz(self.thisptr.coefficient(PPL_Variable(i)).get_mpz_t()))
         return tuple(coeffs)
 
     def divisor(self):
@@ -550,7 +549,7 @@ cdef class Generator(object):
         >>> y = Variable(1)
         >>> point = Generator.point(2*x-y+5)
         >>> point.divisor()
-        1
+        mpz(1)
         >>> line = Generator.line(2*x-y+5)
         >>> line.divisor()
         Traceback (most recent call last):
@@ -558,7 +557,7 @@ cdef class Generator(object):
         ValueError: PPL::Generator::divisor():
         *this is neither a point nor a closure point.
         """
-        return mpz_get_pyintlong(self.thisptr.divisor().get_mpz_t())
+        return get_gmpy_mpz(self.thisptr.divisor().get_mpz_t())
 
     def is_equivalent_to(self, Generator g):
         r"""

@@ -72,11 +72,11 @@ documentation, in particular:
   >>> p = point( 2*x+3*y, 5 ); p
   point(2/5, 3/5)
   >>> p.coefficient(x)
-  2
+  mpz(2)
   >>> p.coefficient(y)
-  3
+  mpz(3)
   >>> p.divisor()
-  5
+  mpz(5)
 
 * PPL supports (topologically) closed polyhedra
   (:class:`C_Polyhedron`) as well as not neccesarily closed polyhedra

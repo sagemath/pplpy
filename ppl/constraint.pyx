@@ -16,7 +16,7 @@ from cpython.int cimport PyInt_CheckExact
 from cpython.long cimport PyLong_CheckExact
 include "cysignals/signals.pxi"
 
-from .cygmp.pylong cimport mpz_get_pyintlong
+from .gmpy2_wrap.gmpy2_wrap cimport get_gmpy_mpz 
 
 try:
     from sage.all import Rational
@@ -63,6 +63,7 @@ cdef class Constraint(object):
     Examples:
 
     >>> from ppl import Constraint, Variable, Linear_Expression
+    >>> from gmpy2 import mpz
     >>> x = Variable(0)
     >>> y = Variable(1)
     >>> 5*x-2*y >  x+y-1
@@ -83,7 +84,7 @@ cdef class Constraint(object):
     >>> 0 == 1    # watch out!
     False
     >>> Linear_Expression(0) == 1
-    -1==0
+    mpz(-1)==0
     """
     def __cinit__(self, do_not_construct_manually=False):
         """
@@ -300,15 +301,15 @@ cdef class Constraint(object):
         >>> x = Variable(0)
         >>> ineq = 3*x+1 > 0
         >>> ineq.coefficient(x)
-        3
+        mpz(3)
         >>> y = Variable(1)
         >>> ineq = 3**50 * y + 2 > 1
         >>> str(ineq.coefficient(y))
         '717897987691852588770249'
         >>> ineq.coefficient(x)
-        0
+        mpz(0)
         """
-        return mpz_get_pyintlong(self.thisptr.coefficient(v.thisptr[0]).get_mpz_t())
+        return get_gmpy_mpz(self.thisptr.coefficient(v.thisptr[0]).get_mpz_t())
 
     def coefficients(self):
         """
@@ -327,13 +328,13 @@ cdef class Constraint(object):
         >>> ineq = ( 3*x+5*y+1 ==  2);  ineq
         3*x0+5*x1-1==0
         >>> ineq.coefficients()
-        (3, 5)
+        (mpz(3), mpz(5))
         """
         cdef int d = self.space_dimension()
         cdef int i
         coeffs = []
         for i in range(0,d):
-            coeffs.append(mpz_get_pyintlong(self.thisptr.coefficient(PPL_Variable(i)).get_mpz_t()))
+            coeffs.append(get_gmpy_mpz(self.thisptr.coefficient(PPL_Variable(i)).get_mpz_t()))
         return tuple(coeffs)
 
     def inhomogeneous_term(self):
@@ -352,12 +353,12 @@ cdef class Constraint(object):
         >>> ineq
         x1+1>0
         >>> ineq.inhomogeneous_term()
-        1
+        mpz(1)
         >>> ineq = 2**66 + y > 0
         >>> str(ineq.inhomogeneous_term())
         '73786976294838206464'
         """
-        return mpz_get_pyintlong(self.thisptr.inhomogeneous_term().get_mpz_t())
+        return get_gmpy_mpz(self.thisptr.inhomogeneous_term().get_mpz_t())
 
     def is_tautological(self):
         r"""

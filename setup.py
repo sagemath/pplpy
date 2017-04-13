@@ -62,6 +62,8 @@ class TestCommand(Command):
             os.chdir(old_path)
             rmtree(tempdir_path)
 
+import os
+print(os.getcwd())
 VERSION = open('version.txt').read()[:-1]
 
 extensions = [
@@ -71,9 +73,9 @@ extensions = [
     Extension("ppl.cygmp.pylong",
         sources = ["ppl/cygmp/pylong.pyx"],
         depends = ["ppl/cygmp/*"]),
-    Extension("ppl.gmpy2.gmpy2",
-        sources = ["ppl/gmpy2/gmpy2.pyx"],
-        depends = ["ppl/gmpy2/*"]),
+    Extension("ppl.gmpy2_wrap.gmpy2_wrap",
+        sources = ["ppl/gmpy2_wrap/gmpy2_wrap.pyx"],
+        depends = ["ppl/gmpy2_wrap/*"]),
     Extension('ppl.linear_algebra',
         sources=['ppl/linear_algebra.pyx', 'ppl/ppl_shim.cc'],
         depends=['ppl/*']),
@@ -102,11 +104,11 @@ setup(
     download_url ='https://github.com/videlec/pplpy/archive/{}.tar.gz'.format(VERSION),
     license='GPL v3',
     platforms=['any'],
-    packages=['ppl', 'ppl.cygmp', 'ppl.gmpy2'], # TODO gmpy2 is a temporary package. Goal is to install .h files 
-    package_dir={'ppl': 'ppl', 'ppl.cygmp': 'ppl/cygmp', 'ppl.gmpy2' : 'ppl/gmpy2'},
+    packages=['ppl', 'ppl.cygmp', 'ppl.gmpy2_wrap'], # TODO gmpy2 is a temporary package. Goal is to install .h files 
+    package_dir={'ppl': 'ppl', 'ppl.cygmp': 'ppl/cygmp', 'ppl.gmpy2_wrap' : 'ppl/gmpy2_wrap'},
     package_data={'ppl': ['*.pxd', '*.h', '*.hh'],
                   'ppl.cygmp': ['*.pxd', '*.h', '*.hh'],
-                  'ppl.gmpy2': ['*.h', '*.pxd']},
+                  'ppl.gmpy2_wrap': ['*.h', '*.pxd']},
     install_requires=['Cython', 'cysignals'],  # For pip install, pip can't read setup_requires
     include_dirs=['ppl'],
     ext_modules=extensions,
