@@ -16,7 +16,8 @@ from cpython.int cimport PyInt_CheckExact
 from cpython.long cimport PyLong_CheckExact
 include "cysignals/signals.pxi"
 
-from .cygmp.pylong cimport mpz_get_pyintlong, mpz_set_pylong
+from .cygmp.pylong cimport mpz_get_pyintlong
+from .gmpy2.gmpy2 cimport get_gmpy_mpz
 
 try:
     from sage.all import Rational

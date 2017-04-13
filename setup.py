@@ -71,6 +71,9 @@ extensions = [
     Extension("ppl.cygmp.pylong",
         sources = ["ppl/cygmp/pylong.pyx"],
         depends = ["ppl/cygmp/*"]),
+    Extension("ppl.gmpy2.gmpy2",
+        sources = ["ppl/gmpy2/gmpy2.pyx"],
+        depends = ["ppl/gmpy2/*"]),
     Extension('ppl.linear_algebra',
         sources=['ppl/linear_algebra.pyx', 'ppl/ppl_shim.cc'],
         depends=['ppl/*']),
@@ -103,8 +106,9 @@ setup(
     package_dir={'ppl': 'ppl', 'ppl.cygmp': 'ppl/cygmp', 'ppl.gmpy2' : 'ppl/gmpy2'},
     package_data={'ppl': ['*.pxd', '*.h', '*.hh'],
                   'ppl.cygmp': ['*.pxd', '*.h', '*.hh'],
-                  'ppl.gmpy2': ['*.h']},
+                  'ppl.gmpy2': ['*.h', '*.pxd']},
     install_requires=['Cython', 'cysignals'],  # For pip install, pip can't read setup_requires
+    include_dirs=['ppl'],
     ext_modules=extensions,
     classifiers=[
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",

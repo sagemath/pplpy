@@ -6,7 +6,8 @@ cdef extern from "Python.h":
         pass
 
 cdef extern from "gmp.h":
-    void mpz_set_si (mpz_t rop, signed long int op)
+    void mpz_set_si(mpz_t rop, signed long int op)
+    void mpz_set(mpz_t rop, mpz_t op)
     
 cdef extern from "gmpy2.h":
     cdef (PyObject *)GMPy_MPZ_New(void *)
@@ -30,10 +31,13 @@ cdef extern from "gmpy2_convert.h":
     
 cdef extern from "gmpy2_convert_gmp.h":
     cdef (PyObject *) GMPy_PyLong_From_MPZ(MPZ_Object *obj, CTXT_Object *context)
-    
-cdef mpz_get_pylong(mpz_srcptr z):
-    pass
 
-cdef mpz_get_pyintlong(mpz_srcptr z):
-    pass
-    
+import_gmpy2()
+
+cdef get_gmpy_mpz(mpz_srcptr z):
+    cdef PyObject * res = GMPy_MPZ_New(NULL)
+    #cdef PyObject * res = GMPy_MPZ_New(NULL)[0]
+    mpz_set(MPZ(res), z)
+    # print('bob')
+    # print(res[0])
+    return <object>res
