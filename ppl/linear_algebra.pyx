@@ -16,16 +16,8 @@ from __future__ import absolute_import, print_function
 include "cysignals/signals.pxi"
 from cpython.int cimport PyInt_CheckExact
 from cpython.long cimport PyLong_CheckExact
-from .constraint cimport Constraint, Constraint_System, _make_Constraint_from_richcmp
-from .cygmp.pylong cimport mpz_set_pylong
-from .gmpy2_wrap cimport GMPy_MPZ_From_mpz, GMPy_MPZ_From_PyIntOrLong
-
-try:
-    from sage.all import Rational
-    def Fraction(p,q):
-        return Rational((p,q))
-except ImportError:
-    from fractions import Fraction
+from .constraint cimport Constraint_System, _make_Constraint_from_richcmp
+from .gmpy2_wrap cimport GMPy_MPZ_From_mpz, mpz_set_pylong, mpz_init
 
 # these are just gmp declarations
 # TODO:
@@ -66,7 +58,6 @@ cdef PPL_Coefficient PPL_Coefficient_from_pyobject(c):
     if PyLong_CheckExact(c):
         mpz_init(coeff)
         mpz_set_pylong(coeff, c)
-        # coeff = GMPy_MPZ_From_PyIntOrLong(c, NULL)
         return PPL_Coefficient(coeff)
     elif PyInt_CheckExact(c):
         return PPL_Coefficient(<long> c)

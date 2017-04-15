@@ -8,7 +8,7 @@ cdef extern from "gmp.h":
     ### Integer Functions ###
 
     # Initialization Functions
-    void mpz_init (mpz_t integer)
+    # void mpz_init (mpz_t integer)
     void mpz_init2 (mpz_t integer, unsigned long n)
     void mpz_clear (mpz_t integer)
     void mpz_realloc2 (mpz_t integer, unsigned long n)

@@ -16,20 +16,14 @@ include "cysignals/signals.pxi"
 
 from cpython.int cimport PyInt_CheckExact
 from cpython.long cimport PyLong_CheckExact
-from .cygmp.pylong cimport mpz_get_pyintlong
 from .gmpy2_wrap cimport GMPy_MPZ_From_mpz
-
-try:
-    from sage.all import Rational
-    def Fraction(p,q):
-        return Rational((p,q))
-except ImportError:
-    from fractions import Fraction
 
 # PPL can use floating-point arithmetic to compute integers
 cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
     cdef void set_rounding_for_PPL()
     cdef void restore_pre_PPL_rounding()
+
+from gmpy2 import mpq
 
 # but with PPL's rounding the gsl will be very unhappy; must turn off!
 restore_pre_PPL_rounding()
@@ -71,9 +65,9 @@ cdef class MIP_Problem(object):
         >>> m
         MIP Problem (maximization, 2 variables, 3 constraints)
         >>> m.optimal_value()
-        Fraction(10, 3)
+        mpq(10,3)
         >>> float(_)
-        3.3333333333333335
+        3.333333333333333
         >>> m.optimizing_point()
         point(10/3, 0/3)
     """
@@ -249,7 +243,7 @@ cdef class MIP_Problem(object):
         >>> cs.insert( 3 * x + 5 * y <= 10 )
         >>> m = MIP_Problem(2, cs, x + y)
         >>> m.optimal_value()
-        Fraction(10, 3)
+        mpq(10,3)
         >>> cs = Constraint_System()
         >>> cs.insert( x >= 0 )
         >>> m = MIP_Problem(1, cs, x + x )
@@ -267,7 +261,7 @@ cdef class MIP_Problem(object):
             self.thisptr.optimal_value(sup_n, sup_d)
         finally:
             sig_off()
-        return Fraction(mpz_get_pyintlong(sup_n.get_mpz_t()), mpz_get_pyintlong(sup_d.get_mpz_t()))
+        return mpq(GMPy_MPZ_From_mpz(sup_n.get_mpz_t()), GMPy_MPZ_From_mpz(sup_d.get_mpz_t()))
 
     def space_dimension(self):
         """
@@ -369,7 +363,7 @@ cdef class MIP_Problem(object):
         >>> m.add_constraint(3 * x + 5 * y <= 10)
         >>> m.set_objective_function(x + y)
         >>> m.optimal_value()
-        Fraction(10, 3)
+        mpq(10,3)
 
         Tests:
 
@@ -403,7 +397,7 @@ cdef class MIP_Problem(object):
         >>> m.set_objective_function(x + y)
         >>> m.add_constraints(cs)
         >>> m.optimal_value()
-        Fraction(10, 3)
+        mpq(10,3)
 
         Tests:
 
@@ -437,7 +431,7 @@ cdef class MIP_Problem(object):
         >>> m.add_constraint(3 * x + 5 * y <= 10)
         >>> m.set_objective_function(x + y)
         >>> m.optimal_value()
-        Fraction(10, 3)
+        mpq(10,3)
 
         Tests:
 
@@ -515,7 +509,7 @@ cdef class MIP_Problem(object):
         >>> m.set_objective_function(x + y)
         >>> g = Generator.point(5 * x - 2 * y, 7)
         >>> m.evaluate_objective_function(g)
-        Fraction(3, 7)
+        mpq(3,7)
         >>> z = Variable(2)
         >>> g = Generator.point(5 * x - 2 * z, 7)
         >>> m.evaluate_objective_function(g)
@@ -533,8 +527,8 @@ cdef class MIP_Problem(object):
         finally:
             sig_off()
 
-        return Fraction(mpz_get_pyintlong(sup_n.get_mpz_t()),
-                mpz_get_pyintlong(sup_d.get_mpz_t()))
+        return mpq(GMPy_MPZ_From_mpz(sup_n.get_mpz_t()),
+                GMPy_MPZ_From_mpz(sup_d.get_mpz_t()))
 
     def solve(self):
         """

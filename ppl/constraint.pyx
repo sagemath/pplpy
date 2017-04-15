@@ -16,14 +16,7 @@ include "cysignals/signals.pxi"
 
 from cpython.int cimport PyInt_CheckExact
 from cpython.long cimport PyLong_CheckExact
-from .gmpy2_wrap cimport GMPy_MPZ_From_mpz 
-
-try:
-    from sage.all import Rational
-    def Fraction(p,q):
-        return Rational((p,q))
-except ImportError:
-    from fractions import Fraction
+from .gmpy2_wrap cimport GMPy_MPZ_From_mpz
 
 # PPL can use floating-point arithmetic to compute integers
 cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":

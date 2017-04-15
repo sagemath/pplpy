@@ -16,13 +16,6 @@ include "cysignals/signals.pxi"
 
 from .gmpy2_wrap cimport GMPy_MPZ_From_mpz
 
-try:
-    from sage.all import Rational
-    def Fraction(p,q):
-        return Rational((p,q))
-except ImportError:
-    from fractions import Fraction
-
 # PPL can use floating-point arithmetic to compute integers
 cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
     cdef void set_rounding_for_PPL()
