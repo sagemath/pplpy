@@ -17,8 +17,8 @@ before_install:
 # command to install dependencies
 install: 
   - pip install Cython
-  - pip install cysignals
-  - pip install . --upgrade
+  - pip install git+https://github.com/vinklein/gmpy
+  - pip install .
 # command to run tests
 script:
   - cd tests

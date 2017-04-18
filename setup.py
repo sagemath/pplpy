@@ -5,6 +5,14 @@ from distutils.cmd import Command
 from setuptools.extension import Extension
 import sys
 
+def get_gmpy2_path():
+    import os
+    try:
+        import gmpy2
+        return os.path.join(os.path.split(gmpy2.__file__)[0], 'gmpy2')
+    except ImportError:
+        raise RuntimeError("gmpy2 should be installed first")
+
 # Adapted from Cython's new_build_ext
 class build_ext(_build_ext):
     def finalize_options(self):
@@ -102,7 +110,7 @@ setup(
     package_dir={'ppl': 'ppl'},
     package_data={'ppl': ['*.pxd', '*.h', '*.hh']},
     install_requires=['Cython', 'cysignals', 'gmpy2'],  # For pip install, pip can't read setup_requires
-    include_dirs=['ppl', '/home/vklein/.local/lib/python2.7/site-packages/gmpy2'],
+    include_dirs=['ppl', get_gmpy2_path()],
     ext_modules=extensions,
     classifiers=[
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
