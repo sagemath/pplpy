@@ -66,13 +66,7 @@ import os
 print(os.getcwd())
 VERSION = open('version.txt').read()[:-1]
 
-extensions = [
-    Extension("ppl.cygmp.utils",
-        sources = ["ppl/cygmp/utils.pyx"],
-        depends = ["ppl/cygmp/*"]),
-    Extension("ppl.cygmp.pylong",
-        sources = ["ppl/cygmp/pylong.pyx"],
-        depends = ["ppl/cygmp/*"]),
+extensions = [    
     Extension("ppl.gmpy2_wrap",
         sources = ["ppl/gmpy2_wrap.pyx"],
         depends = ["ppl/*"]),
@@ -104,10 +98,9 @@ setup(
     download_url ='https://github.com/videlec/pplpy/archive/{}.tar.gz'.format(VERSION),
     license='GPL v3',
     platforms=['any'],
-    packages=['ppl', 'ppl.cygmp'],
-    package_dir={'ppl': 'ppl', 'ppl.cygmp': 'ppl/cygmp'},
-    package_data={'ppl': ['*.pxd', '*.h', '*.hh'],
-                  'ppl.cygmp': ['*.pxd', '*.h', '*.hh']},
+    packages=['ppl'],
+    package_dir={'ppl': 'ppl'},
+    package_data={'ppl': ['*.pxd', '*.h', '*.hh']},
     install_requires=['Cython', 'cysignals', 'gmpy2'],  # For pip install, pip can't read setup_requires
     include_dirs=['ppl', '/home/vklein/.local/lib/python2.7/site-packages/gmpy2'],
     ext_modules=extensions,

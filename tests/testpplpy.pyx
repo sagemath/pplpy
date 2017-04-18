@@ -5,9 +5,8 @@ The goal of this file is to test cython can use pplpy package properly
 In order to do this we do some test with objects from each packages and extension :
 ppl
 ppl.linear_algebra
-ppl.cygmp
-ppl.cygmp.pylong
-ppl.cygmp.utils
+ppl.constraint
+ppl.mip_problem
 """
 
 from ppl.linear_algebra cimport Variable
