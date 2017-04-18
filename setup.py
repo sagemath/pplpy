@@ -46,7 +46,7 @@ class TestCommand(Command):
         pass
 
     def run(self):
-        import sys, subprocess, os, tempfile
+        import subprocess, os, tempfile
         from shutil import rmtree
         from distutils.dir_util import copy_tree
 
@@ -70,11 +70,9 @@ class TestCommand(Command):
             os.chdir(old_path)
             rmtree(tempdir_path)
 
-import os
-print(os.getcwd())
 VERSION = open('version.txt').read()[:-1]
 
-extensions = [    
+extensions = [
     Extension("ppl.gmpy2_wrap",
         sources = ["ppl/gmpy2_wrap.pyx"],
         depends = ["ppl/*"]),
