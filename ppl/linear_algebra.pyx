@@ -57,6 +57,7 @@ cdef PPL_Coefficient PPL_Coefficient_from_pyobject(c):
     cdef mpz_t coeff
     if PyLong_CheckExact(c):
         mpz_init(coeff)
+        #TODO use GMPy_MPZ_From_PyIntOrLong from gmpy2_convert_gmp.h instead of mpz_set_pylong
         mpz_set_pylong(coeff, c)
         return PPL_Coefficient(coeff)
     elif PyInt_CheckExact(c):
@@ -486,7 +487,7 @@ cdef class Linear_Expression(object):
 
         OUTPUT:
 
-        An integer.
+        A gmpy2 integer.
 
         Examples:
 
@@ -504,7 +505,7 @@ cdef class Linear_Expression(object):
 
         OUTPUT:
 
-        A tuple of integers of length :meth:`space_dimension`.
+        A tuple of gmpy2 integers of length :meth:`space_dimension`.
 
         Examples:
 

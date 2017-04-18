@@ -16,14 +16,12 @@ include "cysignals/signals.pxi"
 
 from cpython.int cimport PyInt_CheckExact
 from cpython.long cimport PyLong_CheckExact
-from .gmpy2_wrap cimport GMPy_MPZ_From_mpz
+from .gmpy2_wrap cimport GMPy_MPZ_From_mpz, GMPy_MPQ_From_mpz
 
 # PPL can use floating-point arithmetic to compute integers
 cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
     cdef void set_rounding_for_PPL()
     cdef void restore_pre_PPL_rounding()
-
-from gmpy2 import mpq
 
 # but with PPL's rounding the gsl will be very unhappy; must turn off!
 restore_pre_PPL_rounding()
@@ -261,7 +259,7 @@ cdef class MIP_Problem(object):
             self.thisptr.optimal_value(sup_n, sup_d)
         finally:
             sig_off()
-        return mpq(GMPy_MPZ_From_mpz(sup_n.get_mpz_t()), GMPy_MPZ_From_mpz(sup_d.get_mpz_t()))
+        return GMPy_MPQ_From_mpz(sup_n.get_mpz_t(), sup_d.get_mpz_t())
 
     def space_dimension(self):
         """
@@ -527,8 +525,7 @@ cdef class MIP_Problem(object):
         finally:
             sig_off()
 
-        return mpq(GMPy_MPZ_From_mpz(sup_n.get_mpz_t()),
-                GMPy_MPZ_From_mpz(sup_d.get_mpz_t()))
+        return GMPy_MPQ_From_mpz(sup_n.get_mpz_t(), sup_d.get_mpz_t())
 
     def solve(self):
         """

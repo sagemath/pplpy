@@ -1,19 +1,26 @@
 # distutils: language = c
 # distutils: libraries = gmp
 
-from cpython.object cimport PyObject, Py_SIZE
+from cpython.object cimport Py_SIZE
 
 cdef extern from "gmp.h":
     void mpz_set(mpz_t rop, mpz_t op)
     void mpz_neg (mpz_t rop, mpz_t op)
     void mpz_import (mpz_t rop, size_t count, int order, int size, int endian, size_t nails, void *op)
+    void mpq_set(mpq_ptr rop, mpq_srcptr op)
+    void mpq_set_num (mpq_t rational, mpz_t numerator)
+    void mpq_set_den (mpq_t rational, mpz_t denominator)
 
 cdef extern from "gmpy2.h":
     cdef (PyObject *)GMPy_MPZ_New(void *)
+    cdef (PyObject *)GMPy_MPQ_New(void *)
     cdef int import_gmpy2()
 
 cdef extern from "gmpy2_mpz.h":
     cdef mpz_t MPZ(PyObject *)
+
+cdef extern from "gmpy2_mpq.h":
+    cdef mpq_t MPQ(PyObject *)
 
 cdef extern from "longintrepr.h":
     cdef _PyLong_New(Py_ssize_t s)
@@ -34,7 +41,15 @@ cdef GMPy_MPZ_From_mpz(mpz_srcptr z):
     return <object>res
 
 cdef GMPy_MPQ_From_mpq(mpq_srcptr q):
-    pass
+    cdef PyObject * res = GMPy_MPQ_New(NULL)
+    mpq_set(MPQ(res), q)
+    return <object>res
+
+cdef GMPy_MPQ_From_mpz(mpz_srcptr numerator, mpz_srcptr denominator):
+    cdef PyObject * res = GMPy_MPQ_New(NULL)
+    mpq_set_num(MPQ(res), numerator)
+    mpq_set_den(MPQ(res), denominator)
+    return <object>res
 
 cdef int mpz_set_pylong(mpz_ptr z, L) except -1:
     """
