@@ -70,6 +70,10 @@ Requirements
 
 - `Cython <http://cython.org>`_
 
+- `cygsignals https://pypi.python.org/pypi/cysignals`_
+
+- `gmpy2 https://pypi.python.org/pypi/gmpy2`_
+
 On Debian/Ubuntu systems these can be installed with::
 
     $ sudo apt-get install cython libgmp-dev libppl-dev
