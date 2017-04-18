@@ -12,6 +12,7 @@ python:
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get install libgmp-dev libppl-dev
+  - sudo apt-get install libmpfr-dev libmpfr4 libmpfr4-dbg
 # command to install dependencies
 install: 
   - pip install Cython
