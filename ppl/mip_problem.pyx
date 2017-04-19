@@ -12,8 +12,7 @@
 #*****************************************************************************
 from __future__ import absolute_import, print_function
 
-include "cysignals/signals.pxi"
-
+from cysignals.signals cimport sig_on, sig_off
 from cpython.int cimport PyInt_CheckExact
 from cpython.long cimport PyLong_CheckExact
 from .gmpy2_wrap cimport GMPy_MPZ_From_mpz, GMPy_MPQ_From_mpz

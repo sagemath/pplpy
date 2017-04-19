@@ -13,22 +13,10 @@
 
 from __future__ import absolute_import, print_function
 
-include "cysignals/signals.pxi"
 from cpython.int cimport PyInt_CheckExact
 from cpython.long cimport PyLong_CheckExact
 from .constraint cimport Constraint_System, _make_Constraint_from_richcmp
 from .gmpy2_wrap cimport GMPy_MPZ_From_mpz, mpz_set_pylong, mpz_init
-
-# these are just gmp declarations
-# TODO:
-# here we need to allow to branch this code with integer and rational classes.
-# Give three options:
-#  1) with Integer/Rational from Sage as below
-#  2) with gmpy2
-#  3) with Python native types
-# and potentially more if the user want to dig in
-#from sage.rings.integer cimport Integer
-#from sage.rings.rational cimport Rational
 
 # TODO: interruption buisness. This is internal to Sage. Though by default
 # we could map sig_on/sig_off to a no-op

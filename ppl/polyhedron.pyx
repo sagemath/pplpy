@@ -12,8 +12,7 @@
 #*****************************************************************************
 from __future__ import absolute_import, print_function
 
-include "cysignals/signals.pxi"
-
+from cysignals.signals cimport sig_on, sig_off
 from .gmpy2_wrap cimport GMPy_MPZ_From_mpz
 
 # PPL can use floating-point arithmetic to compute integers
