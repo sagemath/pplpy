@@ -36,16 +36,25 @@ import_gmpy2()
 cdef size_t PyLong_nails = 8*sizeof(digit) - PyLong_SHIFT
 
 cdef GMPy_MPZ_From_mpz(mpz_srcptr z):
+    """
+    Convert from 'gmp mpz' to 'gmpy2 mpz'
+    """
     cdef PyObject * res = GMPy_MPZ_New(NULL)
     mpz_set(MPZ(res), z)
     return <object>res
 
 cdef GMPy_MPQ_From_mpq(mpq_srcptr q):
+    """
+    Convert from 'gmp mpq' to 'gmpy2 mpq'
+    """
     cdef PyObject * res = GMPy_MPQ_New(NULL)
     mpq_set(MPQ(res), q)
     return <object>res
 
 cdef GMPy_MPQ_From_mpz(mpz_srcptr numerator, mpz_srcptr denominator):
+    """
+    Build a 'gmpy2 mpq' from 'gmp mpz' numerator and denominator
+    """
     cdef PyObject * res = GMPy_MPQ_New(NULL)
     mpq_set_num(MPQ(res), numerator)
     mpq_set_den(MPQ(res), denominator)
