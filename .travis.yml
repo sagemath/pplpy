@@ -20,6 +20,7 @@ before_install:
 install: 
   - pip install Cython
   - pip install git+https://github.com/vinklein/gmpy
+  - pip install cysignals
   - pip install .
 # command to run tests
 script:
