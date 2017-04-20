@@ -22,6 +22,14 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
 # but with PPL's rounding the gsl will be very unhappy; must turn off!
 restore_pre_PPL_rounding()
 
+
+####################################################
+######## access Generator's static methods #########
+####################################################
+# cdef (PPL_Generator*) new_line2(PPL_Linear_Expression &e):
+#     cdef PPL_Generator* res = new PPL_Generator(PPL_Generator_line(e))
+#     return res
+
 ####################################################
 cdef class Generator(object):
     r"""

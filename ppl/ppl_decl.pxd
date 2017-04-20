@@ -228,11 +228,11 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         void set_control_parameter(PPL_MIP_Problem_Control_Parameter_Value value)
 
 cdef extern from "ppl.hh":
-    PPL_Generator PPL_line          "Parma_Polyhedra_Library::line"          (PPL_Linear_Expression &e) except +ValueError
-    PPL_Generator PPL_ray           "Parma_Polyhedra_Library::ray"           (PPL_Linear_Expression &e) except +ValueError
-    PPL_Generator PPL_point         "Parma_Polyhedra_Library::point"         (PPL_Linear_Expression &e, PPL_Coefficient &d) except +ValueError
-    PPL_Generator PPL_closure_point "Parma_Polyhedra_Library::closure_point" (PPL_Linear_Expression &e, PPL_Coefficient &d) except +ValueError
-
+    PPL_Generator PPL_line          "Parma_Polyhedra_Library::line"             (PPL_Linear_Expression &e) except +ValueError
+    PPL_Generator PPL_ray           "Parma_Polyhedra_Library::ray"              (PPL_Linear_Expression &e) except +ValueError
+    PPL_Generator PPL_point         "Parma_Polyhedra_Library::point"            (PPL_Linear_Expression &e, PPL_Coefficient &d) except +ValueError
+    PPL_Generator PPL_closure_point "Parma_Polyhedra_Library::closure_point"    (PPL_Linear_Expression &e, PPL_Coefficient &d) except +ValueError
+    PPL_Generator PPL_Generator_line "Parma_Polyhedra_Library::Generator::line" (PPL_Linear_Expression &e) except +ValueError
 
 cdef extern from "ppl.hh":
 
