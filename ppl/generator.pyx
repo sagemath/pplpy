@@ -12,8 +12,6 @@
 #*****************************************************************************
 from __future__ import absolute_import, print_function
 
-from cpython.int cimport PyInt_CheckExact
-from cpython.long cimport PyLong_CheckExact
 from .gmpy2_wrap cimport GMPy_MPZ_From_mpz
 
 # PPL can use floating-point arithmetic to compute integers
@@ -716,7 +714,7 @@ cdef class Generator_System(object):
             for generator in arg:
                 self.insert(generator)
             return
-        raise ValueError, 'Cannot initialize with '+str(arg)+'.'
+        raise ValueError('Cannot initialize with '+str(arg)+'.')
 
     def __dealloc__(self):
         """

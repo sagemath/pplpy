@@ -13,9 +13,7 @@
 from __future__ import absolute_import, print_function
 
 from cysignals.signals cimport sig_on, sig_off
-from cpython.int cimport PyInt_CheckExact
-from cpython.long cimport PyLong_CheckExact
-from .gmpy2_wrap cimport GMPy_MPZ_From_mpz, GMPy_MPQ_From_mpz
+from .gmpy2_wrap cimport GMPy_MPQ_From_mpz
 
 # PPL can use floating-point arithmetic to compute integers
 cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
@@ -467,7 +465,7 @@ cdef class MIP_Problem(object):
         elif mode == 'maximization':
             self.thisptr.set_optimization_mode(MAXIMIZATION)
         else:
-            raise ValueError, 'Unknown value: mode='+str(mode)+'.'
+            raise ValueError('Unknown value: mode='+str(mode)+'.')
 
     def is_satisfiable(self):
         """

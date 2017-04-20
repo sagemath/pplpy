@@ -14,7 +14,7 @@ python:
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get install libgmp-dev libppl-dev
-  - sudo apt-get install libmpfr-dev libmpfr4 libmpfr4-dbg
+  - sudo apt-get install libmpfr-dev
   - sudo apt-get install libmpc-dev
 # command to install dependencies
 install: 

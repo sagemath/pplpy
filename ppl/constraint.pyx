@@ -12,8 +12,6 @@
 #*****************************************************************************
 from __future__ import absolute_import, print_function
 
-from cpython.int cimport PyInt_CheckExact
-from cpython.long cimport PyLong_CheckExact
 from .gmpy2_wrap cimport GMPy_MPZ_From_mpz
 
 # PPL can use floating-point arithmetic to compute integers
@@ -54,7 +52,6 @@ cdef class Constraint(object):
     Examples:
 
     >>> from ppl import Constraint, Variable, Linear_Expression
-    >>> from gmpy2 import mpz
     >>> x = Variable(0)
     >>> y = Variable(1)
     >>> 5*x-2*y >  x+y-1

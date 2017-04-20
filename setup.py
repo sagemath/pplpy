@@ -108,6 +108,7 @@ setup(
     package_dir={'ppl': 'ppl'},
     package_data={'ppl': ['*.pxd', '*.h', '*.hh']},
     install_requires=['Cython', 'cysignals', 'gmpy2'],  # For pip install, pip can't read setup_requires
+    #TODO Remove get_gmpy2_path as soon as we have a better solution
     include_dirs=['ppl', get_gmpy2_path()],
     ext_modules=extensions,
     classifiers=[

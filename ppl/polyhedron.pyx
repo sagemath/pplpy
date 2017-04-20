@@ -64,7 +64,7 @@ cdef class Polyhedron(object):
         ...
         NotImplementedError: The Polyhedron class is abstract, you must not instantiate it.
         """
-        raise NotImplementedError, 'The Polyhedron class is abstract, you must not instantiate it.'
+        raise NotImplementedError('The Polyhedron class is abstract, you must not instantiate it.')
 
     def __repr__(self):
         """
@@ -879,7 +879,7 @@ cdef class Polyhedron(object):
 
         mpz_inf_n = GMPy_MPZ_From_mpz(inf_n.get_mpz_t())
         mpz_inf_d = GMPy_MPZ_From_mpz(inf_d.get_mpz_t())
-        
+
         if rc:
             return { 'bounded':True, 'inf_n':mpz_inf_n, 'inf_d':mpz_inf_d, 'minimum':minimum, 'generator':g }
         else:
@@ -1987,7 +1987,7 @@ cdef class C_Polyhedron(Polyhedron):
             dim = int(arg)
             assert dim>=0
         except ValueError:
-            raise ValueError, 'Cannot initialize C_Polyhedron with '+str(arg)+'.'
+            raise ValueError('Cannot initialize C_Polyhedron with '+str(arg)+'.')
         degenerate_element = degenerate_element.lower()
         if degenerate_element=='universe':
             self.thisptr = new PPL_C_Polyhedron(<PPL_dimension_type>dim, UNIVERSE)
@@ -1996,7 +1996,7 @@ cdef class C_Polyhedron(Polyhedron):
             self.thisptr = new PPL_C_Polyhedron(<PPL_dimension_type>dim, EMPTY)
             return
         else:
-            raise ValueError, 'Unknown value: degenerate_element='+str(degenerate_element)+'.'
+            raise ValueError('Unknown value: degenerate_element='+str(degenerate_element)+'.')
 
     def __init__(self, *args):
         """
