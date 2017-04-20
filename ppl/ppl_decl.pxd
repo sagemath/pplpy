@@ -31,6 +31,12 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
     cdef cppclass PPL_Poly_Gen_Relation "Parma_Polyhedra_Library::Poly_Gen_Relation"
     cdef cppclass PPL_Poly_Con_Relation "Parma_Polyhedra_Library::Poly_Con_Relation"
     cdef cppclass PPL_MIP_Problem       "Parma_Polyhedra_Library::MIP_Problem"
+    cdef cppclass PPL_gs_iterator       "Parma_Polyhedra_Library::Generator_System_const_iterator"
+
+    cdef cppclass PPL_gs_iterator:
+        PPL_Generator& operator*()
+        PPL_gs_iterator& operator++()
+        cppbool operator==(PPL_gs_iterator& y)
 
     cdef cppclass PPL_Variable:
         PPL_Variable(PPL_dimension_type i)
@@ -95,6 +101,8 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         PPL_Generator_System(PPL_Generator &g)
         PPL_Generator_System(PPL_Generator_System &gs)
         PPL_dimension_type space_dimension()
+        PPL_gs_iterator begin()
+        PPL_gs_iterator end()
         void clear()
         void insert(PPL_Generator &g)
         bint empty()
@@ -244,7 +252,6 @@ cdef extern from "ppl.hh":
     PPL_Poly_Con_Relation PPL_Poly_Con_Relation_strictly_intersects "Parma_Polyhedra_Library::Poly_Con_Relation::strictly_intersects" ()
     PPL_Poly_Con_Relation PPL_Poly_Con_Relation_is_included "Parma_Polyhedra_Library::Poly_Con_Relation::is_included" ()
     PPL_Poly_Con_Relation PPL_Poly_Con_Relation_saturates "Parma_Polyhedra_Library::Poly_Con_Relation::saturates" ()
-
 
 cdef extern from "ppl_shim.hh":
     PPL_Poly_Gen_Relation* new_relation_with(PPL_Polyhedron &p, PPL_Generator &g) except +ValueError

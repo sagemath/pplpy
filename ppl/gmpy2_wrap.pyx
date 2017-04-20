@@ -15,11 +15,7 @@ cdef extern from "gmpy2.h":
     cdef (PyObject *)GMPy_MPZ_New(void *)
     cdef (PyObject *)GMPy_MPQ_New(void *)
     cdef int import_gmpy2()
-
-cdef extern from "gmpy2_mpz.h":
     cdef mpz_t MPZ(PyObject *)
-
-cdef extern from "gmpy2_mpq.h":
     cdef mpq_t MPQ(PyObject *)
 
 cdef extern from "longintrepr.h":
@@ -28,7 +24,6 @@ cdef extern from "longintrepr.h":
     ctypedef unsigned int digit
     ctypedef struct PyLongObject:
         digit* ob_digit
-
 
 import_gmpy2()
 

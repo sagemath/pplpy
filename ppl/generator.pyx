@@ -26,7 +26,7 @@ restore_pre_PPL_rounding()
 ####################################################
 ######## access Generator's static methods #########
 ####################################################
-# cdef (PPL_Generator*) new_line2(PPL_Linear_Expression &e):
+# cdef (PPL_Generator*) new_line2(PPL_Linear_Expression &e) except +ValueError:
 #     cdef PPL_Generator* res = new PPL_Generator(PPL_Generator_line(e))
 #     return res
 
@@ -136,7 +136,8 @@ cdef class Generator(object):
         # workaround follows
         cdef Generator g = Generator(True)
         try:
-            g.thisptr = new_line(e.thisptr[0])
+            g.thisptr = new PPL_Generator(PPL_line(e.thisptr[0]))
+            # g.thisptr = new_line(e.thisptr[0])
         except BaseException:
             # g.thisptr must be set to something valid or g.__dealloc__() will segfault
             g.thisptr = new_point(e.thisptr[0],PPL_Coefficient(1))
@@ -955,6 +956,36 @@ cdef class Generator_System(object):
         return (Generator_System, (tuple(self), ))
 
 
+
+# /************************************************************/
+# typedef Generator_System::const_iterator* gs_iterator_ptr;
+#
+# gs_iterator_ptr init_gs_iterator(const Generator_System &gs)
+# {
+#   return new Generator_System::const_iterator(gs.begin());
+# }
+#
+# Generator next_gs_iterator(gs_iterator_ptr gsi_ptr)
+# {
+#   return *(*gsi_ptr)++;
+# }
+#
+# bool is_end_gs_iterator(const Generator_System &gs, gs_iterator_ptr gsi_ptr)
+# {
+#   return (*gsi_ptr) == gs.end();
+# }
+#
+# void delete_gs_iterator(gs_iterator_ptr gsi_ptr)
+# {
+#   delete gsi_ptr;
+# }
+
+# cdef (PPL_gs_iterator*) init_gs_iterator2(const PPL_Generator_System &gs):
+#     # cdef (PPL_gs_iterator*) res = new PPL_gs_iterator(gs.begin())
+#     return new PPL_gs_iterator(gs.begin())
+
+# cdef PPL_Generator next_gs_iterator2(PPL_gs_iterator* gs_it):
+#     return NULL
 
 ####################################################
 ### Generator_System_iterator ######################
