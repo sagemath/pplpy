@@ -22,14 +22,6 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
 # but with PPL's rounding the gsl will be very unhappy; must turn off!
 restore_pre_PPL_rounding()
 
-
-####################################################
-######## access Generator's static methods #########
-####################################################
-# cdef (PPL_Generator*) new_line2(PPL_Linear_Expression &e) except +ValueError:
-#     cdef PPL_Generator* res = new PPL_Generator(PPL_Generator_line(e))
-#     return res
-
 ####################################################
 cdef class Generator(object):
     r"""
@@ -137,10 +129,9 @@ cdef class Generator(object):
         cdef Generator g = Generator(True)
         try:
             g.thisptr = new PPL_Generator(PPL_line(e.thisptr[0]))
-            # g.thisptr = new_line(e.thisptr[0])
         except BaseException:
             # g.thisptr must be set to something valid or g.__dealloc__() will segfault
-            g.thisptr = new_point(e.thisptr[0],PPL_Coefficient(1))
+            g.thisptr = new PPL_Generator(PPL_point(e.thisptr[0],PPL_Coefficient(1)))
             raise
         return g
 
@@ -181,10 +172,10 @@ cdef class Generator(object):
         # workaround follows
         cdef Generator g = Generator(True)
         try:
-            g.thisptr = new_ray(e.thisptr[0])
+            g.thisptr = new PPL_Generator(PPL_ray(e.thisptr[0]))
         except BaseException:
             # g.thisptr must be set to something valid or g.__dealloc__() will segfault
-            g.thisptr = new_point(e.thisptr[0],PPL_Coefficient(1))
+            g.thisptr = new PPL_Generator(PPL_point(e.thisptr[0],PPL_Coefficient(1)))
             raise
         return g
 
@@ -229,10 +220,10 @@ cdef class Generator(object):
         # workaround follows
         cdef Generator g = Generator(True)
         try:
-            g.thisptr = new_point(e.thisptr[0], PPL_Coefficient(d))
+            g.thisptr = new PPL_Generator(PPL_point(e.thisptr[0], PPL_Coefficient(d)))
         except BaseException:
             # g.thisptr must be set to something valid or g.__dealloc__() will segfault
-            g.thisptr = new_point(e.thisptr[0],PPL_Coefficient(1))
+            g.thisptr = new PPL_Generator(PPL_point(e.thisptr[0],PPL_Coefficient(1)))
             raise
         return g
 
@@ -280,10 +271,10 @@ cdef class Generator(object):
         # workaround follows
         cdef Generator g = Generator(True)
         try:
-            g.thisptr = new_closure_point(e.thisptr[0], PPL_Coefficient(d))
+            g.thisptr = new PPL_Generator(PPL_closure_point(e.thisptr[0], PPL_Coefficient(d)))
         except BaseException:
             # g.thisptr must be set to something valid or g.__dealloc__() will segfault
-            g.thisptr = new_point(e.thisptr[0], PPL_Coefficient(1))
+            g.thisptr = new PPL_Generator(PPL_point(e.thisptr[0], PPL_Coefficient(1)))
             raise
         return g
 
@@ -955,38 +946,6 @@ cdef class Generator_System(object):
         """
         return (Generator_System, (tuple(self), ))
 
-
-
-# /************************************************************/
-# typedef Generator_System::const_iterator* gs_iterator_ptr;
-#
-# gs_iterator_ptr init_gs_iterator(const Generator_System &gs)
-# {
-#   return new Generator_System::const_iterator(gs.begin());
-# }
-#
-# Generator next_gs_iterator(gs_iterator_ptr gsi_ptr)
-# {
-#   return *(*gsi_ptr)++;
-# }
-#
-# bool is_end_gs_iterator(const Generator_System &gs, gs_iterator_ptr gsi_ptr)
-# {
-#   return (*gsi_ptr) == gs.end();
-# }
-#
-# void delete_gs_iterator(gs_iterator_ptr gsi_ptr)
-# {
-#   delete gsi_ptr;
-# }
-
-# cdef (PPL_gs_iterator*) init_gs_iterator2(const PPL_Generator_System &gs):
-#     # cdef (PPL_gs_iterator*) res = new PPL_gs_iterator(gs.begin())
-#     return new PPL_gs_iterator(gs.begin())
-
-# cdef PPL_Generator next_gs_iterator2(PPL_gs_iterator* gs_it):
-#     return NULL
-
 ####################################################
 ### Generator_System_iterator ######################
 ####################################################
@@ -1022,12 +981,13 @@ cdef class Generator_System_iterator(object):
         >>> iter = Generator_System_iterator(Generator_System())   # indirect doctest
         """
         self.gs = gs
-        self.gsi_ptr = init_gs_iterator(gs.thisptr[0])
+        self.gsi_ptr = new PPL_gs_iterator(gs.thisptr[0].begin())
 
     def __dealloc__(self):
         """
         The Cython destructor.
         """
+        #del self.gsi_ptr
         delete_gs_iterator(self.gsi_ptr)
 
     def __next__(Generator_System_iterator self):
@@ -1048,8 +1008,9 @@ cdef class Generator_System_iterator(object):
         >>> next(Generator_System_iterator(gs))
         point(5/1, -2/1)
         """
-        if is_end_gs_iterator((<Generator_System>self.gs).thisptr[0], self.gsi_ptr):
+        if (<PPL_gs_iterator>self.gsi_ptr[0]) == (<Generator_System>self.gs).thisptr[0].end():
             raise StopIteration
+        # *(*gsi_ptr)++; => (<PPL_gs_iterator>self.gsi_ptr[0]).inc().deref()
         return _wrap_Generator(next_gs_iterator(self.gsi_ptr))
 
 cdef PPL_GeneratorType_str(PPL_GeneratorType t):

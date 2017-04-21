@@ -575,7 +575,7 @@ cdef class MIP_Problem(object):
         cdef PPL_Generator *g
         sig_on()
         try:
-            g = new_MIP_optimizing_point(self.thisptr[0])
+            g = new PPL_Generator(self.thisptr[0].optimizing_point())
         finally:
             sig_off()
         return _wrap_Generator(g[0])

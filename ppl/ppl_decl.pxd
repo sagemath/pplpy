@@ -33,11 +33,6 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
     cdef cppclass PPL_MIP_Problem       "Parma_Polyhedra_Library::MIP_Problem"
     cdef cppclass PPL_gs_iterator       "Parma_Polyhedra_Library::Generator_System_const_iterator"
 
-    cdef cppclass PPL_gs_iterator:
-        PPL_Generator& operator*()
-        PPL_gs_iterator& operator++()
-        cppbool operator==(PPL_gs_iterator& y)
-
     cdef cppclass PPL_Variable:
         PPL_Variable(PPL_dimension_type i)
         PPL_dimension_type id()
@@ -65,21 +60,6 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         PPL_Constraint operator<=(PPL_Linear_Expression& e)
         PPL_Constraint operator< (PPL_Linear_Expression& e)
 
-    cdef cppclass PPL_Generator:
-        PPL_Generator(PPL_Generator &g)
-        PPL_dimension_type space_dimension()
-        PPL_GeneratorType type()
-        bint is_line()
-        bint is_ray()
-        bint is_line_or_ray()
-        bint is_point()
-        bint is_closure_point()
-        PPL_Coefficient coefficient(PPL_Variable v)
-        PPL_Coefficient divisor() except +
-        bint is_equivalent_to(PPL_Generator &y)
-        void ascii_dump()
-        bint OK()
-
     cdef cppclass PPL_Constraint:
         PPL_Constraint(PPL_Constraint &g)
         PPL_dimension_type space_dimension()
@@ -96,6 +76,21 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         void ascii_dump()
         bint OK()
 
+    cdef cppclass PPL_Generator:
+        PPL_Generator(PPL_Generator &g)
+        PPL_dimension_type space_dimension()
+        PPL_GeneratorType type()
+        bint is_line()
+        bint is_ray()
+        bint is_line_or_ray()
+        bint is_point()
+        bint is_closure_point()
+        PPL_Coefficient coefficient(PPL_Variable v)
+        PPL_Coefficient divisor() except +
+        bint is_equivalent_to(PPL_Generator &y)
+        void ascii_dump()
+        bint OK()
+
     cdef cppclass PPL_Generator_System:
         PPL_Generator_System()
         PPL_Generator_System(PPL_Generator &g)
@@ -108,6 +103,13 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         bint empty()
         void ascii_dump()
         bint OK()
+
+    cdef cppclass PPL_gs_iterator:
+        PPL_gs_iterator(PPL_gs_iterator &gsi)
+        PPL_Generator& deref "operator*" ()
+        PPL_gs_iterator& inc "operator++" ()
+        # PPL_gs_iterator& operator++()
+        cppbool operator==(PPL_gs_iterator& y)
 
     cdef cppclass PPL_Constraint_System:
         PPL_Constraint_System()
@@ -240,7 +242,6 @@ cdef extern from "ppl.hh":
     PPL_Generator PPL_ray           "Parma_Polyhedra_Library::ray"              (PPL_Linear_Expression &e) except +ValueError
     PPL_Generator PPL_point         "Parma_Polyhedra_Library::point"            (PPL_Linear_Expression &e, PPL_Coefficient &d) except +ValueError
     PPL_Generator PPL_closure_point "Parma_Polyhedra_Library::closure_point"    (PPL_Linear_Expression &e, PPL_Coefficient &d) except +ValueError
-    PPL_Generator PPL_Generator_line "Parma_Polyhedra_Library::Generator::line" (PPL_Linear_Expression &e) except +ValueError
 
 cdef extern from "ppl.hh":
 
@@ -257,16 +258,8 @@ cdef extern from "ppl_shim.hh":
     PPL_Poly_Gen_Relation* new_relation_with(PPL_Polyhedron &p, PPL_Generator &g) except +ValueError
     PPL_Poly_Con_Relation* new_relation_with(PPL_Polyhedron &p, PPL_Constraint &c) except +ValueError
 
-    PPL_Generator* new_line(PPL_Linear_Expression &e) except +ValueError
-    PPL_Generator* new_ray(PPL_Linear_Expression &e) except +ValueError
-    PPL_Generator* new_point(PPL_Linear_Expression &e, PPL_Coefficient d) except +ValueError
-    PPL_Generator* new_closure_point(PPL_Linear_Expression &e, PPL_Coefficient d) except +ValueError
-    PPL_Generator* new_MIP_optimizing_point(PPL_MIP_Problem &problem) except +ValueError
-
     ctypedef void* gs_iterator_ptr
-    cdef gs_iterator_ptr init_gs_iterator(PPL_Generator_System &gs)
     cdef PPL_Generator next_gs_iterator(gs_iterator_ptr)
-    cdef bint is_end_gs_iterator(PPL_Generator_System &gs, gs_iterator_ptr gsi_ptr)
     cdef void delete_gs_iterator(gs_iterator_ptr)
 
     ctypedef void* cs_iterator_ptr
