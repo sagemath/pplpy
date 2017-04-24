@@ -617,7 +617,7 @@ cdef class MIP_Problem_constraints_iterator(object):
         >>> iter = Constraint_System_iterator( Constraint_System() )   # indirect doctest
         """
         self.pb = pb
-        self.mip_csi_ptr = init_mip_cs_iterator(pb.thisptr[0])
+        self.mip_csi_ptr = new PPL_mip_iterator(pb.thisptr[0].constraints_begin())
 
     def __dealloc__(self):
         """
@@ -643,6 +643,6 @@ cdef class MIP_Problem_constraints_iterator(object):
         5*x0-2>0
         -x0-1>=0
         """
-        if is_end_mip_cs_iterator((<MIP_Problem>self.pb).thisptr[0], self.mip_csi_ptr):
+        if (<PPL_mip_iterator>self.mip_csi_ptr[0]) == (<MIP_Problem>self.pb).thisptr[0].constraints_end():
             raise StopIteration
-        return _wrap_Constraint(next_mip_cs_iterator(self.mip_csi_ptr))
+        return _wrap_Constraint((<PPL_mip_iterator&>self.mip_csi_ptr[0]).inc(1).deref())

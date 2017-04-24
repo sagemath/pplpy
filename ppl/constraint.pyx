@@ -941,7 +941,7 @@ cdef class Constraint_System_iterator(object):
         >>> iter = Constraint_System_iterator( Constraint_System() )   # indirect doctest
         """
         self.cs = cs
-        self.csi_ptr = init_cs_iterator(cs.thisptr[0])
+        self.csi_ptr = new PPL_cs_iterator(cs.thisptr[0].begin())
 
     def __dealloc__(self):
         """
@@ -973,9 +973,10 @@ cdef class Constraint_System_iterator(object):
         ...
         StopIteration
         """
-        if is_end_cs_iterator((<Constraint_System>self.cs).thisptr[0], self.csi_ptr):
+        if (<PPL_cs_iterator>self.csi_ptr[0]) == (<Constraint_System>self.cs).thisptr[0].end():
             raise StopIteration
-        return _wrap_Constraint(next_cs_iterator(self.csi_ptr))
+        cdef PPL_cs_iterator it_next = (<PPL_cs_iterator&>self.csi_ptr[0]).inc(1)
+        return _wrap_Constraint(it_next.deref())
 
 cdef class Poly_Con_Relation(object):
     r"""

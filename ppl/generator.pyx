@@ -1010,8 +1010,8 @@ cdef class Generator_System_iterator(object):
         """
         if (<PPL_gs_iterator>self.gsi_ptr[0]) == (<Generator_System>self.gs).thisptr[0].end():
             raise StopIteration
-        # *(*gsi_ptr)++; => (<PPL_gs_iterator>self.gsi_ptr[0]).inc().deref()
-        return _wrap_Generator(next_gs_iterator(self.gsi_ptr))
+        cdef PPL_gs_iterator it_next = (<PPL_gs_iterator&>self.gsi_ptr[0]).inc(1)
+        return _wrap_Generator(it_next.deref())
 
 cdef PPL_GeneratorType_str(PPL_GeneratorType t):
     if t == LINE:

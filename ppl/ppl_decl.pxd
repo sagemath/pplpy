@@ -31,7 +31,10 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
     cdef cppclass PPL_Poly_Gen_Relation "Parma_Polyhedra_Library::Poly_Gen_Relation"
     cdef cppclass PPL_Poly_Con_Relation "Parma_Polyhedra_Library::Poly_Con_Relation"
     cdef cppclass PPL_MIP_Problem       "Parma_Polyhedra_Library::MIP_Problem"
+    cdef cppclass PPL_mip_iterator      "Parma_Polyhedra_Library::MIP_Problem::const_iterator"
     cdef cppclass PPL_gs_iterator       "Parma_Polyhedra_Library::Generator_System_const_iterator"
+    cdef cppclass PPL_cs_iterator       "Parma_Polyhedra_Library::Constraint_System_const_iterator"
+
 
     cdef cppclass PPL_Variable:
         PPL_Variable(PPL_dimension_type i)
@@ -61,6 +64,7 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         PPL_Constraint operator< (PPL_Linear_Expression& e)
 
     cdef cppclass PPL_Constraint:
+        PPL_Constraint()
         PPL_Constraint(PPL_Constraint &g)
         PPL_dimension_type space_dimension()
         PPL_ConstraintType type()
@@ -104,18 +108,34 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         void ascii_dump()
         bint OK()
 
+    cdef cppclass PPL_mip_iterator:
+        PPL_mip_iterator()
+        PPL_mip_iterator(PPL_mip_iterator &mipi)
+        PPL_Constraint& deref "operator*" ()
+        PPL_mip_iterator inc "operator++" (int i)
+        cppbool operator==(PPL_mip_iterator& y)
+
     cdef cppclass PPL_gs_iterator:
+        PPL_gs_iterator()
         PPL_gs_iterator(PPL_gs_iterator &gsi)
         PPL_Generator& deref "operator*" ()
-        PPL_gs_iterator& inc "operator++" ()
-        # PPL_gs_iterator& operator++()
+        PPL_gs_iterator inc "operator++" (int i)
         cppbool operator==(PPL_gs_iterator& y)
+
+    cdef cppclass PPL_cs_iterator:
+        PPL_cs_iterator()
+        PPL_cs_iterator(PPL_cs_iterator &csi)
+        PPL_Constraint& deref "operator*" ()
+        PPL_cs_iterator inc "operator++" (int i)
+        cppbool operator==(PPL_cs_iterator& y)
 
     cdef cppclass PPL_Constraint_System:
         PPL_Constraint_System()
         PPL_Constraint_System(PPL_Constraint &g)
         PPL_Constraint_System(PPL_Constraint_System &gs)
         PPL_dimension_type space_dimension()
+        PPL_cs_iterator begin()
+        PPL_cs_iterator end()
         bint has_equalities()
         bint has_strict_inequalities()
         void clear()
@@ -236,6 +256,8 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         bint OK()
         PPL_MIP_Problem_Control_Parameter_Value get_control_parameter(PPL_MIP_Problem_Control_Parameter_Name name)
         void set_control_parameter(PPL_MIP_Problem_Control_Parameter_Value value)
+        PPL_mip_iterator constraints_begin()
+        PPL_mip_iterator constraints_end()
 
 cdef extern from "ppl.hh":
     PPL_Generator PPL_line          "Parma_Polyhedra_Library::line"             (PPL_Linear_Expression &e) except +ValueError
@@ -259,19 +281,12 @@ cdef extern from "ppl_shim.hh":
     PPL_Poly_Con_Relation* new_relation_with(PPL_Polyhedron &p, PPL_Constraint &c) except +ValueError
 
     ctypedef void* gs_iterator_ptr
-    cdef PPL_Generator next_gs_iterator(gs_iterator_ptr)
     cdef void delete_gs_iterator(gs_iterator_ptr)
 
     ctypedef void* cs_iterator_ptr
-    cdef cs_iterator_ptr init_cs_iterator(PPL_Constraint_System &cs)
-    cdef PPL_Constraint next_cs_iterator(cs_iterator_ptr)
-    cdef bint is_end_cs_iterator(PPL_Constraint_System &cs, cs_iterator_ptr csi_ptr)
     cdef void delete_cs_iterator(cs_iterator_ptr)
 
     ctypedef void* mip_cs_iterator_ptr
-    cdef mip_cs_iterator_ptr init_mip_cs_iterator(PPL_MIP_Problem& pb)
-    cdef PPL_Constraint next_mip_cs_iterator(mip_cs_iterator_ptr mip_csi_ptr)
-    cdef bint is_end_mip_cs_iterator(PPL_MIP_Problem &pb, mip_cs_iterator_ptr mip_csi_ptr)
     cdef void delete_mip_cs_iterator(mip_cs_iterator_ptr mip_csi_ptr)
 
 
