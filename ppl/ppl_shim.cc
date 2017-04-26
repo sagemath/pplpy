@@ -10,32 +10,7 @@ Poly_Con_Relation* new_relation_with(const Polyhedron &p, const Constraint &c)
   return new Poly_Con_Relation(p.relation_with(c));
 }
 
-
 /************************************************************/
-typedef Generator_System::const_iterator* gs_iterator_ptr;
-
-void delete_gs_iterator(gs_iterator_ptr gsi_ptr)
-{
-  delete gsi_ptr;
-}
-
-
-/************************************************************/
-typedef Constraint_System::const_iterator* cs_iterator_ptr;
-
-void delete_cs_iterator(cs_iterator_ptr csi_ptr)
-{
-  delete csi_ptr;
-}
-
-
-/************************************************************/
-typedef MIP_Problem::const_iterator* mip_cs_iterator_ptr;
-
-void delete_mip_cs_iterator(mip_cs_iterator_ptr mip_csi_ptr)
-{
-  delete mip_csi_ptr;
-}
 
 Constraint_System* mip_constraints(const MIP_Problem &pb)
 {

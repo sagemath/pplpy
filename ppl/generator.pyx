@@ -987,8 +987,7 @@ cdef class Generator_System_iterator(object):
         """
         The Cython destructor.
         """
-        #del self.gsi_ptr
-        delete_gs_iterator(self.gsi_ptr)
+        del self.gsi_ptr
 
     def __next__(Generator_System_iterator self):
         r"""

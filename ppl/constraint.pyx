@@ -947,7 +947,7 @@ cdef class Constraint_System_iterator(object):
         """
         The Cython destructor.
         """
-        delete_cs_iterator(self.csi_ptr)
+        del self.csi_ptr
 
     def __next__(Constraint_System_iterator self):
         r"""

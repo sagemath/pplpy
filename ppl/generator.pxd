@@ -15,7 +15,7 @@ cdef class Generator_System(object):
 
 cdef class Generator_System_iterator(object):
     cdef Generator_System gs
-    cdef gs_iterator_ptr gsi_ptr
+    cdef PPL_gs_iterator *gsi_ptr
 
 cdef class Poly_Gen_Relation(object):
     cdef PPL_Poly_Gen_Relation *thisptr

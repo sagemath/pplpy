@@ -280,15 +280,4 @@ cdef extern from "ppl_shim.hh":
     PPL_Poly_Gen_Relation* new_relation_with(PPL_Polyhedron &p, PPL_Generator &g) except +ValueError
     PPL_Poly_Con_Relation* new_relation_with(PPL_Polyhedron &p, PPL_Constraint &c) except +ValueError
 
-    ctypedef void* gs_iterator_ptr
-    cdef void delete_gs_iterator(gs_iterator_ptr)
-
-    ctypedef void* cs_iterator_ptr
-    cdef void delete_cs_iterator(cs_iterator_ptr)
-
-    ctypedef void* mip_cs_iterator_ptr
-    cdef void delete_mip_cs_iterator(mip_cs_iterator_ptr mip_csi_ptr)
-
-
     cdef PPL_Constraint_System* mip_constraints(PPL_MIP_Problem &pb)
-

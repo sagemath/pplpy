@@ -623,7 +623,7 @@ cdef class MIP_Problem_constraints_iterator(object):
         """
         The Cython destructor.
         """
-        delete_mip_cs_iterator(self.mip_csi_ptr)
+        del self.mip_csi_ptr
 
     def __next__(Constraint_System_iterator self):
         r"""

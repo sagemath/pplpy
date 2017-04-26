@@ -7,4 +7,4 @@ cdef class MIP_Problem(object):
 
 cdef class MIP_Problem_constraints_iterator(object):
     cdef MIP_Problem pb
-    cdef mip_cs_iterator_ptr mip_csi_ptr
+    cdef PPL_mip_iterator *mip_csi_ptr

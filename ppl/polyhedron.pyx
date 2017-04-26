@@ -327,6 +327,7 @@ cdef class Polyhedron(object):
         try:
             sig_on()
             try:
+                # rel.thisptr = new PPL_Poly_Con_Relation(self.thisptr[0].relation_with(c.thisptr[0]))
                 rel.thisptr = new_relation_with(self.thisptr[0], c.thisptr[0])
             finally:
                 sig_off()
