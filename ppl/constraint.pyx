@@ -13,6 +13,7 @@
 from __future__ import absolute_import, print_function
 
 from .gmpy2_wrap cimport GMPy_MPZ_From_mpz
+from cython.operator cimport dereference as deref
 
 # PPL can use floating-point arithmetic to compute integers
 cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
@@ -976,7 +977,7 @@ cdef class Constraint_System_iterator(object):
         if (<PPL_cs_iterator>self.csi_ptr[0]) == (<Constraint_System>self.cs).thisptr[0].end():
             raise StopIteration
         cdef PPL_cs_iterator it_next = (<PPL_cs_iterator&>self.csi_ptr[0]).inc(1)
-        return _wrap_Constraint(it_next.deref())
+        return _wrap_Constraint(deref(it_next))
 
 cdef class Poly_Con_Relation(object):
     r"""
@@ -1040,7 +1041,7 @@ cdef class Poly_Con_Relation(object):
         """
         The Cython destructor.
         """
-        assert self.thisptr!=NULL, 'Do not construct Poly_Con_Relation objects manually!'
+        assert(self.thisptr!=NULL, 'Do not construct Poly_Con_Relation objects manually!')
         del self.thisptr
 
     def implies(self, Poly_Con_Relation y):

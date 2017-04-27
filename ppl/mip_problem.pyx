@@ -14,6 +14,7 @@ from __future__ import absolute_import, print_function
 
 from cysignals.signals cimport sig_on, sig_off
 from .gmpy2_wrap cimport GMPy_MPQ_From_mpz
+from cython.operator cimport dereference as deref
 
 # PPL can use floating-point arithmetic to compute integers
 cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
@@ -204,7 +205,7 @@ cdef class MIP_Problem(object):
         cdef PPL_mip_iterator* mip_it = new PPL_mip_iterator(self.thisptr[0].constraints_begin())
 
         while(not (mip_it[0] == self.thisptr[0].constraints_end())):
-            cs[0].insert(mip_it[0].deref())
+            cs[0].insert(deref(mip_it[0]))
             mip_it[0].inc(1)
         c.thisptr = cs
         del mip_it
@@ -652,4 +653,4 @@ cdef class MIP_Problem_constraints_iterator(object):
         """
         if (<PPL_mip_iterator>self.mip_csi_ptr[0]) == (<MIP_Problem>self.pb).thisptr[0].constraints_end():
             raise StopIteration
-        return _wrap_Constraint((<PPL_mip_iterator&>self.mip_csi_ptr[0]).inc(1).deref())
+        return _wrap_Constraint(deref((<PPL_mip_iterator&>self.mip_csi_ptr[0]).inc(1)))

@@ -13,6 +13,7 @@
 from __future__ import absolute_import, print_function
 
 from .gmpy2_wrap cimport GMPy_MPZ_From_mpz
+from cython.operator cimport dereference as deref
 
 # PPL can use floating-point arithmetic to compute integers
 cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
@@ -1010,7 +1011,7 @@ cdef class Generator_System_iterator(object):
         if (<PPL_gs_iterator>self.gsi_ptr[0]) == (<Generator_System>self.gs).thisptr[0].end():
             raise StopIteration
         cdef PPL_gs_iterator it_next = (<PPL_gs_iterator&>self.gsi_ptr[0]).inc(1)
-        return _wrap_Generator(it_next.deref())
+        return _wrap_Generator(deref(it_next))
 
 cdef PPL_GeneratorType_str(PPL_GeneratorType t):
     if t == LINE:
@@ -1085,7 +1086,7 @@ cdef class Poly_Gen_Relation(object):
         """
         The Cython destructor.
         """
-        assert self.thisptr!=NULL, 'Do not construct Poly_Gen_Relation objects manually!'
+        assert(self.thisptr!=NULL, 'Do not construct Poly_Gen_Relation objects manually!')
         del self.thisptr
 
     def implies(self, Poly_Gen_Relation y):
