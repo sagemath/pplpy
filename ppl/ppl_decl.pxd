@@ -109,7 +109,6 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         bint OK()
 
     cdef cppclass PPL_mip_iterator:
-        PPL_mip_iterator()
         PPL_mip_iterator(PPL_mip_iterator &mipi)
         PPL_Constraint& deref "operator*" ()
         PPL_mip_iterator inc "operator++" (int i)
@@ -279,5 +278,3 @@ cdef extern from "ppl.hh":
 cdef extern from "ppl_shim.hh":
     PPL_Poly_Gen_Relation* new_relation_with(PPL_Polyhedron &p, PPL_Generator &g) except +ValueError
     PPL_Poly_Con_Relation* new_relation_with(PPL_Polyhedron &p, PPL_Constraint &c) except +ValueError
-
-    cdef PPL_Constraint_System* mip_constraints(PPL_MIP_Problem &pb)

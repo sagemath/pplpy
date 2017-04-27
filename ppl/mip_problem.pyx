@@ -200,7 +200,14 @@ cdef class MIP_Problem(object):
         Constraint_System {-x0-x1+5>=0, 3*x0-18*x1+2>=0}
         """
         cdef Constraint_System c = Constraint_System(None)
-        c.thisptr = mip_constraints(self.thisptr[0])
+        cdef PPL_Constraint_System* cs = new PPL_Constraint_System()
+        cdef PPL_mip_iterator* mip_it = new PPL_mip_iterator(self.thisptr[0].constraints_begin())
+
+        while(not (mip_it[0] == self.thisptr[0].constraints_end())):
+            cs[0].insert(mip_it[0].deref())
+            mip_it[0].inc(1)
+        c.thisptr = cs
+        del mip_it
         return c
 
     def optimization_mode(self):
