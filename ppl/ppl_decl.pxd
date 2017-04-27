@@ -118,7 +118,6 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         PPL_gs_iterator()
         PPL_gs_iterator(PPL_gs_iterator &gsi)
         PPL_Generator& operator* ()
-        # PPL_gs_iterator& operator++ ()
         PPL_gs_iterator inc "operator++" (int i)
         cppbool operator==(PPL_gs_iterator& y)
 
@@ -126,7 +125,6 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         PPL_cs_iterator()
         PPL_cs_iterator(PPL_cs_iterator &csi)
         PPL_Constraint& operator* ()
-        # PPL_cs_iterator operator++ (int i)
         PPL_cs_iterator inc "operator++" (int i)
         cppbool operator==(PPL_cs_iterator& y)
 
