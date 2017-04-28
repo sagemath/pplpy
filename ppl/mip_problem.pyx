@@ -183,7 +183,7 @@ cdef class MIP_Problem(object):
         cdef PPL_mip_iterator *mip_csi_ptr = new PPL_mip_iterator(self.thisptr[0].constraints_begin())
         try:
             while mip_csi_ptr[0] != self.thisptr[0].constraints_end():
-                yield _wrap_Constraint(deref((<PPL_mip_iterator&>mip_csi_ptr[0]).inc(1)))
+                yield _wrap_Constraint(deref(mip_csi_ptr[0].inc(1)))
         finally:
             del mip_csi_ptr
 

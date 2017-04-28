@@ -851,7 +851,7 @@ cdef class Constraint_System(object):
         cdef PPL_cs_iterator *csi_ptr = new PPL_cs_iterator(self.thisptr[0].begin())
         try:
             while csi_ptr[0] != self.thisptr[0].end():
-                yield _wrap_Constraint(deref((<PPL_cs_iterator&>csi_ptr[0]).inc(1)))
+                yield _wrap_Constraint(deref(csi_ptr[0].inc(1)))
         finally:
             del csi_ptr
 

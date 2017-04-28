@@ -882,7 +882,7 @@ cdef class Generator_System(object):
         cdef PPL_gs_iterator *gsi_ptr = new PPL_gs_iterator(self.thisptr[0].begin())
         try:
             while gsi_ptr[0] != self.thisptr[0].end():
-                yield _wrap_Generator(deref((<PPL_gs_iterator&>gsi_ptr[0]).inc(1)))
+                yield _wrap_Generator(deref(gsi_ptr[0].inc(1)))
         finally:
             del gsi_ptr
 
