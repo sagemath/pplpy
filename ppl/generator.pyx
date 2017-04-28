@@ -855,7 +855,7 @@ cdef class Generator_System(object):
     def __iter__(self):
         """
         Iterate through the generators of the system.
-
+        Wrap PPL's ``Generator_System::const_iterator`` class.
         Examples:
 
         >>> from ppl import Generator_System, Variable, point
@@ -864,8 +864,27 @@ cdef class Generator_System(object):
         >>> iter = gs.__iter__()
         >>> next(iter)
         point(3/1)
+        >>> next(iter)
+        Traceback (most recent call last):
+        ...
+        StopIteration
+        >>> x = Variable(0)
+        >>> y = Variable(1)
+        >>> gs = Generator_System( line(5*x-2*y) )
+        >>> gs.insert( ray(6*x-3*y) )
+        >>> gs.insert( point(2*x-7*y, 5) )
+        >>> gs.insert( closure_point(9*x-1*y, 2) )
+        >>> next(gs.__iter__())
+        line(5, -2)
+        >>> list(gs)
+        [line(5, -2), ray(2, -1), point(2/5, -7/5), closure_point(9/2, -1/2)]
         """
-        return Generator_System_iterator(self)
+        cdef PPL_gs_iterator *gsi_ptr = new PPL_gs_iterator(self.thisptr[0].begin())
+        try:
+            while gsi_ptr[0] != self.thisptr[0].end():
+                yield _wrap_Generator(deref((<PPL_gs_iterator&>gsi_ptr[0]).inc(1)))
+        finally:
+            del gsi_ptr
 
     def __getitem__(self, int k):
         """
@@ -946,72 +965,6 @@ cdef class Generator_System(object):
         Generator_System {point(3/1, 2/1), ray(1, 0)}
         """
         return (Generator_System, (tuple(self), ))
-
-####################################################
-### Generator_System_iterator ######################
-####################################################
-
-####################################################
-cdef class Generator_System_iterator(object):
-    """
-    Wrapper for PPL's ``Generator_System::const_iterator`` class.
-
-    Examples:
-
-    >>> from ppl import Generator_System, Variable, line, ray, point, closure_point
-    >>> from ppl.generator import Generator_System_iterator
-    >>> x = Variable(0)
-    >>> y = Variable(1)
-    >>> gs = Generator_System( line(5*x-2*y) )
-    >>> gs.insert( ray(6*x-3*y) )
-    >>> gs.insert( point(2*x-7*y, 5) )
-    >>> gs.insert( closure_point(9*x-1*y, 2) )
-    >>> next(Generator_System_iterator(gs))
-    line(5, -2)
-    >>> list(gs)
-    [line(5, -2), ray(2, -1), point(2/5, -7/5), closure_point(9/2, -1/2)]
-    """
-    def __cinit__(self, Generator_System gs):
-        r"""
-        The Cython constructor.
-
-        Tests:
-
-        >>> from ppl import Generator_System
-        >>> from ppl.generator import Generator_System_iterator
-        >>> iter = Generator_System_iterator(Generator_System())   # indirect doctest
-        """
-        self.gs = gs
-        self.gsi_ptr = new PPL_gs_iterator(gs.thisptr[0].begin())
-
-    def __dealloc__(self):
-        """
-        The Cython destructor.
-        """
-        del self.gsi_ptr
-
-    def __next__(Generator_System_iterator self):
-        r"""
-        The next iteration.
-
-        OUTPUT:
-
-        A :class:`Generator`.
-
-        Examples:
-
-        >>> from ppl import Generator_System, Variable, point
-        >>> from ppl.generator import Generator_System_iterator
-        >>> x = Variable(0)
-        >>> y = Variable(1)
-        >>> gs = Generator_System( point(5*x-2*y) )
-        >>> next(Generator_System_iterator(gs))
-        point(5/1, -2/1)
-        """
-        if self.gsi_ptr[0] == self.gs.thisptr[0].end():
-            raise StopIteration
-        cdef PPL_gs_iterator it_next = (<PPL_gs_iterator&>self.gsi_ptr[0]).inc(1)
-        return _wrap_Generator(deref(it_next))
 
 cdef PPL_GeneratorType_str(PPL_GeneratorType t):
     if t == LINE:

@@ -155,7 +155,7 @@ cdef class MIP_Problem(object):
     def __iter__(self):
         r"""
         Iterator through the constraints
-
+        Wrap PPL's ``MIP_Problem::const_iterator`` class.
         Tests:
 
         >>> from ppl import Variable, MIP_Problem
@@ -170,8 +170,22 @@ cdef class MIP_Problem(object):
         >>> for c in M: print(c)
         -x0-x1+5>=0
         3*x0-18*x1+2>=0
+        >>> M = MIP_Problem(1)
+        >>> M.add_constraint(x <= 5)
+        >>> it = M.__iter__()
+        >>> next(it)
+        -x0+5>=0
+        >>> next(it)
+        Traceback (most recent call last):
+        ...
+        StopIteration
         """
-        return MIP_Problem_constraints_iterator(self)
+        cdef PPL_mip_iterator *mip_csi_ptr = new PPL_mip_iterator(self.thisptr[0].constraints_begin())
+        try:
+            while mip_csi_ptr[0] != self.thisptr[0].constraints_end():
+                yield _wrap_Constraint(deref((<PPL_mip_iterator&>mip_csi_ptr[0]).inc(1)))
+        finally:
+            del mip_csi_ptr
 
     def constraints(self):
         r"""
@@ -356,7 +370,7 @@ cdef class MIP_Problem(object):
 
         Examples:
 
-        >>> from ppl import Variable, Constraint_System, MIP_Problem
+        >>> from ppl import Variable, MIP_Problem
         >>> x = Variable(0)
         >>> y = Variable(1)
         >>> m = MIP_Problem()
@@ -424,7 +438,7 @@ cdef class MIP_Problem(object):
 
         Examples:
 
-        >>> from ppl import Variable, Constraint_System, MIP_Problem
+        >>> from ppl import Variable, MIP_Problem
         >>> x = Variable(0)
         >>> y = Variable(1)
         >>> m = MIP_Problem()
@@ -481,7 +495,7 @@ cdef class MIP_Problem(object):
 
         Examples:
 
-        >>> from ppl import Variable, Constraint_System, MIP_Problem
+        >>> from ppl import Variable, MIP_Problem
         >>> x = Variable(0)
         >>> y = Variable(1)
         >>> m = MIP_Problem()
@@ -501,7 +515,7 @@ cdef class MIP_Problem(object):
 
         Examples:
 
-        >>> from ppl import Variable, Constraint_System, MIP_Problem, Generator
+        >>> from ppl import Variable, MIP_Problem, Generator
         >>> x = Variable(0)
         >>> y = Variable(1)
         >>> m = MIP_Problem()
@@ -538,7 +552,7 @@ cdef class MIP_Problem(object):
 
         Examples:
 
-        >>> from ppl import Variable, Constraint_System, MIP_Problem
+        >>> from ppl import Variable, MIP_Problem
         >>> x = Variable(0)
         >>> y = Variable(1)
         >>> m = MIP_Problem()
@@ -568,7 +582,7 @@ cdef class MIP_Problem(object):
 
         Examples:
 
-        >>> from ppl import Variable, Constraint_System, MIP_Problem
+        >>> from ppl import Variable, MIP_Problem
         >>> x = Variable(0)
         >>> y = Variable(1)
         >>> m = MIP_Problem()
@@ -608,49 +622,3 @@ cdef class MIP_Problem(object):
         True
         """
         return self.thisptr.OK()
-
-cdef class MIP_Problem_constraints_iterator(object):
-    """
-    Wrapper for PPL's ``Constraint_System::const_iterator`` class.
-    """
-    def __cinit__(self, MIP_Problem pb):
-        """
-        The Cython constructor.
-
-        See :class:`Constraint_System_iterator` for documentation.
-
-        Tests:
-
-        >>> from ppl import Constraint_System, Constraint_System_iterator
-        >>> iter = Constraint_System_iterator( Constraint_System() )   # indirect doctest
-        """
-        self.pb = pb
-        self.mip_csi_ptr = new PPL_mip_iterator(pb.thisptr[0].constraints_begin())
-
-    def __dealloc__(self):
-        """
-        The Cython destructor.
-        """
-        del self.mip_csi_ptr
-
-    def __next__(Constraint_System_iterator self):
-        r"""
-        The next iteration.
-
-        OUTPUT:
-
-        A :class:`Generator`.
-
-        Examples:
-
-        >>> from ppl import Constraint_System, Variable, Constraint_System_iterator
-        >>> x = Variable(0)
-        >>> cs = Constraint_System( 5*x > 2 )
-        >>> cs.insert( x <= -1)
-        >>> for cons in cs: print(cons)
-        5*x0-2>0
-        -x0-1>=0
-        """
-        if self.mip_csi_ptr[0] == self.pb.thisptr[0].constraints_end():
-            raise StopIteration
-        return _wrap_Constraint(deref((<PPL_mip_iterator&>self.mip_csi_ptr[0]).inc(1)))

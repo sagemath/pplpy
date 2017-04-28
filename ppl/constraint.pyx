@@ -815,7 +815,7 @@ cdef class Constraint_System(object):
     def __iter__(self):
         """
         Iterate through the constraints of the system.
-
+        Wrap PPL's ``Generator_System::const_iterator`` class.
         Examples:
 
         >>> from ppl import Variable, Constraint_System
@@ -826,8 +826,34 @@ cdef class Constraint_System(object):
         x0>0
         >>> list(cs)   # uses __iter__() internally
         [x0>0]
+        >>> x = Variable(0)
+        >>> y = Variable(1)
+        >>> cs = Constraint_System( 5*x < 2*y )
+        >>> cs.insert( 6*x-y == 0 )
+        >>> cs.insert( x >= 2*x-7*y )
+        >>> next(cs.__iter__())
+        -5*x0+2*x1>0
+        >>> list(cs)
+        [-5*x0+2*x1>0, 6*x0-x1==0, -x0+7*x1>=0]
+        >>> x = Variable(0)
+        >>> cs = Constraint_System( x > 0 )
+        >>> cs.insert ( 2*x <= -3)
+        >>> it = cs.__iter__()
+        >>> next(it)
+        x0>0
+        >>> next(it)
+        -2*x0-3>=0
+        >>> next(it)
+        Traceback (most recent call last):
+        ...
+        StopIteration
         """
-        return Constraint_System_iterator(self)
+        cdef PPL_cs_iterator *csi_ptr = new PPL_cs_iterator(self.thisptr[0].begin())
+        try:
+            while csi_ptr[0] != self.thisptr[0].end():
+                yield _wrap_Constraint(deref((<PPL_cs_iterator&>csi_ptr[0]).inc(1)))
+        finally:
+            del csi_ptr
 
     def __getitem__(self, int k):
         """
@@ -906,78 +932,6 @@ cdef class Constraint_System(object):
         Constraint_System {-3*x0-2*x1+2>0, -x0-1>0}
         """
         return (Constraint_System, (tuple(self), ))
-
-
-####################################################
-### Constraint_System_iterator #####################
-####################################################
-
-####################################################
-cdef class Constraint_System_iterator(object):
-    """
-    Wrapper for PPL's ``Constraint_System::const_iterator`` class.
-
-    Examples:
-
-        >>> from ppl import Constraint_System, Variable, Constraint_System_iterator
-        >>> x = Variable(0)
-        >>> y = Variable(1)
-        >>> cs = Constraint_System( 5*x < 2*y )
-        >>> cs.insert( 6*x-y == 0 )
-        >>> cs.insert( x >= 2*x-7*y )
-        >>> next(Constraint_System_iterator(cs))
-        -5*x0+2*x1>0
-        >>> list(cs)
-        [-5*x0+2*x1>0, 6*x0-x1==0, -x0+7*x1>=0]
-    """
-    def __cinit__(self, Constraint_System cs):
-        """
-        The Cython constructor.
-
-        See :class:`Constraint_System_iterator` for documentation.
-
-        Tests:
-
-        >>> from ppl import Constraint_System, Constraint_System_iterator
-        >>> iter = Constraint_System_iterator( Constraint_System() )   # indirect doctest
-        """
-        self.cs = cs
-        self.csi_ptr = new PPL_cs_iterator(cs.thisptr[0].begin())
-
-    def __dealloc__(self):
-        """
-        The Cython destructor.
-        """
-        del self.csi_ptr
-
-    def __next__(Constraint_System_iterator self):
-        r"""
-        The next iteration.
-
-        OUTPUT:
-
-        A :class:`Generator`.
-
-        Examples:
-
-        >>> from ppl import Constraint_System, Variable, Constraint_System_iterator
-        >>> x = Variable(0)
-        >>> cs = Constraint_System( x > 0 )
-        >>> cs.insert ( 2*x <= -3)
-        >>> it = iter(cs)
-        >>> next(it)
-        x0>0
-        >>> next(it)
-        -2*x0-3>=0
-        >>> next(it)
-        Traceback (most recent call last):
-        ...
-        StopIteration
-        """
-        if self.csi_ptr[0] == self.cs.thisptr[0].end():
-            raise StopIteration
-        cdef PPL_cs_iterator it_next = (<PPL_cs_iterator&>self.csi_ptr[0]).inc(1)
-        return _wrap_Constraint(deref(it_next))
 
 cdef class Poly_Con_Relation(object):
     r"""

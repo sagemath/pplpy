@@ -141,5 +141,4 @@ from .generator import (
 
 from .constraint import (
         Constraint, Constraint_System, Poly_Con_Relation,
-        Constraint_System_iterator, inequality,
-        equation, strict_inequality)
+        inequality, equation, strict_inequality)
