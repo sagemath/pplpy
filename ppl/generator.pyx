@@ -1008,7 +1008,7 @@ cdef class Generator_System_iterator(object):
         >>> next(Generator_System_iterator(gs))
         point(5/1, -2/1)
         """
-        if (<PPL_gs_iterator>self.gsi_ptr[0]) == (<Generator_System>self.gs).thisptr[0].end():
+        if self.gsi_ptr[0] == self.gs.thisptr[0].end():
             raise StopIteration
         cdef PPL_gs_iterator it_next = (<PPL_gs_iterator&>self.gsi_ptr[0]).inc(1)
         return _wrap_Generator(deref(it_next))

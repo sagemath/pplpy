@@ -974,7 +974,7 @@ cdef class Constraint_System_iterator(object):
         ...
         StopIteration
         """
-        if (<PPL_cs_iterator>self.csi_ptr[0]) == (<Constraint_System>self.cs).thisptr[0].end():
+        if self.csi_ptr[0] == self.cs.thisptr[0].end():
             raise StopIteration
         cdef PPL_cs_iterator it_next = (<PPL_cs_iterator&>self.csi_ptr[0]).inc(1)
         return _wrap_Constraint(deref(it_next))

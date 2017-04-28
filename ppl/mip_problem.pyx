@@ -204,7 +204,7 @@ cdef class MIP_Problem(object):
         cdef PPL_Constraint_System* cs = new PPL_Constraint_System()
         cdef PPL_mip_iterator* mip_it = new PPL_mip_iterator(self.thisptr[0].constraints_begin())
 
-        while(not (mip_it[0] == self.thisptr[0].constraints_end())):
+        while(mip_it[0] != self.thisptr[0].constraints_end()):
             cs[0].insert(deref(mip_it[0]))
             mip_it[0].inc(1)
         c.thisptr = cs
@@ -651,6 +651,6 @@ cdef class MIP_Problem_constraints_iterator(object):
         5*x0-2>0
         -x0-1>=0
         """
-        if (<PPL_mip_iterator>self.mip_csi_ptr[0]) == (<MIP_Problem>self.pb).thisptr[0].constraints_end():
+        if self.mip_csi_ptr[0] == self.pb.thisptr[0].constraints_end():
             raise StopIteration
         return _wrap_Constraint(deref((<PPL_mip_iterator&>self.mip_csi_ptr[0]).inc(1)))
