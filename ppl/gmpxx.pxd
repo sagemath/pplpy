@@ -13,5 +13,3 @@ cdef extern from "gmpxx.h":
         mpq_class()
         mpz_t get_num_mpz_t()
         mpz_t get_den_mpz_t()
-
-

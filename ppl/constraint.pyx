@@ -815,7 +815,6 @@ cdef class Constraint_System(object):
     def __iter__(self):
         """
         Iterate through the constraints of the system.
-        Wrap PPL's ``Generator_System::const_iterator`` class.
         Examples:
 
         >>> from ppl import Variable, Constraint_System

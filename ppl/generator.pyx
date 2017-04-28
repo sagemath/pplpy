@@ -855,7 +855,6 @@ cdef class Generator_System(object):
     def __iter__(self):
         """
         Iterate through the generators of the system.
-        Wrap PPL's ``Generator_System::const_iterator`` class.
         Examples:
 
         >>> from ppl import Generator_System, Variable, point

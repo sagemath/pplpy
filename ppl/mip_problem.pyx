@@ -155,7 +155,6 @@ cdef class MIP_Problem(object):
     def __iter__(self):
         r"""
         Iterator through the constraints
-        Wrap PPL's ``MIP_Problem::const_iterator`` class.
         Tests:
 
         >>> from ppl import Variable, MIP_Problem
@@ -218,7 +217,7 @@ cdef class MIP_Problem(object):
         cdef PPL_Constraint_System* cs = new PPL_Constraint_System()
         cdef PPL_mip_iterator* mip_it = new PPL_mip_iterator(self.thisptr[0].constraints_begin())
 
-        while(mip_it[0] != self.thisptr[0].constraints_end()):
+        while mip_it[0] != self.thisptr[0].constraints_end():
             cs[0].insert(deref(mip_it[0]))
             mip_it[0].inc(1)
         c.thisptr = cs

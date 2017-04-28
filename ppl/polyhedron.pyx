@@ -2222,4 +2222,3 @@ cdef class NNC_Polyhedron(Polyhedron):
             return (NNC_Polyhedron, (self.space_dimension(), 'universe'))
         else:
             return (NNC_Polyhedron, (self.generators(),))
-
