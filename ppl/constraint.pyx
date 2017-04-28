@@ -1041,7 +1041,7 @@ cdef class Poly_Con_Relation(object):
         """
         The Cython destructor.
         """
-        assert(self.thisptr!=NULL, 'Do not construct Poly_Con_Relation objects manually!')
+        assert self.thisptr!=NULL, 'Do not construct Poly_Con_Relation objects manually!'
         del self.thisptr
 
     def implies(self, Poly_Con_Relation y):
