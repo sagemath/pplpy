@@ -19,7 +19,7 @@ before_install:
 # command to install dependencies
 install: 
   - pip install Cython
-  - pip install git+https://github.com/aleaxit/gmpy --no-index --verbose
+  - pip install git+https://github.com/videlec/gmpy@setup --no-index --verbose
   - pip install cysignals
   - pip install . --verbose --no-index
 # command to run tests

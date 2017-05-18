@@ -6,7 +6,7 @@ import ppl
 
 extensions = [
     Extension("testpplpy2", ["testpplpy2.pyx"],
-        include_dirs=ppl.__path__,
+        include_dirs=ppl.__path__ + sys.path,
         libraries=['ppl'],
         language='c++'
         )

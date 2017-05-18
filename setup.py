@@ -2,7 +2,6 @@
 from setuptools import setup
 from distutils.command.build_ext import build_ext as _build_ext
 from distutils.cmd import Command
-from distutils.sysconfig import get_python_inc
 from setuptools.extension import Extension
 import sys
 import site
@@ -67,8 +66,8 @@ class TestCommand(Command):
 VERSION = open('version.txt').read()[:-1]
 
 extensions = [
-    Extension("ppl.gmpy2_wrap",
-        sources = ["ppl/gmpy2_wrap.pyx"],
+    Extension("ppl.utils",
+        sources = ["ppl/utils.pyx"],
         depends = ["ppl/*"]),
     Extension('ppl.linear_algebra',
         sources=['ppl/linear_algebra.pyx', 'ppl/ppl_shim.cc'],
@@ -102,10 +101,7 @@ setup(
     package_dir={'ppl': 'ppl'},
     package_data={'ppl': ['*.pxd', '*.h', '*.hh']},
     install_requires=['Cython', 'cysignals', 'gmpy2'],  # For pip install, pip can't read setup_requires
-    #TODO: the get_python_inc(prefix=site.USER_BASE) below is needed since the
-    # relevant -I option is not automatically added to the gcc command
-    # see discussion at https://github.com/aleaxit/gmpy/pull/130
-    include_dirs=['ppl', get_python_inc(prefix=site.USER_BASE)],
+    include_dirs=['ppl'] + sys.path,
     ext_modules=extensions,
     classifiers=[
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",

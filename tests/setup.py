@@ -6,7 +6,7 @@ import ppl
 
 extensions = [
     Extension("testpplpy", ["testpplpy.pyx"],
-        include_dirs=ppl.__path__,
+        include_dirs=ppl.__path__ + sys.path,
         )
 ]
 

@@ -1,5 +1,24 @@
 from libcpp cimport bool as cppbool
-from .gmpxx cimport *
+
+cdef extern from "gmp.h":
+    # gmp integer
+    ctypedef struct __mpz_struct:
+        pass
+    ctypedef __mpz_struct mpz_t[1]
+    ctypedef __mpz_struct *mpz_ptr
+    ctypedef const __mpz_struct *mpz_srcptr
+
+    void mpz_init(mpz_t)
+
+cdef extern from "gmpxx.h":
+    # gmp integer
+    cdef cppclass mpz_class:
+        mpz_class()
+        mpz_class(int i)
+        mpz_class(mpz_t z)
+        mpz_class(mpz_class)
+        mpz_t get_mpz_t()
+        mpz_class operator%(mpz_class, mpz_class)
 
 cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library::Generator":
     ctypedef enum PPL_GeneratorType "Parma_Polyhedra_Library::Generator::Type":
