@@ -11,7 +11,7 @@ cdef extern from "gmp.h":
     void mpq_set_num (mpq_t rational, mpz_t numerator)
     void mpq_set_den (mpq_t rational, mpz_t denominator)
 
-cdef extern from "gmpy2.h":
+cdef extern from "gmpy2/gmpy2.h":
     cdef (PyObject *)GMPy_MPZ_New(void *)
     cdef (PyObject *)GMPy_MPQ_New(void *)
     cdef int import_gmpy2()
