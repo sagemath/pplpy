@@ -78,6 +78,7 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         PPL_Linear_Expression(PPL_Coefficient n)
         PPL_Linear_Expression(PPL_Variable v)
         PPL_dimension_type space_dimension()
+        void set_space_dimension(PPL_dimension_type d)
         PPL_Coefficient coefficient(PPL_Variable v)
         PPL_Coefficient inhomogeneous_term()
         bint is_zero()
@@ -113,6 +114,7 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
     cdef cppclass PPL_Generator:
         PPL_Generator(PPL_Generator &g)
         PPL_dimension_type space_dimension()
+        void set_space_dimension(PPL_dimension_type n)
         PPL_GeneratorType type()
         bint is_line()
         bint is_ray()

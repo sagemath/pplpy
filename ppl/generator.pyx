@@ -336,6 +336,27 @@ cdef class Generator(object):
         """
         return self.thisptr.space_dimension()
 
+    def set_space_dimension(self, size_t n):
+        r"""
+        Set the dimension of this generator to ``n``
+
+        Examples:
+
+        >>> import ppl
+        >>> p = ppl.point()
+        >>> p
+        point()
+        >>> p.set_space_dimension(5)
+        >>> p
+        point(0/1, 0/1, 0/1, 0/1, 0/1)
+
+        >>> p = ppl.point(1 * ppl.Variable(0) + 2 * ppl.Variable(1) + 3 * ppl.Variable(2))
+        >>> p.set_space_dimension(2)
+        >>> p
+        point(1/1, 2/1)
+        """
+        self.thisptr.set_space_dimension(n)
+
     def type(self):
         r"""
         Return the generator type of ``self``.

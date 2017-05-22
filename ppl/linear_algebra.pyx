@@ -612,6 +612,27 @@ cdef class Linear_Expression(object):
         """
         return self.thisptr.space_dimension()
 
+    def set_space_dimension(self, size_t n):
+        r"""
+        Set the dimension of the ambient space to ``n``
+
+        Examples:
+
+        >>> import ppl
+        >>> L = ppl.Variable(0) + ppl.Variable(3)
+        >>> L.space_dimension()
+        4
+        >>> L.set_space_dimension(6)
+        >>> L.space_dimension()
+        6
+
+        >>> L = ppl.Variable(5) - ppl.Variable(2)
+        >>> L.set_space_dimension(3)
+        >>> L
+        -x2
+        """
+        self.thisptr.set_space_dimension(n)
+
     def coefficient(self, Variable v):
         """
         Return the coefficient of the variable ``v``.
