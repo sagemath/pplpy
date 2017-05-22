@@ -13,7 +13,7 @@
 from __future__ import absolute_import, print_function
 
 from cysignals.signals cimport sig_on, sig_off
-from .gmpy2_wrap cimport GMPy_MPZ_From_mpz
+from gmpy2 cimport GMPy_MPZ_From_mpz, import_gmpy2
 from cpython.object cimport Py_LT, Py_LE, Py_EQ, Py_NE, Py_GT, Py_GE
 
 # PPL can use floating-point arithmetic to compute integers
@@ -21,11 +21,13 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
     cdef void set_rounding_for_PPL()
     cdef void restore_pre_PPL_rounding()
 
+# initialize gmpy2 C API
+import_gmpy2()
+
 # but with PPL's rounding the gsl will be very unhappy; must turn off!
 restore_pre_PPL_rounding()
 
 from .generator import point
-
 ####################################################
 ################# Polyhedron #######################
 ####################################################
@@ -1612,7 +1614,7 @@ cdef class Polyhedron(object):
         r"""
         Assign to ``self`` the concatenation of ``self`` and ``y``.
 
-        This function returns the Cartiesian product of ``self`` and
+        This functions returns the Cartiesian product of ``self`` and
         ``y``.
 
         Viewing a polyhedron as a set of tuples (its points), it is
@@ -1852,17 +1854,17 @@ cdef class Polyhedron(object):
         """
         cdef result
         sig_on()
-        if op == Py_LT:
+        if op==0:      # <   0
             result = rhs.strictly_contains(lhs)
-        elif op == Py_LE:
+        elif op==1:    # <=  1
             result = rhs.contains(lhs)
-        elif op == Py_EQ:
+        elif op==2:    # ==  2
             result = (lhs.thisptr[0] == rhs.thisptr[0])
-        elif op == Py_GT:
+        elif op==4:    # >   4
             result = lhs.strictly_contains(rhs)
-        elif op == Py_GE:
+        elif op==5:    # >=  5
             result = lhs.contains(rhs)
-        elif op == Py_NE:
+        elif op==3:    # !=  3
             result = (lhs.thisptr[0] != rhs.thisptr[0])
         else:
             raise RuntimeError  # unreachable

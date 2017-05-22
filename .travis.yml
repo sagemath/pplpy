@@ -17,11 +17,11 @@ before_install:
   - sudo apt-get install libmpfr-dev
   - sudo apt-get install libmpc-dev
 # command to install dependencies
-install: 
+install:
   - pip install Cython
-  - pip install git+https://github.com/aleaxit/gmpy
+  - pip install git+https://github.com/videlec/gmpy@setup --no-index --verbose
   - pip install cysignals
-  - pip install .
+  - pip install . --verbose --no-index
 # command to run tests
 script:
   - cd tests

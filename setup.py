@@ -4,14 +4,7 @@ from distutils.command.build_ext import build_ext as _build_ext
 from distutils.cmd import Command
 from setuptools.extension import Extension
 import sys
-
-def get_gmpy2_path():
-    import os
-    try:
-        import gmpy2
-        return os.path.join(os.path.split(gmpy2.__file__)[0], 'gmpy2')
-    except ImportError:
-        raise RuntimeError("gmpy2 should be installed first")
+import site
 
 # Adapted from Cython's new_build_ext
 class build_ext(_build_ext):
@@ -73,8 +66,8 @@ class TestCommand(Command):
 VERSION = open('version.txt').read()[:-1]
 
 extensions = [
-    Extension("ppl.gmpy2_wrap",
-        sources = ["ppl/gmpy2_wrap.pyx"],
+    Extension("ppl.utils",
+        sources = ["ppl/utils.pyx"],
         depends = ["ppl/*"]),
     Extension('ppl.linear_algebra',
         sources=['ppl/linear_algebra.pyx', 'ppl/ppl_shim.cc'],
@@ -108,8 +101,7 @@ setup(
     package_dir={'ppl': 'ppl'},
     package_data={'ppl': ['*.pxd', '*.h', '*.hh']},
     install_requires=['Cython', 'cysignals', 'gmpy2'],  # For pip install, pip can't read setup_requires
-    #TODO Remove get_gmpy2_path as soon as we have a better solution
-    include_dirs=['ppl', get_gmpy2_path()],
+    include_dirs=['ppl'] + sys.path,
     ext_modules=extensions,
     classifiers=[
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",

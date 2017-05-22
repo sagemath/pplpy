@@ -15,13 +15,18 @@ from __future__ import absolute_import, print_function
 
 from cpython.int cimport PyInt_CheckExact
 from cpython.long cimport PyLong_CheckExact
+from gmpy2 cimport import_gmpy2, GMPy_MPZ_From_mpz
 from .constraint cimport Constraint_System, _make_Constraint_from_richcmp
-from .gmpy2_wrap cimport GMPy_MPZ_From_mpz, mpz_set_pylong, mpz_init
+from .utils cimport mpz_set_pylong
+from .ppl_decl cimport mpz_t, mpz_init, mpz_class
 
 # TODO: interruption buisness. This is internal to Sage. Though by default
 # we could map sig_on/sig_off to a no-op
 # how can these be changed at Python launched time? -> function pointers!
 #include 'sage/ext/interrupt.pxi'
+
+# initialize gmpy2 C API
+import_gmpy2()
 
 
 ####################################################

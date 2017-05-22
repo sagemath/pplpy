@@ -13,13 +13,16 @@
 from __future__ import absolute_import, print_function
 
 from cysignals.signals cimport sig_on, sig_off
-from .gmpy2_wrap cimport GMPy_MPQ_From_mpz
+from gmpy2 cimport import_gmpy2, GMPy_MPQ_From_mpz
 from cython.operator cimport dereference as deref
 
 # PPL can use floating-point arithmetic to compute integers
 cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
     cdef void set_rounding_for_PPL()
     cdef void restore_pre_PPL_rounding()
+
+# initialize gmpy2 C API
+import_gmpy2()
 
 # but with PPL's rounding the gsl will be very unhappy; must turn off!
 restore_pre_PPL_rounding()
