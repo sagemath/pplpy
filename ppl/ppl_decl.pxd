@@ -234,6 +234,8 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         void add_space_dimensions_and_project(PPL_dimension_type m) except +ValueError
         void concatenate_assign(PPL_Polyhedron &y) except +ValueError
         void remove_higher_space_dimensions(PPL_dimension_type new_dimension) except +ValueError
+        void affine_image(const PPL_Variable, const PPL_Linear_Expression& expr) except +ValueError
+        void affine_preimage(const PPL_Variable, const PPL_Linear_Expression& expr) except +ValueError
         void ascii_dump()
         int hash_code()
         PPL_dimension_type max_space_dimension()

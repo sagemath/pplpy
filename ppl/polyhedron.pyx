@@ -1718,6 +1718,78 @@ cdef class Polyhedron(object):
         finally:
             sig_off()
 
+    def affine_image(self, Variable v, Linear_Expression le):
+        r"""
+        Set this polyhedron to the image of the map `v -> le`
+
+        INPUT:
+
+        - ``v`` -- a variable
+
+        - ``le`` -- a linear expression
+
+        Examples:
+
+        >>> import ppl
+        >>> x = ppl.Variable(0)
+        >>> y = ppl.Variable(1)
+        >>> gs0 = ppl.Generator_System()
+        >>> gs0.insert(ppl.point())
+        >>> gs0.insert(ppl.point(x))
+        >>> gs0.insert(ppl.point(y))
+        >>> gs0.insert(ppl.point(x+y))
+        >>> p0 = ppl.C_Polyhedron(gs0)
+        >>> gs1 = ppl.Generator_System()
+        >>> gs1.insert(ppl.point())
+        >>> gs1.insert(ppl.point(x))
+        >>> gs1.insert(ppl.point(x+y))
+        >>> gs1.insert(ppl.point(2*x+y))
+        >>> p1 = ppl.C_Polyhedron(gs1)
+
+        >>> p0 == p1
+        False
+        >>> p0.affine_image(x, x+y)
+        >>> p0 == p1
+        True
+        """
+        self.thisptr.affine_image(v.thisptr[0], le.thisptr[0])
+
+    def affine_preimage(self, Variable v, Linear_Expression le):
+        r"""
+        Set this polyhedron to the preimage of the map `v -> le`
+
+        INPUT:
+
+        - ``v`` -- a variable
+
+        - ``le`` -- a linear expression
+
+        Examples:
+
+        >>> import ppl
+        >>> x = ppl.Variable(0)
+        >>> y = ppl.Variable(1)
+        >>> gs0 = ppl.Generator_System()
+        >>> gs0.insert(ppl.point())
+        >>> gs0.insert(ppl.point(x))
+        >>> gs0.insert(ppl.point(y))
+        >>> gs0.insert(ppl.point(x+y))
+        >>> p0 = ppl.C_Polyhedron(gs0)
+        >>> gs1 = ppl.Generator_System()
+        >>> gs1.insert(ppl.point())
+        >>> gs1.insert(ppl.point(x))
+        >>> gs1.insert(ppl.point(x+y))
+        >>> gs1.insert(ppl.point(2*x+y))
+        >>> p1 = ppl.C_Polyhedron(gs1)
+
+        >>> p0 == p1
+        False
+        >>> p1.affine_preimage(x, x+y)
+        >>> p0 == p1
+        True
+        """
+        self.thisptr.affine_preimage(v.thisptr[0], le.thisptr[0])
+
     def ascii_dump(self):
         r"""
         Write an ASCII dump to stderr.
