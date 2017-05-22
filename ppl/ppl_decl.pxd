@@ -20,6 +20,7 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
     ctypedef size_t PPL_dimension_type  "Parma_Polyhedra_Library::dimension_type"
     ctypedef mpz_class PPL_Coefficient  "Parma_Polyhedra_Library::Coefficient"
     cdef cppclass PPL_Variable          "Parma_Polyhedra_Library::Variable"
+    cdef cppclass PPL_Variables_Set     "Parma_Polyhedra_Library::Variables_Set"
     cdef cppclass PPL_Linear_Expression "Parma_Polyhedra_Library::Linear_Expression"
     cdef cppclass PPL_Generator         "Parma_Polyhedra_Library::Generator"
     cdef cppclass PPL_Generator_System  "Parma_Polyhedra_Library::Generator_System"
@@ -41,6 +42,16 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         PPL_dimension_type id()
         bint OK()
         PPL_dimension_type space_dimension()
+
+    cdef cppclass PPL_Variables_Set:
+        PPL_Variables_Set()
+        PPL_Variables_Set(PPL_Variable v)
+        PPL_Variables_Set(PPL_Variable v, PPL_Variable w)
+        PPL_dimension_type space_dimension()
+        void insert(PPL_Variable v)
+        size_t size()
+        void ascii_dump()
+        bint OK()
 
     cdef cppclass PPL_Linear_Expression:
         PPL_Linear_Expression()
@@ -246,6 +257,7 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         void add_space_dimensions_and_embed(PPL_dimension_type m) except +ValueError
         void add_constraint(PPL_Constraint &c) except +ValueError
         void add_constraints(PPL_Constraint_System &cs) except +ValueError
+        void add_to_integer_space_dimensions(PPL_Variables_Set &i_vars) except +ValueError
         void set_objective_function(PPL_Linear_Expression &obj) except +ValueError
         void set_optimization_mode(PPL_Optimization_Mode mode)
         PPL_Optimization_Mode optimization_mode()

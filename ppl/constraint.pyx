@@ -14,6 +14,7 @@ from __future__ import absolute_import, print_function
 
 from .gmpy2_wrap cimport GMPy_MPZ_From_mpz
 from cython.operator cimport dereference as deref
+from cpython.object cimport Py_LT, Py_LE, Py_EQ, Py_NE, Py_GT, Py_GE
 
 # PPL can use floating-point arithmetic to compute integers
 cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
@@ -1165,17 +1166,17 @@ cdef class Poly_Con_Relation(object):
 cdef _make_Constraint_from_richcmp(lhs_, rhs_, op):
     cdef Linear_Expression lhs = Linear_Expression(lhs_)
     cdef Linear_Expression rhs = Linear_Expression(rhs_)
-    if op==0:      # <   0
+    if op == Py_LT:
         return _wrap_Constraint(lhs.thisptr[0] <  rhs.thisptr[0])
-    elif op==1:    # <=  1
+    elif op == Py_LE:
         return _wrap_Constraint(lhs.thisptr[0] <= rhs.thisptr[0])
-    elif op==2:    # ==  2
+    elif op == Py_EQ:
         return _wrap_Constraint(lhs.thisptr[0] == rhs.thisptr[0])
-    elif op==4:    # >   4
+    elif op == Py_GT:
         return _wrap_Constraint(lhs.thisptr[0] >  rhs.thisptr[0])
-    elif op==5:    # >=  5
+    elif op == Py_GE:
         return _wrap_Constraint(lhs.thisptr[0] >= rhs.thisptr[0])
-    elif op==3:    # !=  3
+    elif op == Py_NE:
         raise NotImplementedError
     else:
         assert(False)

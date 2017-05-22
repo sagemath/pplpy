@@ -113,7 +113,7 @@ cdef class MIP_Problem(object):
         >>> M = MIP_Problem(2, None, None)
         Traceback (most recent call last):
         ...
-        TypeError: Cannot convert NoneType to sage.libs.ppl.Constraint_System
+        TypeError: Cannot convert NoneType to ppl.Constraint_System
         >>> M = MIP_Problem(2, cs, 'hey')
         Traceback (most recent call last):
         ...
@@ -428,6 +428,33 @@ cdef class MIP_Problem(object):
         sig_on()
         try:
             self.thisptr.add_constraints(cs.thisptr[0])
+        finally:
+            sig_off()
+
+    def add_to_integer_space_dimensions(self, Variables_Set i_vars):
+        """
+        Sets the variables whose indexes are in set `i_vars` to be integer space dimensions.
+
+        EXAMPLES::
+
+            sage: from sage.libs.ppl import Variable, Variables_Set, Constraint_System, MIP_Problem
+            sage: x = Variable(0)
+            sage: y = Variable(1)
+            sage: cs = Constraint_System()
+            sage: cs.insert( x >= 0)
+            sage: cs.insert( y >= 0 )
+            sage: cs.insert( 3 * x + 5 * y <= 10 )
+            sage: m = MIP_Problem(2)
+            sage: m.set_objective_function(x + y)
+            sage: m.add_constraints(cs)
+            sage: i_vars = Variables_Set(x, y)
+            sage: m.add_to_integer_space_dimensions(i_vars)
+            sage: m.optimal_value()
+            3
+        """
+        sig_on()
+        try:
+            self.thisptr.add_to_integer_space_dimensions(i_vars.thisptr[0])
         finally:
             sig_off()
 

@@ -158,7 +158,7 @@ cdef class Variable(object):
         r"""
         Return the dimension of the vector space enclosing ``self``.
 
-        OUPUT:
+        OUTPUT:
 
         Integer. The returned value is ``self.id()+1``.
 
@@ -334,6 +334,148 @@ cdef class Variable(object):
         """
         return _make_Constraint_from_richcmp(self, other, op)
 
+####################################################
+### Variables_Set ##################################
+####################################################
+cdef class Variables_Set(object):
+    r"""
+    Wrapper for PPL's ``Variables_Set`` class.
+
+    A set of variables' indexes.
+
+    EXAMPLES:
+
+    Build the empty set of variable indexes::
+
+            >>> from ppl import Variable, Variables_Set
+            >>> Variables_Set()
+            Variables_Set of cardinality 0
+
+    Build the singleton set of indexes containing the index of the variable::
+
+            >>> v123 = Variable(123)
+            >>> Variables_Set(v123)
+            Variables_Set of cardinality 1
+
+    Build the set of variables' indexes in the range from one variable to
+    another variable::
+
+            >>> v127 = Variable(127)
+            >>> Variables_Set(v123,v127)
+            Variables_Set of cardinality 5
+    """
+    def __cinit__(self, *args):
+        """
+        The Cython constructor.
+
+        See :class:`Variables_Set` for documentation.
+
+        TESTS::
+
+            >>> from ppl import Variable, Variables_Set
+            >>> Variables_Set()
+            Variables_Set of cardinality 0
+        """
+        if len(args)==0:
+            self.thisptr = new PPL_Variables_Set()
+        elif len(args)==1:
+            v = <Variable?>args[0]
+            self.thisptr = new PPL_Variables_Set(v.thisptr[0])
+        elif len(args)==2:
+            v = <Variable?>args[0]
+            w = <Variable?>args[1]
+            self.thisptr = new PPL_Variables_Set(v.thisptr[0], w.thisptr[0])
+
+    def __dealloc__(self):
+        """
+        The Cython destructor
+        """
+        del self.thisptr
+
+    def OK(self):
+        """
+        Checks if all the invariants are satisfied.
+
+        OUTPUT:
+
+        Boolean.
+
+        EXAMPLES::
+
+            >>> from ppl import Variable, Variables_Set
+            >>> v123 = Variable(123)
+            >>> S = Variables_Set(v123)
+            >>> S.OK()
+            True
+        """
+        return self.thisptr.OK()
+
+    def space_dimension(self):
+        r"""
+        Returns the dimension of the smallest vector space enclosing all the variables whose indexes are in the set.
+
+        OUPUT:
+
+        Integer.
+
+        EXAMPLES::
+
+            >>> from ppl import Variable, Variables_Set
+            >>> v123 = Variable(123)
+            >>> S = Variables_Set(v123)
+            >>> S.space_dimension()
+            124
+        """
+        return self.thisptr.space_dimension()
+
+    def insert(self, Variable v):
+        r"""
+        Inserts the index of variable `v` into the set.
+
+        EXAMPLES::
+
+            >>> from ppl import Variable, Variables_Set
+            >>> S = Variables_Set()
+            >>> v123 = Variable(123)
+            >>> S.insert(v123)
+            >>> S.space_dimension()
+            124
+        """
+        self.thisptr.insert(v.thisptr[0])
+
+    def ascii_dump(self):
+        r"""
+        Write an ASCII dump to stderr.
+        
+        TODO: rewrite examples
+        EXAMPLES::
+            
+            >>> #sage_cmd  = 'from ppl import Variable, Variables_Set\n'
+            >>> #sage_cmd += 'v123 = Variable(123)\n'
+            >>> #sage_cmd += 'S = Variables_Set(v123)\n'
+            >>> #sage_cmd += 'S.ascii_dump()\n'
+            >>> #from sage.tests.cmdline import test_executable
+            >>> #(out, err, ret) = test_executable(['sage', '-c', sage_cmd], timeout=100)  # long time, indirect doctest
+            >>> #print err  # long time <BLANKLINE> variables( 1 ) 123
+        """
+        self.thisptr.ascii_dump()
+
+    def __repr__(self):
+        """
+        Return a string representation.
+
+        OUTPUT:
+
+        String.
+
+        EXAMPLES::
+
+            >>> from ppl import Variable, Variables_Set
+            >>> S = Variables_Set()
+            >>> S.__repr__()
+            'Variables_Set of cardinality 0'
+        """
+        return 'Variables_Set of cardinality {}'.format(self.thisptr.size())
 
 ####################################################
 ### Linear_Expression ##############################

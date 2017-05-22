@@ -14,6 +14,7 @@ from __future__ import absolute_import, print_function
 
 from cysignals.signals cimport sig_on, sig_off
 from .gmpy2_wrap cimport GMPy_MPZ_From_mpz
+from cpython.object cimport Py_LT, Py_LE, Py_EQ, Py_NE, Py_GT, Py_GE
 
 # PPL can use floating-point arithmetic to compute integers
 cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
@@ -24,6 +25,7 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
 restore_pre_PPL_rounding()
 
 from .generator import point
+
 ####################################################
 ################# Polyhedron #######################
 ####################################################
@@ -1610,7 +1612,7 @@ cdef class Polyhedron(object):
         r"""
         Assign to ``self`` the concatenation of ``self`` and ``y``.
 
-        This functions returns the Cartiesian product of ``self`` and
+        This function returns the Cartiesian product of ``self`` and
         ``y``.
 
         Viewing a polyhedron as a set of tuples (its points), it is
@@ -1850,17 +1852,17 @@ cdef class Polyhedron(object):
         """
         cdef result
         sig_on()
-        if op==0:      # <   0
+        if op == Py_LT:
             result = rhs.strictly_contains(lhs)
-        elif op==1:    # <=  1
+        elif op == Py_LE:
             result = rhs.contains(lhs)
-        elif op==2:    # ==  2
+        elif op == Py_EQ:
             result = (lhs.thisptr[0] == rhs.thisptr[0])
-        elif op==4:    # >   4
+        elif op == Py_GT:
             result = lhs.strictly_contains(rhs)
-        elif op==5:    # >=  5
+        elif op == Py_GE:
             result = lhs.contains(rhs)
-        elif op==3:    # !=  3
+        elif op == Py_NE:
             result = (lhs.thisptr[0] != rhs.thisptr[0])
         else:
             raise RuntimeError  # unreachable

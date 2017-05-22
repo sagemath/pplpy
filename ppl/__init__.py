@@ -128,7 +128,7 @@ AUTHORS:
 from __future__ import absolute_import
 
 from .linear_algebra import (
-        Variable, Linear_Expression,
+        Variable, Variables_Set, Linear_Expression,
         )
 
 from .mip_problem import MIP_Problem
