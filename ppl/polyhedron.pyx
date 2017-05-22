@@ -62,13 +62,31 @@ cdef class Polyhedron(object):
 
         Tests:
 
-        >>> from ppl import Polyhedron
-        >>> Polyhedron()
+        >>> import ppl
+        >>> ppl.Polyhedron()
         Traceback (most recent call last):
         ...
         NotImplementedError: The Polyhedron class is abstract, you must not instantiate it.
         """
         raise NotImplementedError('The Polyhedron class is abstract, you must not instantiate it.')
+
+    def __hash__(self):
+        r"""
+        Tests:
+
+        >>> import ppl
+        >>> hash(ppl.C_Polyhedron(ppl.point()))
+        Traceback (most recent call last):
+        ...
+        TypeError: Polyhedron not hashable
+
+        >>> cs = ppl.Constraint_System(ppl.Variable(0) > 0)
+        >>> hash(NNC_Polyhedron(cs))
+        Traceback (most recent call last):
+        ...
+        TypeError: Polyhedron not hashable
+        """
+        raise TypeError('Polyhedron not hashable')
 
     def __repr__(self):
         """
@@ -1881,16 +1899,16 @@ cdef class Polyhedron(object):
         sig_off()
         return result
 
-    def __hash__(self):
+    def hash_code(self):
         r"""
-        Hash value for polyhedra.
+        Return a hash code
 
         Tests:
 
         >>> from ppl import Constraint_System, Variable, C_Polyhedron
         >>> x = Variable(0)
         >>> p = C_Polyhedron( 5*x >= 3 )
-        >>> hash(p)
+        >>> p.hash_code()
         1
 
         >>> y = Variable(1)
@@ -1898,7 +1916,7 @@ cdef class Polyhedron(object):
         >>> cs.insert( x >= 0 )
         >>> cs.insert( y >= 0 )
         >>> p = C_Polyhedron(cs)
-        >>> hash(p)
+        >>> p.hash_code()
         2
         """
         return self.thisptr[0].hash_code()

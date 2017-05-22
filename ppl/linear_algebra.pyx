@@ -129,6 +129,18 @@ cdef class Variable(object):
         """
         del self.thisptr
 
+    def __hash__(self):
+        r"""
+        Tests:
+
+        >>> import ppl
+        >>> hash(ppl.Variable(12))
+        Traceback (most recent call last):
+        ...
+        TypeError: Variable unhashable
+        """
+        raise TypeError('Variable unhashable')
+
     def id(self):
         """
         Return the index of the Cartesian axis associated to the variable.
@@ -375,11 +387,11 @@ cdef class Variables_Set(object):
 
         See :class:`Variables_Set` for documentation.
 
-        TESTS::
+        Tests:
 
-            >>> from ppl import Variable, Variables_Set
-            >>> Variables_Set()
-            Variables_Set of cardinality 0
+        >>> from ppl import Variable, Variables_Set
+        >>> Variables_Set()
+        Variables_Set of cardinality 0
         """
         if len(args)==0:
             self.thisptr = new PPL_Variables_Set()
@@ -390,6 +402,18 @@ cdef class Variables_Set(object):
             v = <Variable?>args[0]
             w = <Variable?>args[1]
             self.thisptr = new PPL_Variables_Set(v.thisptr[0], w.thisptr[0])
+
+    def __hash__(self):
+        r"""
+        Tests:
+
+        >>> import ppl
+        >>> hash(ppl.Variables_Set())
+        Traceback (most recent call last):
+        ...
+        TypeError: Variables_Set unhashable
+        """
+        raise TypeError('Variables_Set unhashable')
 
     def __dealloc__(self):
         """
@@ -584,6 +608,18 @@ cdef class Linear_Expression(object):
         The Cython destructor.
         """
         del self.thisptr
+
+    def __hash__(self):
+        r"""
+        Tests:
+
+        >>> import ppl
+        >>> hash(ppl.Linear_Expression(10))
+        Traceback (most recent call last):
+        ...
+        TypeError: Linear_Expression unhashable
+        """
+        raise TypeError('Linear_Expression unhashable')
 
     def space_dimension(self):
         """

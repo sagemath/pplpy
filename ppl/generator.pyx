@@ -95,6 +95,18 @@ cdef class Generator(object):
         assert self.thisptr!=NULL, 'Do not construct Generators manually!'
         del self.thisptr
 
+    def __hash__(self):
+        r"""
+        Tests:
+
+        >>> import ppl
+        >>> hash(ppl.point())
+        Traceback (most recent call last):
+        ...
+        TypeError: Generator unhashable
+        """
+        raise TypeError('Generator unhashable')
+
     @classmethod
     def line(cls, expression):
         """
@@ -747,6 +759,18 @@ cdef class Generator_System(object):
         """
         del self.thisptr
 
+    def __hash__(self):
+        r"""
+        Tests:
+
+        >>> import ppl
+        >>> hash(ppl.Generator_System())
+        Traceback (most recent call last):
+        ...
+        TypeError: Generator_System unhashable
+        """
+        raise TypeError('Generator_System unhashable')
+
     def space_dimension(self):
         r"""
         Return the dimension of the vector space enclosing ``self``.
@@ -1064,6 +1088,18 @@ cdef class Poly_Gen_Relation(object):
         """
         assert self.thisptr!=NULL, 'Do not construct Poly_Gen_Relation objects manually!'
         del self.thisptr
+
+    def __hash__(self):
+        r"""
+        Tests:
+
+        >>> import ppl
+        >>> hash(ppl.Poly_Gen_Relation.nothing())
+        Traceback (most recent call last):
+        ...
+        TypeError: Poly_Gen_Relation unhashable
+        """
+        raise TypeError('Poly_Gen_Relation unhashable')
 
     def implies(self, Poly_Gen_Relation y):
         r"""

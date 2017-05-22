@@ -102,6 +102,18 @@ cdef class Constraint(object):
         assert self.thisptr!=NULL, 'Do not construct Constraints manually!'
         del self.thisptr
 
+    def __hash__(self):
+        r"""
+        Tests:
+
+        >>> import ppl
+        >>> hash(ppl.Variable(0) == 3)
+        Traceback (most recent call last):
+        ...
+        TypeError: Constraint unhashable
+        """
+        raise TypeError('Constraint unhashable')
+
     def __repr__(self):
         """
         Return a string representation of the constraint.
@@ -643,6 +655,18 @@ cdef class Constraint_System(object):
         """
         del self.thisptr
 
+    def __hash__(self):
+        r"""
+        Tests:
+
+        >>> import ppl
+        >>> hash(ppl.Constraint_System())
+        Traceback (most recent call last):
+        ...
+        TypeError: Constraint_System unhashable
+        """
+        raise TypeError('Constraint_System unhashable')
+
     def space_dimension(self):
         r"""
         Return the dimension of the vector space enclosing ``self``.
@@ -1000,6 +1024,18 @@ cdef class Poly_Con_Relation(object):
         """
         assert self.thisptr!=NULL, 'Do not construct Poly_Con_Relation objects manually!'
         del self.thisptr
+
+    def __hash__(self):
+        r"""
+        Tests:
+
+        >>> import ppl
+        >>> hash(ppl.Poly_Con_Relation.saturates())
+        Traceback (most recent call last):
+        ...
+        TypeError: Poly_Con_Relation unhashable
+        """
+        raise TypeError('Poly_Con_Relation unhashable')
 
     def implies(self, Poly_Con_Relation y):
         r"""
