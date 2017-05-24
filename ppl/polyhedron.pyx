@@ -1921,7 +1921,7 @@ cdef class Polyhedron(object):
         """
         return self.thisptr[0].hash_code()
 
-    def __richcmp__(Polyhedron lhs, Polyhedron rhs, op):
+    def __richcmp__(Polyhedron lhs, Polyhedron rhs, int op):
         r"""
         Comparison for polyhedra.
 
