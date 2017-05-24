@@ -59,7 +59,7 @@ example::
 Using from Cython
 -----------------
 
-All types from ppl are extension types and can be used with Cython. Each
+All Python classes from pplpy are extension types and can be used with Cython. Each
 extension type carries an attribute `thisptr` that holds a pointer to
 the corresponding C++ object from ppl.
 
