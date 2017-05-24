@@ -2,7 +2,7 @@ r"""
 Cython wrapper for the Parma Polyhedra Library (PPL)
 
 The Parma Polyhedra Library (PPL) is a library for polyhedral computations over
-,:math:`\mathbb{Q}`. This interface tries to reproduce the C++ API as faithfully as possible
+the rationals. This interface tries to reproduce the C++ API as faithfully as possible
 in Python. For example, the following C++ excerpt:
 
 .. code-block:: c++
@@ -122,8 +122,8 @@ AUTHORS:
 - Risan (2012-02-19): extension for MIP_Problem class (within Sage)
 - Vincent Delecroix (2016): convert Sage files into a standalone Python package
 - Vincent Klein (2017): improve doctest support and Python 3 compatibility
-    Split the main code into several files.
-    remove the _mutable_immutable classe.
+  Split the main code into several files.
+  Remove the _mutable_immutable classe.
 """
 from __future__ import absolute_import
 

@@ -14,15 +14,48 @@ The code source can be obtained from `github <https://github.com/videlec/pplpy>`
 
     $ git clone https://github.com/videlec/pplpy.git
 
-Module documentation
---------------------
+Introduction
+------------
 
 .. automodule:: ppl
+
+
+Module `ppl.constraint`
+-----------------------
+
+.. automodule:: ppl.constraint
     :members:
     :undoc-members:
     :show-inheritance:
 
-.. automodule:: ppl.wrappers
+Module `ppl.linear_algebra`
+---------------------------
+
+.. automodule:: ppl.linear_algebra
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Module `ppl.generator`
+----------------------
+
+.. automodule:: ppl.generator
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Module `ppl.polyhedron`
+-----------------------
+
+.. automodule:: ppl.polyhedron
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Module `ppl.mip_problem`
+------------------------
+
+.. automodule:: ppl.mip_problem
     :members:
     :undoc-members:
     :show-inheritance:
