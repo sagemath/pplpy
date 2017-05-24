@@ -789,6 +789,27 @@ cdef class Generator_System(object):
         """
         return self.thisptr.space_dimension()
 
+    def set_space_dimension(self, size_t n):
+        r"""
+        Set the dimension of the vector space enclosing ``self``
+
+        Examples:
+
+        >>> import ppl
+        >>> gs = ppl.Generator_System()
+        >>> gs.insert(ppl.point(ppl.Variable(0) + ppl.Variable(12)))
+        >>> gs.insert(ppl.point(ppl.Variable(1) + 2*ppl.Variable(3)))
+        >>> gs.space_dimension()
+        13
+        >>> gs.set_space_dimension(25)
+        >>> gs.space_dimension()
+        25
+        >>> gs.set_space_dimension(3)
+        >>> gs.space_dimension()
+        3
+        """
+        self.thisptr.set_space_dimension(n)
+
     def clear(self):
         r"""
         Removes all generators from the generator system and sets its

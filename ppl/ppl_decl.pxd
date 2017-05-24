@@ -132,6 +132,7 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         PPL_Generator_System(PPL_Generator &g)
         PPL_Generator_System(PPL_Generator_System &gs)
         PPL_dimension_type space_dimension()
+        void set_space_dimension(PPL_dimension_type space_dim)
         PPL_gs_iterator begin()
         PPL_gs_iterator end()
         void clear()
