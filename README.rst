@@ -27,6 +27,20 @@ The names of objects and methods are the same as in the library:
     >>> poly.minimized_generators()
     Generator_System {point(1/1, 0/1, 0/1), point(0/1, 1/1, 0/1), point(0/1, 0/1, 1/1)}
 
+The available objects and functions from the `ppl` Python module are:
+
+- `Variable`, `Variables_Set`, `Linear_Expression` (defined in `ppl.linear_algebra`)
+
+- `MIP_Problem` (defined in `ppl.mip_problem`)
+
+- `C_Polyhedron`, `NNC_Polyhedron` (defined in `ppl.polyhedron`)
+
+- `Generator`, `Generator_System`, `Poly_Gen_Relation`, `point`,
+  `closure_point`, `ray`, `line` (defined in `ppl.generator`)
+
+- `Constraint`, `Constraint_System`, `Poly_Con_Relation`,
+  `inequality`, `equation`, `strict_inequality` (defined in `ppl.constraint`)
+
 Installation
 ------------
 
@@ -45,10 +59,11 @@ example::
 Using from Cython
 -----------------
 
-TODO
+All types from ppl are extension types and can be used with Cython. Each
+extension type carries an attribute `thisptr` that holds a pointer to
+the corresponding C++ object from ppl.
 
-- Needs explanation
-- link to examples
+A complete example is provided with the files `tests/testpplpy.pyx` and `tests/setup.py`.
 
 Source
 ------
