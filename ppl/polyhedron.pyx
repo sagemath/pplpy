@@ -62,8 +62,8 @@ cdef class Polyhedron(object):
 
         Tests:
 
-        >>> import ppl
-        >>> ppl.Polyhedron()
+        >>> from ppl.polyhedron import Polyhedron
+        >>> Polyhedron()
         Traceback (most recent call last):
         ...
         NotImplementedError: The Polyhedron class is abstract, you must not instantiate it.

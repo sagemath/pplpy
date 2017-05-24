@@ -133,7 +133,7 @@ from .linear_algebra import (
 
 from .mip_problem import MIP_Problem
 
-from .polyhedron import Polyhedron, C_Polyhedron, NNC_Polyhedron
+from .polyhedron import C_Polyhedron, NNC_Polyhedron
 
 from .generator import (
         Generator, Generator_System, Poly_Gen_Relation,
