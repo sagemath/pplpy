@@ -15,7 +15,8 @@ from __future__ import absolute_import, print_function
 
 from cpython.int cimport PyInt_CheckExact
 from cpython.long cimport PyLong_CheckExact
-from gmpy2 cimport import_gmpy2, GMPy_MPZ_From_mpz
+from cpython.object cimport PyObject
+from gmpy2 cimport import_gmpy2, MPZ_Object, MPZ, GMPy_MPZ_From_mpz, MPZ_Check
 from .constraint cimport Constraint_System, _make_Constraint_from_richcmp
 from .utils cimport mpz_set_pylong
 from .ppl_decl cimport mpz_t, mpz_init, mpz_class
@@ -55,6 +56,8 @@ cdef PPL_Coefficient PPL_Coefficient_from_pyobject(c):
         return PPL_Coefficient(coeff)
     elif PyInt_CheckExact(c):
         return PPL_Coefficient(<long> c)
+    elif MPZ_Check(<PyObject *> c):
+        return PPL_Coefficient(MPZ(<MPZ_Object*> c))
     else:
         try:
             return PPL_Coefficient_from_pyobject(c.__int__())
@@ -227,8 +230,14 @@ cdef class Variable(object):
         x0+15
         >>> 15 + y
         x1+15
+
+        >>> from gmpy2 import mpz
+        >>> x + mpz(3)
+        x0+3
+        >>> mpz(-5) + y
+        x1-5
         """
-        return Linear_Expression(self)+Linear_Expression(other)
+        return Linear_Expression(self) + Linear_Expression(other)
 
     def __sub__(self, other):
         r"""
@@ -564,6 +573,12 @@ cdef class Linear_Expression(object):
     mpz(1)
     >>> expr.coefficient( Variable(124) )
     mpz(0)
+
+    >>> from gmpy2 import mpz
+    >>> Linear_Expression(mpz(3))
+    3
+    >>> Linear_Expression([mpz(5), mpz(2)], mpz(-2))
+    5*x0+2*x1-2
     """
     def __cinit__(self, *args):
         """
@@ -878,11 +893,25 @@ cdef class Linear_Expression(object):
         >>> from ppl import Linear_Expression, Variable
         >>> x = Variable(0)
         >>> y = Variable(1)
-        >>> 9+x+y+(1+x)+y+y
+        >>> 9 + x + y + (1 + x) + y + y
         2*x0+3*x1+10
+
+        >>> from gmpy2 import mpz
+        >>> mpz(3) + x + mpz(5) + y + mpz(7)
+        x0+x1+15
         """
-        cdef Linear_Expression lhs = Linear_Expression(self)
-        cdef Linear_Expression rhs = Linear_Expression(other)
+        cdef Linear_Expression lhs, rhs
+
+        if isinstance(self, Linear_Expression):
+            lhs = <Linear_Expression> self
+        else:
+            lhs = Linear_Expression(self)
+
+        if isinstance(other, Linear_Expression):
+            rhs = <Linear_Expression> other
+        else:
+            rhs = Linear_Expression(other)
+
         cdef Linear_Expression result = Linear_Expression()
         result.thisptr[0] = lhs.thisptr[0] + rhs.thisptr[0]
         return result
@@ -910,9 +939,23 @@ cdef class Linear_Expression(object):
         >>> y = Variable(1)
         >>> 9-x-y-(1-x)-y-y
         -3*x1+8
+
+        >>> from gmpy2 import mpz
+        >>> mpz(5)-x-(mpz(3)-y)-x-mpz(7)
+        -2*x0+x1-5
         """
-        cdef Linear_Expression lhs = Linear_Expression(self)
-        cdef Linear_Expression rhs = Linear_Expression(other)
+        cdef Linear_Expression lhs, rhs
+
+        if isinstance(self, Linear_Expression):
+            lhs = <Linear_Expression> self
+        else:
+            lhs = Linear_Expression(self)
+
+        if isinstance(other, Linear_Expression):
+            rhs = <Linear_Expression> other
+        else:
+            rhs = Linear_Expression(other)
+
         cdef Linear_Expression result = Linear_Expression()
         result.thisptr[0] = lhs.thisptr[0] - rhs.thisptr[0]
         return result
@@ -944,6 +987,10 @@ cdef class Linear_Expression(object):
         8*x1
         >>> 2**128 * x
         340282366920938463463374607431768211456*x0
+
+        >>> from gmpy2 import mpz
+        >>> mpz(3) * x * mpz(5)
+        15*x0
         """
         cdef Linear_Expression e
         cdef c
