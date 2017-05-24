@@ -53,11 +53,11 @@ class TestCommand(Command):
                 raise SystemExit("Doctest failures")
 
             if subprocess.call([sys.executable, 'setup.py', 'build_ext', '--inplace']) or \
-                    subprocess.call([sys.executable, '-c', "import testpplpy; testpplpy.test()"]):
+                    subprocess.call([sys.executable, '-c', "import testpplpy; testpplpy.test(); testpplpy.example()"]):
                 raise SystemExit("Cython test 1 failure")
 
             if subprocess.call([sys.executable, 'setup2.py', 'build_ext', '--inplace']) or \
-                    subprocess.call([sys.executable, '-c', "import testpplpy2; testpplpy2.test()"]):
+                    subprocess.call([sys.executable, '-c', "import testpplpy2; testpplpy2.test(); testpplpy2.example()"]):
                 raise SystemExit("Cython test 2 failure")
         finally:
             os.chdir(old_path)

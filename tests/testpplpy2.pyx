@@ -11,6 +11,7 @@ ppl.mip_problem
 from ppl.linear_algebra cimport Variable
 from ppl.constraint cimport Constraint_System
 from ppl.mip_problem cimport MIP_Problem
+from ppl.polyhedron cimport C_Polyhedron
 
 def test():
     x = Variable(0)
@@ -27,4 +28,20 @@ def test():
 
     print("-"*80)
     print("Cython test 2 OK")
+    print("-"*80)
+
+def example():
+    "Cython version of the example from the README"
+    cdef Variable x = Variable(0)
+    cdef Variable y = Variable(1)
+    cdef Variable z = Variable(2)
+    cdef Constraint_System cs = Constraint_System()
+    cs.insert(x >= 0)
+    cs.insert(y >= 0)
+    cs.insert(x + y + z == 1)
+    cdef C_Polyhedron poly = C_Polyhedron(cs)
+    print(poly.minimized_generators())
+    print('dim = %lu' % poly.thisptr.space_dimension())
+    print("-"*80)
+    print("Cython example 2 OK")
     print("-"*80)
