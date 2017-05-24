@@ -795,7 +795,7 @@ cdef class Polyhedron(object):
         sup_d 3
         sup_n 10
 
-        Unbounded case::
+        Unbounded case:
 
         >>> cs = Constraint_System()
         >>> cs.insert(x > 0)
