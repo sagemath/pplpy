@@ -4,12 +4,7 @@ from Cython.Build import cythonize
 import ppl
 
 extensions = [
-    Extension("testpplpy", ["testpplpy.pyx"],
-        include_dirs=ppl.__path__,
-        )
+    Extension("testpplpy", ["testpplpy.pyx"], include_dirs=ppl.__path__)
 ]
 
-setup(
-    name="test pplpy",
-    ext_modules=cythonize(extensions)
-)
+setup(ext_modules=cythonize(extensions))

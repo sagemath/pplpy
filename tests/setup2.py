@@ -11,7 +11,4 @@ extensions = [
         )
 ]
 
-setup(
-    name="test pplpy2",
-    ext_modules=cythonize(extensions)
-)
+setup(ext_modules=cythonize(extensions))
