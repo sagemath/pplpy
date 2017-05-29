@@ -402,12 +402,12 @@ cdef class Variables_Set(object):
         >>> Variables_Set()
         Variables_Set of cardinality 0
         """
-        if len(args)==0:
+        if len(args) == 0:
             self.thisptr = new PPL_Variables_Set()
-        elif len(args)==1:
+        elif len(args) == 1:
             v = <Variable?>args[0]
             self.thisptr = new PPL_Variables_Set(v.thisptr[0])
-        elif len(args)==2:
+        elif len(args) == 2:
             v = <Variable?>args[0]
             w = <Variable?>args[1]
             self.thisptr = new PPL_Variables_Set(v.thisptr[0], w.thisptr[0])
@@ -484,17 +484,22 @@ cdef class Variables_Set(object):
     def ascii_dump(self):
         r"""
         Write an ASCII dump to stderr.
-        
+
         TODO: rewrite examples
         EXAMPLES::
-            
-            >>> #sage_cmd  = 'from ppl import Variable, Variables_Set\n'
-            >>> #sage_cmd += 'v123 = Variable(123)\n'
-            >>> #sage_cmd += 'S = Variables_Set(v123)\n'
-            >>> #sage_cmd += 'S.ascii_dump()\n'
-            >>> #from sage.tests.cmdline import test_executable
-            >>> #(out, err, ret) = test_executable(['sage', '-c', sage_cmd], timeout=100)  # long time, indirect doctest
-            >>> #print err  # long time <BLANKLINE> variables( 1 ) 123
+
+            >>> cmd  = 'from ppl import Variable, Variables_Set\n'
+            >>> cmd += 'v123 = Variable(123)\n'
+            >>> cmd += 'S = Variables_Set(v123)\n'
+            >>> cmd += 'S.ascii_dump()\n'
+            >>> import subprocess
+            >>> import sys
+            >>> proc = subprocess.Popen([sys.executable, '-c', cmd], stderr=subprocess.PIPE)
+            >>> out, err = proc.communicate()
+            >>> print(str(err.decode('ascii')))
+            <BLANKLINE>
+            variables( 1 )
+            123 
         """
         self.thisptr.ascii_dump()
 
@@ -593,7 +598,7 @@ cdef class Linear_Expression(object):
         10
         """
         cdef long i
-        if len(args)==2:
+        if len(args) == 2:
             a = args[0]
             b = args[1]
             ex = Linear_Expression(0)
@@ -845,19 +850,19 @@ cdef class Linear_Expression(object):
         for i in range(0,self.space_dimension()):
             x = Variable(i)
             coeff = self.coefficient(x)
-            if coeff==0: continue
-            if first and coeff==1:
+            if coeff == 0: continue
+            if first and coeff == 1:
                 s += '%r' % x
                 first = False
-            elif first and coeff==-1:
+            elif first and coeff == -1:
                 s += '-%r' % x
                 first = False
-            elif first and coeff!=1:
+            elif first and coeff != 1:
                 s += '%d*%r' % (coeff, x)
                 first = False
-            elif coeff==1:
+            elif coeff == 1:
                 s += '+%r' % x
-            elif coeff==-1:
+            elif coeff == -1:
                 s += '-%r' % x
             else:
                 s += '%+d*%r' % (coeff, x)
