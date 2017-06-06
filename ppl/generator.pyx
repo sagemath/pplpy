@@ -14,6 +14,7 @@ from __future__ import absolute_import, print_function
 
 from gmpy2 cimport GMPy_MPZ_From_mpz, import_gmpy2
 from cython.operator cimport dereference as deref
+from .linear_algebra cimport PPL_Coefficient_from_pyobject
 
 # PPL can use floating-point arithmetic to compute integers
 cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
@@ -230,13 +231,12 @@ cdef class Generator(object):
         d == 0.
         """
         cdef Linear_Expression e = Linear_Expression(expression)
-        cdef long d = <long?> divisor
         # This does not work as Cython gets confused by the private default ctor
         #   return _wrap_Generator(PPL_point(e.thisptr[0], PPL_Coefficient(d.value)))
         # workaround follows
         cdef Generator g = Generator(True)
         try:
-            g.thisptr = new PPL_Generator(PPL_point(e.thisptr[0], PPL_Coefficient(d)))
+            g.thisptr = new PPL_Generator(PPL_point(e.thisptr[0], PPL_Coefficient_from_pyobject(divisor)))
         except BaseException:
             # g.thisptr must be set to something valid or g.__dealloc__() will segfault
             g.thisptr = new PPL_Generator(PPL_point(e.thisptr[0],PPL_Coefficient(1)))
@@ -281,13 +281,12 @@ cdef class Generator(object):
         d == 0.
         """
         cdef Linear_Expression e = Linear_Expression(expression)
-        cdef long d = <long> divisor
         # This does not work as Cython gets confused by the private default ctor
         #   return _wrap_Generator(PPL_closure_point(e.thisptr[0], PPL_Coefficient(d.value)))
         # workaround follows
         cdef Generator g = Generator(True)
         try:
-            g.thisptr = new PPL_Generator(PPL_closure_point(e.thisptr[0], PPL_Coefficient(d)))
+            g.thisptr = new PPL_Generator(PPL_closure_point(e.thisptr[0], PPL_Coefficient_from_pyobject(divisor)))
         except BaseException:
             # g.thisptr must be set to something valid or g.__dealloc__() will segfault
             g.thisptr = new PPL_Generator(PPL_point(e.thisptr[0], PPL_Coefficient(1)))

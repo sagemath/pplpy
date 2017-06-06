@@ -8,3 +8,5 @@ cdef class Variables_Set(object):
 
 cdef class Linear_Expression(object):
     cdef PPL_Linear_Expression *thisptr
+
+cdef PPL_Coefficient PPL_Coefficient_from_pyobject(c)
