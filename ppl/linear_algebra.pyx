@@ -47,7 +47,7 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
 # but with PPL's rounding the gsl will be very unhappy; must turn off!
 restore_pre_PPL_rounding()
 
-cdef PPL_Coefficient PPL_Coefficient_from_pyobject(c):
+cdef PPL_Coefficient PPL_Coefficient_from_pyobject(c) except *:
     cdef mpz_t coeff
     if PyLong_CheckExact(c):
         mpz_init(coeff)
@@ -579,6 +579,10 @@ cdef class Linear_Expression(object):
     >>> expr.coefficient( Variable(124) )
     mpz(0)
 
+    >>> Linear_Expression('I am a linear expression')
+    Traceback (most recent call last):
+    ...
+    ValueError: unknown input type <... 'str'>
     >>> from gmpy2 import mpz
     >>> Linear_Expression(mpz(3))
     3
