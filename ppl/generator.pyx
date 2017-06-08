@@ -681,15 +681,72 @@ cdef class Generator(object):
         else:
             raise RuntimeError
 
+####################################################
+def line(expression):
+    """
+    Constuct a line.
 
-#############
-# shortcuts #
-#############
-line          = Generator.line
-ray           = Generator.ray
-point         = Generator.point
-closure_point = Generator.closure_point
+    See :meth:`Generator.line` for documentation.
 
+    EXAMPLES::
+
+        sage: from sage.libs.ppl import Variable, line
+        sage: y = Variable(1)
+        sage: line(2*y)
+        line(0, 1)
+    """
+    return Generator.line(expression)
+
+
+####################################################
+def ray(expression):
+    """
+    Constuct a ray.
+
+    See :meth:`Generator.ray` for documentation.
+
+    EXAMPLES::
+
+        sage: from sage.libs.ppl import Variable, ray
+        sage: y = Variable(1)
+        sage: ray(2*y)
+        ray(0, 1)
+    """
+    return Generator.ray(expression)
+
+
+####################################################
+def point(expression=0, divisor=1):
+    """
+    Constuct a point.
+
+    See :meth:`Generator.point` for documentation.
+
+    EXAMPLES::
+
+        sage: from sage.libs.ppl import Variable, point
+        sage: y = Variable(1)
+        sage: point(2*y, 5)
+        point(0/5, 2/5)
+    """
+    return Generator.point(expression, divisor)
+
+
+####################################################
+def closure_point(expression=0, divisor=1):
+    """
+    Constuct a closure point.
+
+    See :meth:`Generator.closure_point` for documentation.
+
+    EXAMPLES::
+
+        sage: from sage.libs.ppl import Variable, closure_point
+        sage: y = Variable(1)
+        sage: closure_point(2*y, 5)
+        closure_point(0/5, 2/5)
+    """
+    return Generator.closure_point(expression, divisor)
 
 ####################################################
 ### Generator_System  ##############################
