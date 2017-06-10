@@ -688,11 +688,11 @@ def line(expression):
 
     See :meth:`Generator.line` for documentation.
 
-    EXAMPLES::
+    Examples:
 
-        sage: from sage.libs.ppl import Variable, line
-        sage: y = Variable(1)
-        sage: line(2*y)
+        >>> from ppl import Variable, line
+        >>> y = Variable(1)
+        >>> line(2*y)
         line(0, 1)
     """
     return Generator.line(expression)
@@ -705,11 +705,11 @@ def ray(expression):
 
     See :meth:`Generator.ray` for documentation.
 
-    EXAMPLES::
+    Examples:
 
-        sage: from sage.libs.ppl import Variable, ray
-        sage: y = Variable(1)
-        sage: ray(2*y)
+        >>> from ppl import Variable, ray
+        >>> y = Variable(1)
+        >>> ray(2*y)
         ray(0, 1)
     """
     return Generator.ray(expression)
@@ -722,11 +722,11 @@ def point(expression=0, divisor=1):
 
     See :meth:`Generator.point` for documentation.
 
-    EXAMPLES::
+    Examples:
 
-        sage: from sage.libs.ppl import Variable, point
-        sage: y = Variable(1)
-        sage: point(2*y, 5)
+        >>> from ppl import Variable, point
+        >>> y = Variable(1)
+        >>> point(2*y, 5)
         point(0/5, 2/5)
     """
     return Generator.point(expression, divisor)
@@ -739,11 +739,11 @@ def closure_point(expression=0, divisor=1):
 
     See :meth:`Generator.closure_point` for documentation.
 
-    EXAMPLES::
+    Examples:
 
-        sage: from sage.libs.ppl import Variable, closure_point
-        sage: y = Variable(1)
-        sage: closure_point(2*y, 5)
+        >>> from ppl import Variable, closure_point
+        >>> y = Variable(1)
+        >>> closure_point(2*y, 5)
         closure_point(0/5, 2/5)
     """
     return Generator.closure_point(expression, divisor)
