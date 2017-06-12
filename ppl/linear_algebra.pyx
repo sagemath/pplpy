@@ -56,13 +56,15 @@ cdef PPL_Coefficient PPL_Coefficient_from_pyobject(c) except *:
         return PPL_Coefficient(coeff)
     elif PyInt_CheckExact(c):
         return PPL_Coefficient(<long> c)
-    elif MPZ_Check(<PyObject *> c):
-        return PPL_Coefficient(MPZ(<MPZ_Object*> c))
-    else:
+    elif not MPZ_Check(<PyObject *> c):
         try:
-            return PPL_Coefficient_from_pyobject(c.__index__())
+            c = c.__mpz__()
         except AttributeError:
-            raise ValueError("unknown input type {}".format(type(c)))
+            raise ValueError("no conversion of {} to mpz".format(type(c)))
+
+        if not MPZ_Check(<PyObject *> c):
+            raise RuntimeError('__mpz__ method of {} return a non mpz object'.format(c))
+    return PPL_Coefficient(MPZ(<MPZ_Object*> c))
 
 cdef class Variable(object):
     r"""
@@ -582,7 +584,7 @@ cdef class Linear_Expression(object):
     >>> Linear_Expression('I am a linear expression')
     Traceback (most recent call last):
     ...
-    ValueError: unknown input type <... 'str'>
+    ValueError: no conversion of <...> to mpz
     >>> from gmpy2 import mpz
     >>> Linear_Expression(mpz(3))
     3
