@@ -92,3 +92,5 @@ Requirements
 On Debian/Ubuntu systems these can be installed with::
 
     $ sudo apt-get install cython libgmp-dev libppl-dev
+    $ sudo pip install cysignals
+    $ sudo pip install git+https://github.com/aleaxit/gmpy
