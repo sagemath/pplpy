@@ -135,9 +135,11 @@ from .mip_problem import MIP_Problem
 
 from .polyhedron import C_Polyhedron, NNC_Polyhedron
 
-from .generator import (
-        Generator, Generator_System, Poly_Gen_Relation,
-        point, closure_point, ray, line)
+from .generator import Generator, Generator_System, Poly_Gen_Relation
+line = Generator.line
+point = Generator.point
+ray = Generator.ray
+closure_point = Generator.closure_point
 
 from .constraint import (
         Constraint, Constraint_System, Poly_Con_Relation,

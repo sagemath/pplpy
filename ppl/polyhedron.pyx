@@ -12,9 +12,14 @@
 #*****************************************************************************
 from __future__ import absolute_import, print_function
 
+from cpython.object cimport Py_LT, Py_LE, Py_EQ, Py_NE, Py_GT, Py_GE
 from cysignals.signals cimport sig_on, sig_off
 from gmpy2 cimport GMPy_MPZ_From_mpz, import_gmpy2
-from cpython.object cimport Py_LT, Py_LE, Py_EQ, Py_NE, Py_GT, Py_GE
+
+from .ppl_decl cimport *
+from .constraint cimport Constraint_System, Poly_Con_Relation, _wrap_Constraint_System
+from .generator cimport Generator_System, Poly_Gen_Relation, _wrap_Generator_System
+from .linear_algebra cimport *
 
 # PPL can use floating-point arithmetic to compute integers
 cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
@@ -27,7 +32,6 @@ import_gmpy2()
 # but with PPL's rounding the gsl will be very unhappy; must turn off!
 restore_pre_PPL_rounding()
 
-from .generator import point
 ####################################################
 ################# Polyhedron #######################
 ####################################################
@@ -813,7 +817,7 @@ cdef class Polyhedron(object):
         """
         cdef PPL_Coefficient sup_n
         cdef PPL_Coefficient sup_d
-        cdef Generator g = point()
+        cdef Generator g = Generator.point()
         cdef cppbool maximum
         sig_on()
         rc = self.thisptr.maximize(<PPL_Linear_Expression&>expr.thisptr[0], sup_n, sup_d, maximum, g.thisptr[0])
@@ -893,7 +897,7 @@ cdef class Polyhedron(object):
         """
         cdef PPL_Coefficient inf_n
         cdef PPL_Coefficient inf_d
-        cdef Generator g = point()
+        cdef Generator g = Generator.point()
         cdef cppbool minimum
         sig_on()
         rc = self.thisptr.minimize(<PPL_Linear_Expression&>expr.thisptr[0], inf_n, inf_d, minimum, g.thisptr[0])

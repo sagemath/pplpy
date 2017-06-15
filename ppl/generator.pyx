@@ -668,85 +668,27 @@ cdef class Generator(object):
         >>> loads(dumps(Generator.ray(2*x+7*y)))
         ray(2, 7)
         """
-        t = self.thisptr.type()
         le = Linear_Expression(self.coefficients(), 0)
-        if t == LINE:
-            return (line, (le,))
-        elif t == RAY:
-            return (ray, (le,))
-        elif t == POINT:
-            return (point, (le, self.divisor()))
-        elif t == CLOSURE_POINT:
-            return (closure_point, (le, self.divisor()))
-        else:
-            raise RuntimeError
-
-####################################################
-def line(expression):
-    """
-    Constuct a line.
-
-    See :meth:`Generator.line` for documentation.
-
-    Examples:
-
-        >>> from ppl import Variable, line
-        >>> y = Variable(1)
-        >>> line(2*y)
-        line(0, 1)
-    """
-    return Generator.line(expression)
-
-
-####################################################
-def ray(expression):
-    """
-    Constuct a ray.
-
-    See :meth:`Generator.ray` for documentation.
-
-    Examples:
-
-        >>> from ppl import Variable, ray
-        >>> y = Variable(1)
-        >>> ray(2*y)
-        ray(0, 1)
-    """
-    return Generator.ray(expression)
-
-
-####################################################
-def point(expression=0, divisor=1):
-    """
-    Constuct a point.
-
-    See :meth:`Generator.point` for documentation.
-
-    Examples:
-
-        >>> from ppl import Variable, point
-        >>> y = Variable(1)
-        >>> point(2*y, 5)
-        point(0/5, 2/5)
-    """
-    return Generator.point(expression, divisor)
-
-
-####################################################
-def closure_point(expression=0, divisor=1):
-    """
-    Constuct a closure point.
-
-    See :meth:`Generator.closure_point` for documentation.
-
-    Examples:
-
-        >>> from ppl import Variable, closure_point
-        >>> y = Variable(1)
-        >>> closure_point(2*y, 5)
-        closure_point(0/5, 2/5)
-    """
-    return Generator.closure_point(expression, divisor)
+        t = self.thisptr.type()
+        IF PY_MAJOR_VERSION == 2:
+            le = Linear_Expression(self.coefficients(), 0)
+            if t == LINE or t == RAY:
+                return (unpickle_generator, (self.type(), le))
+            elif t == POINT or t == CLOSURE_POINT:
+                return (unpickle_generator, (self.type(), le, self.divisor()))
+            else:
+                raise RuntimeError
+        ELSE:
+            if t == LINE:
+                return (Generator.line, (le,))
+            elif t == RAY:
+                return (Generator.ray, (le,))
+            elif t == POINT:
+                return (Generator.point, (le, self.divisor()))
+            elif t == CLOSURE_POINT:
+                return (Generator.closure_point, (le, self.divisor()))
+            else:
+                raise RuntimeError
 
 ####################################################
 ### Generator_System  ##############################
@@ -982,7 +924,7 @@ cdef class Generator_System(object):
         Iterate through the generators of the system.
         Examples:
 
-        >>> from ppl import Generator_System, Variable, point
+        >>> from ppl import Generator_System, Variable, point, ray, line, closure_point
         >>> x = Variable(0)
         >>> gs = Generator_System(point(3*x))
         >>> iter = gs.__iter__()
@@ -1291,3 +1233,18 @@ cdef _wrap_Poly_Gen_Relation(PPL_Poly_Gen_Relation relation):
     cdef Poly_Gen_Relation rel = Poly_Gen_Relation(True)
     rel.thisptr = new PPL_Poly_Gen_Relation(relation)
     return rel
+
+IF PY_MAJOR_VERSION == 2:
+    def unpickle_generator(*args):
+        t = args[0]
+        args = args[1:]
+        if t == 'line':
+            return Generator.line(*args)
+        elif t == 'ray':
+            return Generator.ray(*args)
+        elif t == 'point':
+            return Generator.point(*args)
+        elif t == 'closure_point':
+            return Generator.closure_point(*args)
+        else:
+            raise RuntimeError
