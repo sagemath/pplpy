@@ -671,7 +671,6 @@ cdef class Generator(object):
         le = Linear_Expression(self.coefficients(), 0)
         t = self.thisptr.type()
         IF PY_MAJOR_VERSION == 2:
-            le = Linear_Expression(self.coefficients(), 0)
             if t == LINE or t == RAY:
                 return (unpickle_generator, (self.type(), le))
             elif t == POINT or t == CLOSURE_POINT:
