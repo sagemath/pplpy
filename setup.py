@@ -25,11 +25,8 @@ class build_ext(_build_ext):
             sys.stderr.write("The installation of ppl requires cysignals\n")
             sys.exit(1)
 
-        self.compile_time_env = dict(PY_MAJOR_VERSION=sys.version_info.major)
-
         self.distribution.ext_modules[:] = cythonize(
-            self.distribution.ext_modules, include_path=sys.path,
-            compile_time_env=self.compile_time_env)
+            self.distribution.ext_modules, include_path=sys.path)
         _build_ext.finalize_options(self)
 
 class TestCommand(Command):

@@ -16,6 +16,9 @@ from gmpy2 cimport GMPy_MPZ_From_mpz, import_gmpy2
 from cython.operator cimport dereference as deref
 from .linear_algebra cimport PPL_Coefficient_from_pyobject
 
+import sys
+cdef int PY_MAJOR_VERSION = sys.version_info.major
+
 # PPL can use floating-point arithmetic to compute integers
 cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
     cdef void set_rounding_for_PPL()
@@ -670,14 +673,14 @@ cdef class Generator(object):
         """
         le = Linear_Expression(self.coefficients(), 0)
         t = self.thisptr.type()
-        IF PY_MAJOR_VERSION == 2:
+        if PY_MAJOR_VERSION == 2:
             if t == LINE or t == RAY:
-                return (unpickle_generator, (self.type(), le))
+                return (_unpickle_generator, (self.type(), le))
             elif t == POINT or t == CLOSURE_POINT:
-                return (unpickle_generator, (self.type(), le, self.divisor()))
+                return (_unpickle_generator, (self.type(), le, self.divisor()))
             else:
                 raise RuntimeError
-        ELSE:
+        elif PY_MAJOR_VERSION == 3:
             if t == LINE:
                 return (Generator.line, (le,))
             elif t == RAY:
@@ -688,6 +691,8 @@ cdef class Generator(object):
                 return (Generator.closure_point, (le, self.divisor()))
             else:
                 raise RuntimeError
+        else:
+            raise RuntimeError
 
 ####################################################
 ### Generator_System  ##############################
@@ -1233,8 +1238,8 @@ cdef _wrap_Poly_Gen_Relation(PPL_Poly_Gen_Relation relation):
     rel.thisptr = new PPL_Poly_Gen_Relation(relation)
     return rel
 
-IF PY_MAJOR_VERSION == 2:
-    def unpickle_generator(*args):
+if PY_MAJOR_VERSION == 2:
+    def _unpickle_generator(*args):
         t = args[0]
         args = args[1:]
         if t == 'line':
