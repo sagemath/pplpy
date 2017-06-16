@@ -1,6 +1,11 @@
 import ppl
 import doctest
 import sys
+import os
+
+path = os.path.dirname(__file__)
+if path:
+    os.chdir(path)
 
 print("Running doctests for pplpy")
 print('-'*80)
