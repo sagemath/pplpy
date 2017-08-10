@@ -16,9 +16,8 @@ from __future__ import absolute_import, print_function
 from cpython.int cimport PyInt_CheckExact
 from cpython.long cimport PyLong_CheckExact
 from cpython.object cimport PyObject
-from gmpy2 cimport import_gmpy2, MPZ_Object, MPZ, GMPy_MPZ_From_mpz, MPZ_Check
+from gmpy2 cimport import_gmpy2, mpz, MPZ, GMPy_MPZ_From_mpz, MPZ_Check
 from .constraint cimport Constraint_System, _make_Constraint_from_richcmp
-from .utils cimport mpz_set_pylong
 from .ppl_decl cimport mpz_t, mpz_init, mpz_class
 
 # TODO: interruption buisness. This is internal to Sage. Though by default
@@ -48,23 +47,14 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
 restore_pre_PPL_rounding()
 
 cdef PPL_Coefficient PPL_Coefficient_from_pyobject(c) except *:
-    cdef mpz_t coeff
-    if PyLong_CheckExact(c):
-        mpz_init(coeff)
-        #TODO use GMPy_MPZ_From_PyIntOrLong from gmpy2_convert_gmp.h instead of mpz_set_pylong
-        mpz_set_pylong(coeff, c)
-        return PPL_Coefficient(coeff)
-    elif PyInt_CheckExact(c):
-        return PPL_Coefficient(<long> c)
-    elif not MPZ_Check(<PyObject *> c):
-        try:
-            c = c.__mpz__()
-        except AttributeError:
-            raise ValueError("no conversion of {} to mpz".format(type(c)))
+    cdef mpz coeff
 
-        if not MPZ_Check(<PyObject *> c):
-            raise RuntimeError('__mpz__ method of {} return a non mpz object'.format(c))
-    return PPL_Coefficient(MPZ(<MPZ_Object*> c))
+    if MPZ_Check(c):
+        coeff = <mpz> c
+    else:
+        coeff = mpz(c)
+
+    return PPL_Coefficient(MPZ(coeff))
 
 cdef class Variable(object):
     r"""
@@ -584,7 +574,11 @@ cdef class Linear_Expression(object):
     >>> Linear_Expression('I am a linear expression')
     Traceback (most recent call last):
     ...
-    ValueError: no conversion of <...> to mpz
+    ValueError: invalid digits
+    >>> Linear_Expression(('I','am','a','linear','expression'))
+    Traceback (most recent call last):
+    ...
+    TypeError: mpz() requires numeric or string argument
     >>> from gmpy2 import mpz
     >>> Linear_Expression(mpz(3))
     3

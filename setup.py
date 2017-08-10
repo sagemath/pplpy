@@ -66,9 +66,6 @@ class TestCommand(Command):
 VERSION = open('version.txt').read()[:-1]
 
 extensions = [
-    Extension("ppl.utils",
-        sources = ["ppl/utils.pyx"],
-        depends = ["ppl/*"]),
     Extension('ppl.linear_algebra',
         sources=['ppl/linear_algebra.pyx', 'ppl/ppl_shim.cc'],
         depends=['ppl/*']),
