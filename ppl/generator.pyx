@@ -605,7 +605,7 @@ cdef class Generator(object):
 
         Examples:
 
-        >>> from ppl import Generator, Variable, point, line
+        >>> from ppl import Variable, point, line
         >>> x = Variable(0)
         >>> y = Variable(1)
         >>> point(2*x    , 2).is_equivalent_to( point(x) )
@@ -644,7 +644,7 @@ cdef class Generator(object):
 
         Examples:
 
-        >>> from ppl import Linear_Expression, Variable
+        >>> from ppl import Variable
         >>> x = Variable(0)
         >>> y = Variable(1)
         >>> e = 3*x+2*y+1
@@ -659,8 +659,8 @@ cdef class Generator(object):
 
         Tests:
 
-        >>> from ppl import Generator, Variable, line, ray, point, closure_point
-        >>> from pickle import loads,dumps
+        >>> from ppl import Generator, Variable
+        >>> from pickle import loads, dumps
         >>> x = Variable(0); y = Variable(1)
         >>> loads(dumps(Generator.point(2*x+7*y, 3)))
         point(2/3, 7/3)

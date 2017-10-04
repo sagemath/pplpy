@@ -17,7 +17,7 @@ from cpython.int cimport PyInt_CheckExact
 from cpython.long cimport PyLong_CheckExact
 from cpython.object cimport PyObject
 from gmpy2 cimport import_gmpy2, mpz, MPZ, GMPy_MPZ_From_mpz, MPZ_Check
-from .constraint cimport Constraint_System, _make_Constraint_from_richcmp
+from .constraint cimport _make_Constraint_from_richcmp
 from .ppl_decl cimport mpz_t, mpz_init, mpz_class
 
 # TODO: interruption buisness. This is internal to Sage. Though by default

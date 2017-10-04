@@ -56,7 +56,7 @@ cdef class Constraint(object):
 
     Examples:
 
-    >>> from ppl import Constraint, Variable, Linear_Expression
+    >>> from ppl import Variable, Linear_Expression
     >>> x = Variable(0)
     >>> y = Variable(1)
     >>> 5*x-2*y >  x+y-1
@@ -87,7 +87,7 @@ cdef class Constraint(object):
 
         Tests:
 
-            >>> from ppl import Constraint, Variable, Linear_Expression
+            >>> from ppl import Variable
             >>> x = Variable(0)
             >>> x>0   # indirect doctest
             x0>0
@@ -124,7 +124,7 @@ cdef class Constraint(object):
 
         Examples:
 
-        >>> from ppl import Constraint, Variable
+        >>> from ppl import Variable
         >>> x = Variable(0)
         >>> y = Variable(1)
         >>> (2*x-y+5 >  x).__repr__()
@@ -480,7 +480,7 @@ cdef class Constraint(object):
 
         Examples:
 
-        >>> from ppl import Linear_Expression, Variable
+        >>> from ppl import Variable
         >>> x = Variable(0)
         >>> y = Variable(1)
         >>> ineq = (3*x+2*y+1>=0)
@@ -495,7 +495,7 @@ cdef class Constraint(object):
 
         Examples:
 
-        >>> from ppl import Linear_Expression, Variable
+        >>> from ppl import Variable
         >>> from pickle import loads, dumps
         >>> x = Variable(0)
         >>> y = Variable(1)
@@ -778,7 +778,7 @@ cdef class Constraint_System(object):
 
         Examples:
 
-        >>> from ppl import Variable, Constraint_System, point
+        >>> from ppl import Variable, Constraint_System
         >>> x = Variable(0)
         >>> cs = Constraint_System()
         >>> cs.empty()

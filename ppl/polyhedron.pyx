@@ -170,7 +170,7 @@ cdef class Polyhedron(object):
             desc += repr(n_lines)
             if n_lines==1: desc +=' line'
             else:          desc +=' lines'
-        return desc;
+        return desc
 
     def space_dimension(self):
         r"""
@@ -381,7 +381,7 @@ cdef class Polyhedron(object):
 
         Examples:
 
-        >>> from ppl import Variable, C_Polyhedron, point, ray
+        >>> from ppl import Variable, C_Polyhedron, point
         >>> x = Variable(0);  y = Variable(1)
         >>> p = C_Polyhedron(2, 'empty')
         >>> p.add_generator( point(1*x+0*y) )
@@ -565,7 +565,7 @@ cdef class Polyhedron(object):
 
         Examples:
 
-        >>> from ppl import Variable, C_Polyhedron, point, ray
+        >>> from ppl import Variable, C_Polyhedron, point
         >>> x = Variable(0);  y = Variable(1)
         >>> p = C_Polyhedron( point(1*x+2*y) )
         >>> p.is_discrete()
@@ -783,7 +783,7 @@ cdef class Polyhedron(object):
 
         Examples:
 
-        >>> from ppl import Variable, C_Polyhedron, NNC_Polyhedron, Constraint_System, Linear_Expression
+        >>> from ppl import Variable, C_Polyhedron, NNC_Polyhedron, Constraint_System
         >>> x = Variable(0);  y = Variable(1)
         >>> cs = Constraint_System()
         >>> cs.insert(x >= 0)
@@ -863,7 +863,7 @@ cdef class Polyhedron(object):
 
         Examples:
 
-        >>> from ppl import Variable, C_Polyhedron, NNC_Polyhedron, Constraint_System, Linear_Expression
+        >>> from ppl import Variable, C_Polyhedron, NNC_Polyhedron, Constraint_System
         >>> x = Variable(0);  y = Variable(1)
         >>> cs = Constraint_System()
         >>> cs.insert( x>=0 )
@@ -1423,7 +1423,7 @@ cdef class Polyhedron(object):
 
         Examples:
 
-        >>> from ppl import Variable, C_Polyhedron, point, closure_point, NNC_Polyhedron
+        >>> from ppl import Variable, C_Polyhedron, point, NNC_Polyhedron
         >>> x = Variable(0)
         >>> p = NNC_Polyhedron( point(0*x) )
         >>> p.add_generator( point(1*x) )
@@ -1891,7 +1891,7 @@ cdef class Polyhedron(object):
 
         Examples:
 
-        >>> from ppl import Linear_Expression, Variable
+        >>> from ppl import Variable
         >>> x = Variable(0)
         >>> y = Variable(1)
         >>> e = 3*x+2*y+1
@@ -2011,7 +2011,7 @@ cdef class C_Polyhedron(Polyhedron):
 
     Examples:
 
-    >>> from ppl import Constraint, Constraint_System, Generator, Generator_System, Variable, C_Polyhedron, point, ray
+    >>> from ppl import Constraint_System, Generator_System, Variable, C_Polyhedron, point, ray
     >>> x = Variable(0)
     >>> y = Variable(1)
     >>> C_Polyhedron( 5*x-2*y >=  x+y-1 )

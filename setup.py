@@ -4,7 +4,6 @@ from distutils.command.build_ext import build_ext as _build_ext
 from distutils.cmd import Command
 from setuptools.extension import Extension
 import sys
-import site
 
 # Adapted from Cython's new_build_ext
 class build_ext(_build_ext):

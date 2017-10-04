@@ -641,7 +641,7 @@ cdef class MIP_Problem(object):
 
         Examples:
 
-        >>> from ppl import Variable, Constraint_System, MIP_Problem
+        >>> from ppl import Variable, MIP_Problem
         >>> x = Variable(0)
         >>> y = Variable(1)
         >>> m = MIP_Problem()

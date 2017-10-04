@@ -68,10 +68,10 @@ install: # command to install dependencies
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install libmpfr-dev; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install libmpc-dev; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install libppl-dev; fi
-  - pip install Cython;
-  - pip install git+https://github.com/aleaxit/gmpy --no-index --verbose;
-  - pip install cysignals;
-  - pip install . --verbose --no-index;
+  - pip install Cython --user;
+  - pip install git+https://github.com/aleaxit/gmpy --no-index --verbose --user;
+  - pip install cysignals --user;
+  - pip install . --verbose --no-index --user;
 # command to run tests
 script:
   - cd tests
