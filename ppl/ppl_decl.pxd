@@ -233,6 +233,13 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         void difference_assign(PPL_Polyhedron &y) except +ValueError
         void drop_some_non_integer_points()
         void topological_closure_assign()
+        void BHRZ03_widening_assign(PPL_Polyhedron &y, unsigned* tp) except +ValueError
+        void limited_BHRZ03_extrapolation_assign(PPL_Polyhedron &y, PPL_Constraint_System &cs, unsigned* tp) except +ValueError
+        void bounded_BHRZ03_extrapolation_assign(PPL_Polyhedron &y, PPL_Constraint_System &cs, unsigned* tp) except +ValueError
+        void H79_widening_assign(PPL_Polyhedron &y, unsigned* tp) except +ValueError
+        void widening_assign(PPL_Polyhedron &y, unsigned* tp) except +ValueError
+        void limited_H79_extrapolation_assign(PPL_Polyhedron &y, PPL_Constraint_System &cs, unsigned* tp) except +ValueError
+        void bounded_H79_extrapolation_assign(PPL_Polyhedron &y, PPL_Constraint_System &cs, unsigned* tp) except +ValueError
         void add_space_dimensions_and_embed(PPL_dimension_type m) except +ValueError
         void add_space_dimensions_and_project(PPL_dimension_type m) except +ValueError
         void concatenate_assign(PPL_Polyhedron &y) except +ValueError

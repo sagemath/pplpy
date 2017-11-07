@@ -1524,6 +1524,449 @@ cdef class Polyhedron(object):
         self.thisptr.topological_closure_assign()
         sig_off()
 
+    def BHRZ03_widening_assign(self, Polyhedron y, unsigned tp = 0):
+        r""" 
+        Assigns to ``self``` the result of computing the `BHRZ03-widening`
+        between ``self`` and ``y``.  
+
+        INPUT:
+
+        - ``y`` -- a :class:`Polyhedron` that must be contained in ``self`` 
+        
+        - ``tp`` -- an optional unsigned variable with the number of
+        available tokens (to be used when applying the `widening with
+        tokens` delay technique).
+
+        OUTPUT:
+
+        This method assigns to ``self`` the result of computing the
+        BHRZ03-widening between ``self`` and ``y``. And returns the
+        new value of ``tp``.
+
+        Raises a ``ValueError`` if ``self`` and ``y`` are
+        topology-incompatible.
+
+        Examples:
+
+        >>> from ppl import NNC_Polyhedron, Variable
+        >>> x = Variable(0)
+        >>> y = Variable(1)        
+        >>> ph1 = NNC_Polyhedron(2)
+        >>> ph1.add_constraint( y >= 0 )
+        >>> ph1.add_constraint( x + y > 0 )
+        >>> ph1.add_constraint( x - y < 1 )
+        >>> ph2 = NNC_Polyhedron(2)
+        >>> ph2.add_constraint( y >= 0 )
+        >>> ph2.add_constraint( x > 0 )
+        >>> ph2.add_constraint( x < 1 )
+        >>> tp = ph1.BHRZ03_widening_assign( ph2 )
+        >>> known_result = NNC_Polyhedron(2)
+        >>> known_result.add_constraint(y >= 0)
+        >>> known_result == ph1
+        True
+
+        >>> from ppl import C_Polyhedron, Generator_System, point, ray
+        >>> gs1 = Generator_System()
+        >>> gs1.insert(point())
+        >>> gs1.insert(point( x + 2 * y ))
+        >>> gs1.insert(ray( x ))
+        >>> gs1.insert(ray( 2 * x + y ))
+        >>> ph1 = C_Polyhedron(gs1)
+        >>> gs2 = Generator_System()
+        >>> gs2.insert(point())
+        >>> gs2.insert(point( x + 2 * y ))
+        >>> gs2.insert(ray( x ))
+        >>> gs2.insert(ray( x + y ))
+        >>> ph2 = C_Polyhedron( gs2 )
+        >>> tp = ph2.BHRZ03_widening_assign( ph1 )
+        >>> known_result = C_Polyhedron(2)
+        >>> known_result.add_constraint( y >= 0 )
+        >>> known_result.add_constraint( 2 * x - y >= 0 )
+        >>> ph2 == known_result
+        True
+
+        if this method is going to be called too many times, the
+        ``tp`` parameter allows to reduce the computation cost by
+        computing the widening only when ``tp`` is equal to 0,
+        otherwise the this method will decrement the value of ``tp``
+        and return it.
+        
+        >>> from ppl import closure_point
+        >>> gs1 = Generator_System()
+        >>> gs1.insert(point( 2 * x ))
+        >>> gs1.insert(closure_point( x + y ))
+        >>> gs1.insert(closure_point( 3 * x + y ))
+        >>> ph1 = NNC_Polyhedron(gs1)
+        >>> gs2 = Generator_System()
+        >>> gs2.insert(point( 2 * x ))
+        >>> gs2.insert(closure_point( y ))
+        >>> gs2.insert(closure_point( 4 * x + y ))
+        >>> ph2 = NNC_Polyhedron(gs2)
+        >>> ph2_copy = NNC_Polyhedron(ph2)
+        >>> known_result = NNC_Polyhedron(2)
+        >>> known_result.add_constraint(y >= 0)
+        >>> known_result.add_constraint(y < 1)
+        >>> tp = 1
+        >>> tp = ph2.BHRZ03_widening_assign(ph1, tp); tp
+        0
+        >>> ph2 == ph2_copy
+        True
+        >>> tp = ph2.BHRZ03_widening_assign(ph1, tp); tp
+        0
+        >>> ph2 == known_result
+        True
+        """
+        sig_on()
+        try:
+            self.thisptr.BHRZ03_widening_assign(y.thisptr[0], &tp)
+        finally:
+            sig_off()
+        return tp
+
+    def limited_BHRZ03_extrapolation_assign(self, Polyhedron y, Constraint_System cs, unsigned tp = 0):
+        r""" 
+        Assigns to ``self``` the result of computing the limited
+        extrapolation between ``self`` and ``y`` using the
+        `BHRZ03-widening` operator.
+
+        INPUT:
+
+        - ``y`` -- a :class:`Polyhedron` that must be contained in ``self`` 
+        
+        - ``cs`` -- a :class:`Constraint_System` used to improve the
+          widened polyhedron
+        
+        - ``tp`` -- an optional unsigned variable with the number of
+        available tokens (to be used when applying the `widening with
+        tokens` delay technique).
+
+        OUTPUT:
+
+        This method assigns to ``self`` the result of computing the
+        limited extrapolation between ``self`` and ``y`` using the
+        BHRZ03-widening operator. And returns the new value of ``tp``.
+
+        Raises a ``ValueError`` if ``self`` and ``y`` are
+        topology-incompatible or dimesion-incompatible.
+
+        Examples:
+        >>> from ppl import C_Polyhedron, Generator_System, Variable, point, Constraint_System
+        >>> x = Variable(0)
+        >>> y = Variable(1)
+        >>> gs1 = Generator_System()
+        >>> gs1.insert(point())
+        >>> gs1.insert(point( x + y ))
+        >>> gs1.insert(point( x ))
+        >>> ph1 = C_Polyhedron( gs1 )
+        >>> gs2 = Generator_System()
+        >>> gs2.insert(point())
+        >>> gs2.insert(point( 2 * x ))
+        >>> gs2.insert(point( 2 * x + 2 * y ))
+        >>> ph2 = C_Polyhedron( gs2 )
+        >>> cs = Constraint_System()
+        >>> cs.insert( x <= 5 )
+        >>> cs.insert( y <= 4 )
+        >>> tp = ph2.limited_BHRZ03_extrapolation_assign(ph1, cs)
+        >>> known_result = C_Polyhedron(2)
+        >>> known_result.add_constraint(y >= 0)
+        >>> known_result.add_constraint(x - y >= 0)
+        >>> known_result.add_constraint(y <= 4)
+        >>> known_result.add_constraint(x <= 5)
+        >>> known_result == ph2
+        True
+        """
+        sig_on()
+        try:
+            self.thisptr.limited_BHRZ03_extrapolation_assign(y.thisptr[0],
+                                                             cs.thisptr[0],
+                                                             &tp)
+        finally:
+            sig_off()
+        return tp
+
+    def bounded_BHRZ03_extrapolation_assign(self, Polyhedron y, Constraint_System cs, unsigned tp = 0):
+        r""" 
+        Assigns to ``self``` the result of computing the bounded
+        extrapolation between ``self`` and ``y`` using the
+        `BHRZ03-widening` operator.
+
+        INPUT:
+
+        - ``y`` -- a :class:`Polyhedron` that must be contained in ``self`` 
+        
+        - ``cs`` -- a :class:`Constraint_System` used to improve the
+          widened polyhedron
+        
+        - ``tp`` -- an optional unsigned variable with the number of
+        available tokens (to be used when applying the `widening with
+        tokens` delay technique).
+
+        OUTPUT:
+
+        This method assigns to ``self`` the result of computing the
+        bounded extrapolation between ``self`` and ``y`` using the
+        BHRZ03-widening operator. And returns the new value of ``tp``.
+
+        Raises a ``ValueError`` if ``self`` and ``y`` are
+        topology-incompatible or dimesion-incompatible.
+
+        Examples:
+        
+        >>> from ppl import Variable, Constraint_System, C_Polyhedron
+        >>> x = Variable(0)
+        >>> ph1 = C_Polyhedron(1)
+        >>> ph1.add_constraint( 1 <= x )
+        >>> ph1.add_constraint( x <= 2 )
+        >>> ph2 = C_Polyhedron(1)
+        >>> ph2.add_constraint( 0 <= x )
+        >>> ph2.add_constraint( x <= 3 )
+        >>> cs = Constraint_System()
+        >>> tp = ph2.bounded_BHRZ03_extrapolation_assign(ph1, cs)
+        >>> known_result = C_Polyhedron(1)
+        >>> known_result.add_constraint(0 <= x)
+        >>> known_result == ph2
+        True
+        """
+        sig_on()
+        try:
+            self.thisptr.bounded_BHRZ03_extrapolation_assign(y.thisptr[0],
+                                                             cs.thisptr[0],
+                                                             &tp)
+        finally:
+            sig_off()
+        return tp
+
+    def H79_widening_assign(self, Polyhedron y, unsigned tp = 0):
+        r""" 
+        Assigns to ``self``` the result of computing the `H79-widening`
+        between ``self`` and ``y``.  
+
+        INPUT:
+
+        - ``y`` -- a :class:`Polyhedron` that must be contained in ``self`` 
+        
+        - ``tp`` -- an optional unsigned variable with the number of
+        available tokens (to be used when applying the `widening with
+        tokens` delay technique).
+
+        OUTPUT:
+
+        This method assigns to ``self`` the result of computing the
+        BHRZ03-widening between ``self`` and ``y``. And returns the
+        new value of ``tp``.
+
+        Raises a ``ValueError`` if ``self`` and ``y`` are
+        topology-incompatible.
+
+
+        Examples:
+        >>> from ppl import Variable, C_Polyhedron
+        >>> x = Variable(0)
+        >>> y = Variable(1)
+        >>> ph1 = C_Polyhedron(2)
+        >>> ph1.add_constraint( x >= 2 )
+        >>> ph1.add_constraint( y >= 0 )
+        >>> ph2 = C_Polyhedron(2)
+        >>> ph2.add_constraint( x >= 0 )
+        >>> ph2.add_constraint( y >= 0 )
+        >>> ph2.add_constraint( x-y >= 2 )
+        >>> tp = ph1.H79_widening_assign(ph2)
+        >>> known_result = C_Polyhedron(2)
+        >>> known_result.add_constraint(y >= 0)
+        >>> known_result == ph1
+        True
+
+        ``self`` and ``y`` must be dimension- and topology-compatible,
+        or an exception is raised:
+
+        >>> z = Variable(2)
+        >>> ph1.H79_widening_assign( C_Polyhedron(z>=0) )
+        Traceback (most recent call last):
+        ...
+        ValueError: PPL::C_Polyhedron::H79_widening_assign(y):
+        this->space_dimension() == 2, y.space_dimension() == 3.
+
+        if this method is going to be called too many times, the
+        ``tp`` parameter allows to reduce the computation cost by
+        computing the widening only when ``tp`` is equal to 0,
+        otherwise the this method will decrement the value of ``tp``
+        and return it.
+        
+        >>> from ppl import point, ray, Generator_System
+        >>> gs1 = Generator_System()
+        >>> gs1.insert(point())
+        >>> gs1.insert(ray( x + y ))
+        >>> gs1.insert(ray( x ))
+        >>> ph1 = C_Polyhedron(gs1)
+        >>> gs2 = Generator_System()
+        >>> gs2.insert(point())
+        >>> gs2.insert(ray( x ))
+        >>> gs2.insert(ray( x + 2 * y ))
+        >>> ph2 = C_Polyhedron(gs2)
+        >>> ph2_copy = C_Polyhedron(ph2)
+        >>> known_result = C_Polyhedron(2)
+        >>> known_result.add_constraint(y >= 0)
+        >>> tp = 1
+        >>> tp = ph2.H79_widening_assign(ph1, tp); tp
+        0
+        >>> ph2 == ph2_copy
+        True
+        >>> tp = ph2.H79_widening_assign(ph1, tp); tp
+        0
+        >>> ph2 == known_result
+        True
+        """
+        sig_on()
+        try:
+            self.thisptr.H79_widening_assign(y.thisptr[0], &tp)
+        finally:
+            sig_off()
+        return tp
+
+    widening_assign = H79_widening_assign
+
+    def limited_H79_extrapolation_assign(self, Polyhedron y, Constraint_System cs, unsigned tp = 0):
+        r""" 
+        Assigns to ``self``` the result of computing the limited
+        extrapolation between ``self`` and ``y`` using the
+        `H79-widening` operator.
+
+        INPUT:
+
+        - ``y`` -- a :class:`Polyhedron` that must be contained in ``self`` 
+        
+        - ``cs`` -- a :class:`Constraint_System` used to improve the
+          widened polyhedron
+        
+        - ``tp`` -- an optional unsigned variable with the number of
+        available tokens (to be used when applying the `widening with
+        tokens` delay technique).
+
+        OUTPUT:
+
+        This method assigns to ``self`` the result of computing the
+        limited extrapolation between ``self`` and ``y`` using the
+        H79-widening operator. And returns the new value of ``tp``.
+
+        Raises a ``ValueError`` if ``self`` and ``y`` are
+        topology-incompatible or dimesion-incompatible.
+
+        Examples:
+
+        >>> from ppl import Variable, C_Polyhedron, Constraint_System, point
+        >>> x = Variable(0)
+        >>> y = Variable(1)
+        >>> ph1 = C_Polyhedron(2)
+        >>> ph1.add_constraint( x >= 0 )
+        >>> ph1.add_constraint( x <= 1 )
+        >>> ph1.add_constraint( y >= 0 )
+        >>> ph1.add_constraint( x - y >= 0 )
+        >>> ph2 = C_Polyhedron(2)
+        >>> ph2.add_constraint( x >= 0 )
+        >>> ph2.add_constraint( x <= 2 )
+        >>> ph2.add_constraint( y >= 0 )
+        >>> ph2.add_constraint( x - y >= 0 )
+        >>> cs = Constraint_System()
+        >>> cs.insert( x >= 0 )
+        >>> cs.insert( y >= 0 )
+        >>> cs.insert( x <= 5 )
+        >>> cs.insert( y <= 5 )
+        >>> tp = ph2.limited_H79_extrapolation_assign(ph1, cs)
+        >>> known_result = C_Polyhedron(2)
+        >>> known_result.add_constraint( x - y >= 0)
+        >>> known_result.add_constraint(y >= 0)
+        >>> known_result.add_constraint(x <= 5)
+        >>> known_result == ph2
+        True
+
+        >>> ph1 = C_Polyhedron(2)
+        >>> ph1.add_constraint( x >= 0 )
+        >>> ph1.add_constraint( x <= 1 )
+        >>> ph1.add_constraint( y == 0 )
+        >>> ph2 = C_Polyhedron(2)
+        >>> ph2.add_constraint( x <= 2 )
+        >>> ph2.add_constraint( y >= 0 )
+        >>> ph2.add_constraint( y <= x )
+        >>> cs = Constraint_System()
+        >>> cs.insert( x <= 5 )
+        >>> cs.insert( y <= -1 )
+        >>> known_result = C_Polyhedron(ph2)
+        >>> known_result.add_generator(point(5*x))
+        >>> known_result.add_generator(point(5*x + 5*y))
+        >>> tp = ph2.limited_H79_extrapolation_assign(ph1, cs)
+        >>> known_result == ph2
+        True
+        """
+        sig_on()
+        try:
+            self.thisptr.limited_H79_extrapolation_assign(y.thisptr[0],
+                                                          cs.thisptr[0],
+                                                          &tp)
+        finally:
+            sig_off()
+        return tp
+    
+    def bounded_H79_extrapolation_assign(self, Polyhedron y, Constraint_System cs, unsigned tp = 0):
+        r""" 
+        Assigns to ``self``` the result of computing the bounded
+        extrapolation between ``self`` and ``y`` using the
+        `H79-widening` operator.
+
+        INPUT:
+
+        - ``y`` -- a :class:`Polyhedron` that must be contained in ``self`` 
+        
+        - ``cs`` -- a :class:`Constraint_System` used to improve the
+          widened polyhedron
+        
+        - ``tp`` -- an optional unsigned variable with the number of
+        available tokens (to be used when applying the `widening with
+        tokens` delay technique).
+
+        OUTPUT:
+
+        This method assigns to ``self`` the result of computing the
+        bounded extrapolation between ``self`` and ``y`` using the
+        H79-widening operator. And returns the new value of ``tp``.
+
+        Raises a ``ValueError`` if ``self`` and ``y`` are
+        topology-incompatible or dimesion-incompatible.
+
+        Examples:
+
+        >>> from ppl import Variable, C_Polyhedron, Constraint_System
+        >>> x = Variable(0)
+        >>> y = Variable(1)
+        >>> ph1 = C_Polyhedron(2)
+        >>> ph1.add_constraint( x-3 >= 0 )
+        >>> ph1.add_constraint( x-3 <= 1 )
+        >>> ph1.add_constraint( y >= 0 )
+        >>> ph1.add_constraint( y <= 1 )
+        >>> ph2 = C_Polyhedron(2)
+        >>> ph2.add_constraint( 2*x-5 >= 0 )
+        >>> ph2.add_constraint( x-3 <= 1 )
+        >>> ph2.add_constraint( 2*y+3 >= 0 )
+        >>> ph2.add_constraint( 2*y-5 <= 0 )
+        >>> cs = Constraint_System()
+        >>> cs.insert( x >= y )
+        >>> tp = ph2.bounded_H79_extrapolation_assign(ph1, cs)
+        >>> known_result = C_Polyhedron(2)
+        >>> known_result.add_constraint( x >= 2 )
+        >>> known_result.add_constraint( x <= 4 )
+        >>> known_result.add_constraint( y >= -2 )
+        >>> known_result.add_constraint( x >= y )
+        >>> known_result == ph2
+        True
+        """
+        sig_on()
+        try:
+            self.thisptr.bounded_H79_extrapolation_assign(y.thisptr[0],
+                                                          cs.thisptr[0],
+                                                          &tp)
+        finally:
+            sig_off()
+        return tp
+
     def add_space_dimensions_and_embed(self, m):
         r"""
         Add ``m`` new space dimensions and embed ``self`` in the new
