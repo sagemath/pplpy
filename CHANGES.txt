@@ -1,3 +1,12 @@
+v0.7, 2017/11/24
+   - use of gmpy2 for integers and rationals (Vincent Delecroix/Vincent Klein)
+   - tests on travis (Vincent Delecroix/Vincent Klein)
+   - fixes in install scripts (Vincent Delecroix)
+   - port some upgrades from Sage (Vincent Klein)
+   - split in several Cython files (Vincent Klein)
+   - adding widening (Jesús Doménech)
+v0.6, 2016/01/17 -- distribution bug fixes
+v0.5, 2016/01/17 -- bug fixes
 v0.4, 2016/01/16 -- iterator for MIP_Problem
 v0.3, 2016/01/16 -- Reworked documentation
 v0.2, 2016/01/16 -- Fix build
