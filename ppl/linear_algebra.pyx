@@ -16,7 +16,7 @@ from __future__ import absolute_import, print_function
 from cpython.int cimport PyInt_CheckExact
 from cpython.long cimport PyLong_CheckExact
 from cpython.object cimport PyObject
-from gmpy2 cimport import_gmpy2, mpz, MPZ, GMPy_MPZ_From_mpz, MPZ_Check
+from gmpy2 cimport import_gmpy2, mpz, GMPy_MPZ_From_mpz, MPZ_Check
 from .constraint cimport _make_Constraint_from_richcmp
 from .ppl_decl cimport mpz_t, mpz_init, mpz_class
 
@@ -54,7 +54,7 @@ cdef PPL_Coefficient PPL_Coefficient_from_pyobject(c) except *:
     else:
         coeff = mpz(c)
 
-    return PPL_Coefficient(MPZ(coeff))
+    return PPL_Coefficient(coeff.z)
 
 cdef class Variable(object):
     r"""
