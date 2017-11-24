@@ -1,9 +1,5 @@
 sudo: required
-notifications:
-  slack:
-    on_success: never
-    on_failure : never
-
+language: python
 matrix:
   include:
 #    Tests on osx are working but are slow. Uncomment to run them.
@@ -38,40 +34,37 @@ matrix:
 #        - brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/0c07502e530bae1ca8811a3a27ab0583fbb396b0/Formula/python3.rb
 #        - virtualenv env -p python3
 
-    - langage: python
-      python: 2.7
-      os: linux
-      dist: trusty
+  - langage: python
+    python: 2.7
+    os: linux
+    dist: trusty
 
-    - langage: python
-      python: 3.4
-      os: linux
-      dist: trusty
+  - langage: python
+    python: 3.4
+    os: linux
+    dist: trusty
 
-    - langage: python
-      python: 3.5
-      os: linux
-      dist: trusty
+  - langage: python
+    python: 3.5
+    os: linux
+    dist: trusty
 
-    - langage: python
-      python: 3.6
-      os: linux
-      dist: trusty
+  - langage: python
+    python: 3.6
+    os: linux
+    dist: trusty
 
 install: # command to install dependencies
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then source env/bin/activate; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install mpfr; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install libmpc; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install ppl; fi
+#  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then source env/bin/activate; fi
+#  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install mpfr; fi
+#  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install libmpc; fi
+#  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install ppl; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install libgmp-dev; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install libmpfr-dev; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install libmpc-dev; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install libppl-dev; fi
-  - pip install Cython --user;
-  - pip install git+https://github.com/aleaxit/gmpy --no-index --verbose --user;
-  - pip install cysignals --user;
-  - pip install . --verbose --no-index --user;
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install libgmp-dev libmpfr-dev libmpc-dev libppl-dev; fi
+  - pip install Cython --verbose --disable-pip-version-check
+  - pip install gmpy2==2.1.0a1 --verbose --disable-pip-version-check --no-binary ":all:"
+  - pip install cysignals --verbose --disable-pip-version-check
+  - pip install . --verbose --no-index
 # command to run tests
 script:
   - cd tests
