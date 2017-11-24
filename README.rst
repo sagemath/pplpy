@@ -79,9 +79,13 @@ The documentation is available at http://pythonhosted.org/pplpy/
 Requirements
 ------------
 
-- `PPL <http://bugseng.com/products/ppl/>`_
-
 - `gmp <https://gmplib.org/>`_
+
+- `mpfr <http://www.mpfr.org/>`_
+
+- `mpc <http://www.multiprecision.org/index.php?prog=mpc>`_
+
+- `PPL <http://bugseng.com/products/ppl/>`_
 
 - `Cython <http://cython.org>`_
 
@@ -91,6 +95,9 @@ Requirements
 
 On Debian/Ubuntu systems these can be installed with::
 
-    $ sudo apt-get install cython libgmp-dev libppl-dev
-    $ sudo pip install cysignals
-    $ sudo pip install git+https://github.com/aleaxit/gmpy
+    $ sudo apt-get install libgmp-dev libmpfr-dev libmpc-dev libppl-dev cython
+    $ sudo pip install cysignals [--user]
+    $ pip install gmpy2==2.1.0a1 --no-binary ":all:" [--user]
+
+The pip optional option `--user` allows to install python packages for a single
+user with no need for administrator rights.
