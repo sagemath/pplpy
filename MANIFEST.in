@@ -1,5 +1,7 @@
-include README.rst
-include *.txt
-include docs/*
-include docs/_static/*
-include ppl/*.pxd
+include README.rst LICENSE.txt CHANGES.txt setup.py version.txt
+prune sphinx-docs
+prune tests
+recursive-include ppl *.pxd *.pyx *.py
+include ppl/ppl_shim.cc
+include ppl/ppl_shim.hh
+recursive-exclude ppl *.so *.c *.cpp
