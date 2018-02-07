@@ -76,6 +76,13 @@ Documentation
 
 The documentation is available at http://pythonhosted.org/pplpy/
 
+License
+-------
+
+pplpy is distributed under the terms of the GNU General Public License (GPL)
+published by the Free Software Foundation; either version 3 of
+the License, or (at your option) any later version. See http://www.gnu.org/licenses/.
+
 Requirements
 ------------
 
