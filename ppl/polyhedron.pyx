@@ -1532,10 +1532,10 @@ cdef class Polyhedron(object):
         INPUT:
 
         - ``y`` -- a :class:`Polyhedron` that must be contained in ``self`` 
-        
+
         - ``tp`` -- an optional unsigned variable with the number of
-        available tokens (to be used when applying the `widening with
-        tokens` delay technique).
+          available tokens (to be used when applying the `widening with
+          tokens` delay technique).
 
         OUTPUT:
 
@@ -1632,13 +1632,13 @@ cdef class Polyhedron(object):
         INPUT:
 
         - ``y`` -- a :class:`Polyhedron` that must be contained in ``self`` 
-        
+
         - ``cs`` -- a :class:`Constraint_System` used to improve the
           widened polyhedron
-        
+
         - ``tp`` -- an optional unsigned variable with the number of
-        available tokens (to be used when applying the `widening with
-        tokens` delay technique).
+          available tokens (to be used when applying the `widening with
+          tokens` delay technique).
 
         OUTPUT:
 
@@ -1693,13 +1693,13 @@ cdef class Polyhedron(object):
         INPUT:
 
         - ``y`` -- a :class:`Polyhedron` that must be contained in ``self`` 
-        
+
         - ``cs`` -- a :class:`Constraint_System` used to improve the
           widened polyhedron
-        
+
         - ``tp`` -- an optional unsigned variable with the number of
-        available tokens (to be used when applying the `widening with
-        tokens` delay technique).
+          available tokens (to be used when applying the `widening with
+          tokens` delay technique).
 
         OUTPUT:
 
@@ -1744,10 +1744,10 @@ cdef class Polyhedron(object):
         INPUT:
 
         - ``y`` -- a :class:`Polyhedron` that must be contained in ``self`` 
-        
+
         - ``tp`` -- an optional unsigned variable with the number of
-        available tokens (to be used when applying the `widening with
-        tokens` delay technique).
+          available tokens (to be used when applying the `widening with
+          tokens` delay technique).
 
         OUTPUT:
 
@@ -1834,13 +1834,13 @@ cdef class Polyhedron(object):
         INPUT:
 
         - ``y`` -- a :class:`Polyhedron` that must be contained in ``self`` 
-        
+
         - ``cs`` -- a :class:`Constraint_System` used to improve the
           widened polyhedron
-        
+
         - ``tp`` -- an optional unsigned variable with the number of
-        available tokens (to be used when applying the `widening with
-        tokens` delay technique).
+          available tokens (to be used when applying the `widening with
+          tokens` delay technique).
 
         OUTPUT:
 
@@ -1915,13 +1915,13 @@ cdef class Polyhedron(object):
         INPUT:
 
         - ``y`` -- a :class:`Polyhedron` that must be contained in ``self`` 
-        
+
         - ``cs`` -- a :class:`Constraint_System` used to improve the
           widened polyhedron
-        
+
         - ``tp`` -- an optional unsigned variable with the number of
-        available tokens (to be used when applying the `widening with
-        tokens` delay technique).
+          available tokens (to be used when applying the `widening with
+          tokens` delay technique).
 
         OUTPUT:
 
