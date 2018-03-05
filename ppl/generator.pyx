@@ -1,9 +1,18 @@
 # distutils: language = c++
 # distutils: libraries = gmp gmpxx ppl m
 #*****************************************************************************
-#       Copyright (C) 2010 Volker Braun  <vbraun.name@gmail.com>
-#                     2016 Vincent Delecroix <vincent.delecroix@labri.fr>
-#                     2017 Vincent Klein <vinklein@gmail.com>
+#       Copyright (C) 2010-2014 Volker Braun  <vbraun.name@gmail.com>
+#                     2011 Simon King <simon.king@uni-jena.de>
+#                     2011-2017 Jeroen Demeyer <jdemeyer@cage.ugent.be>
+#                     2012 Risan <ptrrsn.1@gmail.com>
+#                     2013 Julien Puydt <julien.puydt@laposte.net>
+#                     2013 Travis Scrimshaw <tscrim@ucdavis.edu>
+#                     2015 André Apitzsch <andre.apitzsch@etit.tu-chemnitz.de>
+#                     2016 Jori Mäntysalo <jori.mantysalo@uta.fi>
+#                     2016 Matthias Koeppe <mkoeppe@math.ucdavis.edu>
+#                     2016-2017 Frédéric Chapoton <chapoton@math.univ-lyon1.fr>
+#                     2016-2018 Vincent Delecroix <vincent.delecroix@labri.fr>
+#                     2017-2018 Vincent Klein <vinklein@gmail.com>
 #
 #  Distributed under the terms of the GNU General Public License (GPL)
 #  as published by the Free Software Foundation; either version 3 of
