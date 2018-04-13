@@ -29,22 +29,8 @@ from gmpy2 cimport import_gmpy2, mpz, GMPy_MPZ_From_mpz, MPZ_Check
 from .constraint cimport _make_Constraint_from_richcmp
 from .ppl_decl cimport mpz_t, mpz_init, mpz_class
 
-# TODO: interruption buisness. This is internal to Sage. Though by default
-# we could map sig_on/sig_off to a no-op
-# how can these be changed at Python launched time? -> function pointers!
-#include 'sage/ext/interrupt.pxi'
-
 # initialize gmpy2 C API
 import_gmpy2()
-
-
-####################################################
-# Potentially expensive operations:
-#  - compute dual description
-#  - solve linear program
-# These can only be triggered by methods in the Polyhedron class
-# they need to be wrapped in sig_on() / sig_off()
-####################################################
 
 ####################################################
 # PPL can use floating-point arithmetic to compute integers

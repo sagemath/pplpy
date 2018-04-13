@@ -123,7 +123,7 @@ AUTHORS:
 - Vincent Delecroix (2016): convert Sage files into a standalone Python package
 - Vincent Klein (2017): improve doctest support and Python 3 compatibility
   Split the main code into several files.
-  Remove the _mutable_immutable classe.
+  Remove the _mutable_immutable class.
 """
 from __future__ import absolute_import
 
