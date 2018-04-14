@@ -1,71 +1,59 @@
 sudo: required
 language: python
+os: linux
+dist: trusty
+
 matrix:
   include:
-#    Tests on osx are working but are slow. Uncomment to run them.
-#    - language: generic
-#      os: osx
-#      before_install: # command to install dependencies
-#        - brew update
-#        # python 2.7.12
-#        - virtualenv env -p python
-#
-#    - language: generic
-#      os: osx
-#      before_install: # command to install dependencies
-#        - brew update
-#        # python 3.4.3_2
-#        - brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/6051bbe8a67698f3b7e1aad48466c67f77ec04a1/Formula/python3.rb
-#        - virtualenv env -p python3
-#
-#    - language: generic
-#      os: osx
-#      before_install: # command to install dependencies
-#        - brew update
-#        # python 3.5.2_3
-#        - brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/ec545d45d4512ace3570782283df4ecda6bb0044/Formula/python3.rb
-#        - virtualenv env -p python3
-#
-#    - language: generic
-#      os: osx
-#      before_install: # command to install dependencies
-#        - brew update
-#        # python 3.6.1
-#        - brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/0c07502e530bae1ca8811a3a27ab0583fbb396b0/Formula/python3.rb
-#        - virtualenv env -p python3
 
-  - langage: python
-    python: 2.7
-    os: linux
-    dist: trusty
+  - python: 2.7
+    compiler: gcc
 
-  - langage: python
-    python: 3.4
-    os: linux
-    dist: trusty
+  - python: 2.7
+    compiler: clang
+    env:
+      CC=clang
+      CXX=clang++
+      LDSHARED='clang -shared'
 
-  - langage: python
-    python: 3.5
-    os: linux
-    dist: trusty
+  - python: 3.4
+    compiler: gcc
 
-  - langage: python
-    python: 3.6
-    os: linux
-    dist: trusty
+  - python: 3.4
+    compiler: clang
+    env:
+      CC=clang
+      CXX=clang++
+      LDSHARED='clang -shared'
 
-install: # command to install dependencies
-#  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then source env/bin/activate; fi
-#  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install mpfr; fi
-#  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install libmpc; fi
-#  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install ppl; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install libgmp-dev libmpfr-dev libmpc-dev libppl-dev; fi
+  - python: 3.5
+    compiler: gcc
+
+  - python: 3.5
+    compiler: clang
+    env:
+      CC=clang
+      CXX=clang++
+      LDSHARED='clang -shared'
+
+  - python: 3.6
+    compiler: gcc
+
+  - python: 3.6
+    compiler: clang
+    env:
+      CC=clang
+      CXX=clang++
+      LDSHARED='clang -shared'
+
+install:
+  - sudo apt-get -qq update
+  - sudo apt-get install libgmp-dev libmpfr-dev libmpc-dev libppl-dev
   - pip install Cython --verbose --disable-pip-version-check
   - pip install gmpy2==2.1.0a1 --verbose --disable-pip-version-check --no-binary ":all:"
   - pip install cysignals --verbose --disable-pip-version-check
   - pip install . --verbose --no-index
-# command to run tests
+
 script:
   - cd tests
   - python rundoctest.py
