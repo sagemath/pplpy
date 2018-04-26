@@ -98,7 +98,7 @@ Requirements
 
 - `cysignals <https://pypi.python.org/pypi/cysignals>`_
 
-- `gmpy2 <https://pypi.python.org/pypi/gmpy2>`_
+- `gmpy2 <https://pypi.python.org/pypi/gmpy2>`_: version 2.1.0a1 from sources (see below)
 
 On Debian/Ubuntu systems these can be installed with::
 
