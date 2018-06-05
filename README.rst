@@ -69,7 +69,7 @@ Source
 ------
 
 You can find the latest version of the source code on gitlab:
-https://gitlab.com/videlec/pplpy.git
+https://gitlab.com/videlec/pplpy
 
 Documentation
 -------------
