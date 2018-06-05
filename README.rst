@@ -68,8 +68,8 @@ A complete example is provided with the files `tests/testpplpy.pyx` and `tests/s
 Source
 ------
 
-You can find the latest version of the source code on github:
-https://github.com/videlec/pplpy/
+You can find the latest version of the source code on gitlab:
+https://gitlab.com/videlec/pplpy.git
 
 Documentation
 -------------
