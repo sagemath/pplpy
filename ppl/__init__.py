@@ -144,3 +144,5 @@ closure_point = Generator.closure_point
 from .constraint import (
         Constraint, Constraint_System, Poly_Con_Relation,
         inequality, equation, strict_inequality)
+
+from .bit_arrays import Bit_Row, Bit_Matrix
