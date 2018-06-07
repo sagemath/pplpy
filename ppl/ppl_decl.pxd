@@ -54,7 +54,8 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
     cdef cppclass PPL_mip_iterator      "Parma_Polyhedra_Library::MIP_Problem::const_iterator"
     cdef cppclass PPL_gs_iterator       "Parma_Polyhedra_Library::Generator_System_const_iterator"
     cdef cppclass PPL_cs_iterator       "Parma_Polyhedra_Library::Constraint_System_const_iterator"
-
+    cdef cppclass PPL_Bit_Row           "Parma_Polyhedra_Library::Bit_Row"
+    cdef cppclass PPL_Bit_Matrix        "Parma_Polyhedra_Library::Bit_Matrix"
 
     cdef cppclass PPL_Variable:
         PPL_Variable(PPL_dimension_type i)
@@ -303,6 +304,43 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         void set_control_parameter(PPL_MIP_Problem_Control_Parameter_Value value)
         PPL_mip_iterator constraints_begin()
         PPL_mip_iterator constraints_end()
+
+    cdef cppclass PPL_Bit_Row:
+        PPL_Bit_Row()
+        PPL_Bit_Row(const PPL_Bit_Row& y, const PPL_Bit_Row& z)
+        void set(unsigned long k)
+        void set_until(unsigned long k)
+        void clear_from(unsigned long k)
+        void clear()
+        void union_assign(const PPL_Bit_Row& x, const PPL_Bit_Row& y)
+        void intersection_assign(const PPL_Bit_Row& x, const PPL_Bit_Row& y)
+        void difference_assign(const PPL_Bit_Row&x, const PPL_Bit_Row& y)
+
+        unsigned long first()
+        unsigned long last()
+        unsigned long prev(unsigned long position)
+        unsigned long next(unsigned long position)
+        unsigned long count_ones()
+        cppbool empty()
+
+        cppbool OK()
+
+    cdef cppclass PPL_Bit_Matrix:
+        PPL_Bit_Matrix()
+        PPL_Bit_Matrix(PPL_dimension_type n_rows, PPL_dimension_type n_columns)
+        PPL_Bit_Matrix(const PPL_Bit_Matrix& y)
+
+        PPL_Bit_Row& operator[](PPL_dimension_type k)
+        const PPL_Bit_Row& operator[](PPL_dimension_type k)
+
+        void transpose()
+        void transpose_assign(const PPL_Bit_Matrix& y)
+
+        PPL_dimension_type num_columns()
+        PPL_dimension_type num_rows()
+
+        void sort_rows()
+        cppbool OK()
 
 cdef extern from "ppl.hh":
     PPL_Generator PPL_line          "Parma_Polyhedra_Library::line"             (PPL_Linear_Expression &e) except +ValueError

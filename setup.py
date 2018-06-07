@@ -79,6 +79,9 @@ extensions = [
         depends=['ppl/*']),
     Extension('ppl.constraint',
         sources = ['ppl/constraint.pyx', 'ppl/ppl_shim.cc'],
+        depends=['ppl/*']),
+    Extension('ppl.bit_arrays',
+        sources = ['ppl/bit_arrays.pyx', 'ppl/ppl_shim.cc'],
         depends=['ppl/*'])
     ]
 
