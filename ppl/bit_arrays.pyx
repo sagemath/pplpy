@@ -145,20 +145,20 @@ cdef class Bit_Row(object):
 
         >>> from ppl import Bit_Row
         >>> r = Bit_Row()
-        >>> r.first()
-        -1
+        >>> r.first() == -1
+        True
         >>> r.set(127)
-        >>> r.first()
-        127
+        >>> r.first() == 127
+        True
         >>> r.set(2)
-        >>> r.first()
-        2
+        >>> r.first() == 2
+        True
         >>> r.set(253)
-        >>> r.first()
-        2
+        >>> r.first() == 2
+        True
         >>> r.clear()
-        >>> r.first()
-        -1
+        >>> r.first() == -1
+        True
         """
         cdef unsigned long k = self.thisptr.first()
         if k == ULONG_MAX:
@@ -174,20 +174,20 @@ cdef class Bit_Row(object):
 
         >>> from ppl import Bit_Row
         >>> r = Bit_Row()
-        >>> r.last()
-        -1
+        >>> r.last() == -1
+        True
         >>> r.set(127)
-        >>> r.last()
-        127
+        >>> r.last() == 127
+        True
         >>> r.set(2)
-        >>> r.last()
-        127
+        >>> r.last() == 127
+        True
         >>> r.set(253)
-        >>> r.last()
-        253
+        >>> r.last() == 253
+        True
         >>> r.clear()
-        >>> r.last()
-        -1
+        >>> r.last() == -1
+        True
         """
         cdef unsigned long k = self.thisptr.last()
         if k == ULONG_MAX:
