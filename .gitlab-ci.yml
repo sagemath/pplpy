@@ -1,12 +1,7 @@
-image: ubuntu:16.04
+image: ubuntu:18.04
 before_script:
 - apt-get -qq update
 - apt-get install -y apt-utils git
-- if [[ $PYTHON == "python3.6" ]]; then
-      apt-get install -y software-properties-common python-software-properties;
-      printf "\n" | add-apt-repository ppa:deadsnakes/ppa;
-      apt-get -qq update;
-  fi
 - apt-get install -y libgmp-dev libmpfr-dev libmpc-dev libppl-dev
 - apt-get install -y $PKGS
 - $PYTHON -m pip install Cython --disable-pip-version-check
