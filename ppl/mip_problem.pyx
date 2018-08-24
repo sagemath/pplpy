@@ -470,7 +470,7 @@ cdef class MIP_Problem(object):
         finally:
             sig_off()
 
-    def set_objective_function(self, Linear_Expression obj):
+    def set_objective_function(self, obj):
         """
         Sets the objective function to obj.
 
@@ -496,8 +496,15 @@ cdef class MIP_Problem(object):
         ...
         ValueError: PPL::MIP_Problem::set_objective_function(obj):
         obj.space_dimension() == 3 exceeds this->space_dimension == 2.
+
+        >>> M = MIP_Problem(1)
+        >>> M.set_objective_function(Variable(0))
         """
-        self.thisptr.set_objective_function(obj.thisptr[0])
+        if isinstance(obj, Variable):
+            obj = Linear_Expression(obj)
+        elif not isinstance(obj, Linear_Expression):
+            raise ValueError('not an objective function')
+        self.thisptr.set_objective_function((<Linear_Expression> obj).thisptr[0])
 
     def set_optimization_mode(self, mode):
         """
