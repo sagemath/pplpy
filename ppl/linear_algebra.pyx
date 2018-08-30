@@ -1095,4 +1095,22 @@ cdef class Linear_Expression(object):
         """
         return (Linear_Expression, (self.coefficients(), self.inhomogeneous_term()))
 
-####################################################
+    def permute_space_dimensions(self, cycle):
+        r"""
+        Permute the coordinates according to ``cycle``.
+
+        >>> from ppl import Variable
+        >>> x = Variable(0); y = Variable(1); z = Variable(2)
+        >>> l = 2*x - y + 3*z
+        >>> l.permute_space_dimensions([0, 2])
+        >>> l
+        3*x0-x1+2*x2
+        >>> l.permute_space_dimensions([1, 0, 2])
+        >>> l
+        -x0+2*x1+3*x2
+        """
+        cdef cppvector[PPL_Variable] cpp_cycle
+        cdef int i
+        for i in cycle:
+            cpp_cycle.push_back(PPL_Variable(i))
+        self.thisptr.permute_space_dimensions(cpp_cycle)

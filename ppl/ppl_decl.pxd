@@ -1,4 +1,5 @@
 from libcpp cimport bool as cppbool
+from libcpp.vector cimport vector as cppvector
 
 cdef extern from "gmp.h":
     # gmp integer
@@ -86,6 +87,7 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         bint all_homogeneous_terms_are_zero()
         void ascii_dump()
         bint OK()
+        void permute_space_dimensions(const cppvector[PPL_Variable]& cycle) except +ValueError
         PPL_Linear_Expression operator+(PPL_Linear_Expression& e)
         PPL_Linear_Expression operator-(PPL_Linear_Expression& e)
         PPL_Linear_Expression operator*(PPL_Coefficient n)
@@ -111,6 +113,7 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         bint is_equivalent_to(PPL_Constraint &y)
         void ascii_dump()
         bint OK()
+        void permute_space_dimensions(const cppvector[PPL_Variable]& cycle) except +ValueError
 
     cdef cppclass PPL_Generator:
         PPL_Generator(PPL_Generator &g)
@@ -127,6 +130,7 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         bint is_equivalent_to(PPL_Generator &y)
         void ascii_dump()
         bint OK()
+        void permute_space_dimensions(const cppvector[PPL_Variable]& cycle) except +ValueError
 
     cdef cppclass PPL_Generator_System:
         PPL_Generator_System()

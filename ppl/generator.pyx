@@ -703,6 +703,26 @@ cdef class Generator(object):
         else:
             raise RuntimeError
 
+    def permute_space_dimensions(self, cycle):
+        r"""
+        Permute the coordinates according to ``cycle``.
+
+        >>> from ppl import Generator, Variable
+        >>> x = Variable(0); y = Variable(1); z = Variable(2)
+        >>> p = Generator.point(2*x+7*y-z, 3)
+        >>> p.permute_space_dimensions([0, 1])
+        >>> p
+        point(7/3, 2/3, -1/3)
+        >>> p.permute_space_dimensions([0, 2, 1])
+        >>> p
+        point(2/3, -1/3, 7/3)
+        """
+        cdef cppvector[PPL_Variable] cpp_cycle
+        cdef int i
+        for i in cycle:
+            cpp_cycle.push_back(PPL_Variable(i))
+        self.thisptr.permute_space_dimensions(cpp_cycle)
+
 ####################################################
 ### Generator_System  ##############################
 ####################################################

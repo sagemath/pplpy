@@ -36,6 +36,9 @@ import_gmpy2()
 # but with PPL's rounding the gsl will be very unhappy; must turn off!
 restore_pre_PPL_rounding()
 
+def _dummy():
+    raise ValueError
+
 ####################################################
 ### Constraint ######################################
 ####################################################
@@ -525,6 +528,23 @@ cdef class Constraint(object):
         else:
             raise RuntimeError
 
+    def permute_space_dimensions(self, cycle):
+        """
+        Permute the coordinates according to ``cycle``.
+
+        >>> from ppl import Variable
+        >>> x = Variable(0); y = Variable(1); z = Variable(2)
+        >>> l = 2*x - y + 3*z
+        >>> ieq = l >= 5
+        >>> ieq.permute_space_dimensions([2, 1, 0])
+        >>> ieq
+        -x0+3*x1+2*x2-5>=0
+        """
+        cdef cppvector[PPL_Variable] cpp_cycle
+        cdef int i
+        for i in cycle:
+            cpp_cycle.push_back(PPL_Variable(i))
+        self.thisptr.permute_space_dimensions(cpp_cycle)
 
 ####################################################
 def inequality(expression):
