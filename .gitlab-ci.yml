@@ -27,16 +27,16 @@ python2.7:
     PKGS: python-pip
   script: *test_script
 
-python3.5:
+python3.6:
   stage: test
   variables:
     PYTHON: python3
     PKGS: python3-pip
   script: *test_script
 
-python3.6:
+python3.7:
   stage: test
   variables:
-    PYTHON: python3.6
-    PKGS: python3.6 python3.6-dev python3-pip
+    PYTHON: python3.7
+    PKGS: python3.7 python3.7-dev python3-pip
   script: *test_script
