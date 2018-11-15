@@ -7,7 +7,7 @@ before_script:
 - $PYTHON -m pip install --upgrade pip
 - $PYTHON -m pip install Cython --disable-pip-version-check
 - $PYTHON -m pip install cysignals --disable-pip-version-check
-- $PYTHON -m pip install git+https://github.com/aleaxit/gmpy
+- $PYTHON -m pip install gmpy2==2.1.0a4 --disable-pip-version-check
 - $PYTHON setup.py sdist
 - $PYTHON -m pip install dist/pplpy-*.tar.gz --verbose --no-index
 
