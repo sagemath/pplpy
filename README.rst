@@ -74,7 +74,7 @@ https://gitlab.com/videlec/pplpy
 Documentation
 -------------
 
-The documentation is available at http://pythonhosted.org/pplpy/
+The documentation is available at http://www.labri.fr/perso/vdelecro/pplpy/latest/
 
 License
 -------

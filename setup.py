@@ -62,7 +62,9 @@ class TestCommand(Command):
             os.chdir(old_path)
             rmtree(tempdir_path)
 
-VERSION = open('version.txt').read()[:-1]
+with open('version.txt') as f:
+    VERSION = f.read()[:-1]
+    assert 2 <= len(VERSION.split('.')) <= 3
 
 extensions = [
     Extension('ppl.linear_algebra',
@@ -93,7 +95,7 @@ setup(
     author='Vincent Delecroix',
     author_email='vincent.delecroix@labri.fr',
     url='https://gitlab.com/videlec/pplpy',
-    download_url ='https://gitlab.com/videlec/pplpy/archive/{}.tar.gz'.format(VERSION),
+    download_url='https://pypi.org/project/pplpy/#files',
     license='GPL v3',
     platforms=['any'],
     packages=['ppl'],
