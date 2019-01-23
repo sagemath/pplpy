@@ -48,8 +48,6 @@ cdef PPL_Coefficient PPL_Coefficient_from_pyobject(c) except *:
         coeff = <mpz> c
     else:
         coeff = mpz(c)
-        if not isinstance(c, str) and coeff != c:
-            raise ValueError('input must be an integer')
 
     return PPL_Coefficient(coeff.z)
 
@@ -582,7 +580,23 @@ cdef class Linear_Expression(object):
     >>> Linear_Expression((4, 1.0, mpq('4/2')), 2.0)
     4*x0+x1+2*x2+2
 
-    Though, if the numbers are not integers a ValueError is raised:
+    The conversion to integer coefficients is done via a call to `gmpy2.mpz`.
+    For example, Python floating point numbers and gmpy2 rationals are silently
+    casted to integers:
+
+    >>> Linear_Expression((1, 2.1, 1), 1)
+    x0+2*x1+x2+1
+    >>> Linear_Expression(mpq('1/2'))
+    0
+
+    Since
+
+    >>> mpz(2.1)
+    mpz(2)
+    >>> mpz(mpq('1/2'))
+    mpz(0)
+
+    Invalid input result in errors:
 
     >>> Linear_Expression('I am a linear expression')
     Traceback (most recent call last):
@@ -592,14 +606,6 @@ cdef class Linear_Expression(object):
     Traceback (most recent call last):
     ...
     TypeError: mpz() requires numeric or string argument
-    >>> Linear_Expression((1, 2.1, 1), 1)
-    Traceback (most recent call last):
-    ...
-    ValueError: input must be an integer
-    >>> Linear_Expression(mpq('1/2'))
-    Traceback (most recent call last):
-    ...
-    ValueError: input must be an integer
     """
     def __cinit__(self, *args):
         """
