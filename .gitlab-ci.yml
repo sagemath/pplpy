@@ -1,6 +1,6 @@
 image: ubuntu:18.04
 before_script:
-- export DEBIAN_FRONTEND=noninteractive
+- export DEBIAN_FRONTEND=noninteractive   # avoid tzdata interactive configuration
 - apt-get -qq update
 - apt-get install -y apt-utils git
 - apt-get install -y libgmp-dev libmpfr-dev libmpc-dev libppl-dev
@@ -10,7 +10,11 @@ before_script:
 - $PYTHON -m pip install cysignals --disable-pip-version-check
 - $PYTHON -m pip install gmpy2==2.1.0a4 --disable-pip-version-check
 - $PYTHON setup.py sdist
-- $PYTHON -m pip install dist/pplpy-*.tar.gz --verbose --no-index
+- mkdir tmp
+- cd tmp
+- tar xf ../dist/pplpy-*.tar.gz
+- cd pplpy-*
+- $PYTHON -m pip install . --verbose --no-index
 
 .template_script:
   script: &test_script
@@ -21,7 +25,7 @@ before_script:
   - $PYTHON setup2.py build_ext --inplace
   - $PYTHON -c "import testpplpy2"
   - cd ../
-  - cd sphinx-doc
+  - cd docs
   - make html
 
 python2.7:
