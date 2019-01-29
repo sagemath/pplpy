@@ -78,9 +78,9 @@ An online version of the documentation is available at http://www.labri.fr/perso
 
 Compiling the html documentation requires make and `sphinx <http://www.sphinx-doc.org/en/master/>`_.
 Before building the documentation, you need to install the pplpy package (sphinx uses Python introspection).
-The documentation source code is contained in the repository `sphinx-doc` where there is a standard
-Makefile with a target `html`. Running `make html` in the `sphinx-doc` repository builds the documentation
-inside `sphinx-doc/build/html`. For more configuration options, run `make help`.
+The documentation source code is contained in the repository `docs` where there is a standard
+Makefile with a target `html`. Running `make html` in the `docs` repository builds the documentation
+inside `docs/build/html`. For more configuration options, run `make help`.
 
 License
 -------
