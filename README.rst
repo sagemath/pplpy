@@ -109,8 +109,11 @@ Requirements
 On Debian/Ubuntu systems these can be installed with::
 
     $ sudo apt-get install libgmp-dev libmpfr-dev libmpc-dev libppl-dev cython
-    $ sudo pip install cysignals [--user]
-    $ pip install gmpy2==2.1.0a4 [--user]
+    $ pip install cysignals --user
+    $ pip install gmpy2==2.1.0a4 --user
 
 The pip optional option `--user` allows to install python packages for a single
-user with no need for administrator rights.
+user with no need for administrator rights. The two pip install commands might
+be replaced by `sudo pip install PKG` (not recommanded). On recent Debian/Ubuntu systems,
+cysignals is also available as a package under the name `python-cysignals` for
+Python 2 and `python3-cysignals` for Python 3.
