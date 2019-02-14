@@ -18,13 +18,7 @@ before_script:
 
 .template_script:
   script: &test_script
-  - cd tests
-  - $PYTHON runtests.py
-  - $PYTHON setup.py build_ext --inplace
-  - $PYTHON -c "import testpplpy"
-  - $PYTHON setup2.py build_ext --inplace
-  - $PYTHON -c "import testpplpy2"
-  - cd ../
+  - $PYTHON setup.py test
   - cd docs
   - make html
 
