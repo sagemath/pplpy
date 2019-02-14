@@ -48,7 +48,7 @@ class TestCommand(Command):
             copy_tree('./tests', tempdir_path)
             os.chdir(tempdir_path)
 
-            if subprocess.call([sys.executable, 'rundoctest.py']):
+            if subprocess.call([sys.executable, 'runtests.py']):
                 raise SystemExit("Doctest failures")
 
             if subprocess.call([sys.executable, 'setup.py', 'build_ext', '--inplace']) or \
