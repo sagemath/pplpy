@@ -22,6 +22,8 @@
 
 from __future__ import absolute_import, print_function
 
+cimport cython
+
 from cpython.int cimport PyInt_CheckExact
 from cpython.long cimport PyLong_CheckExact
 from cpython.object cimport PyObject
@@ -51,6 +53,7 @@ cdef PPL_Coefficient PPL_Coefficient_from_pyobject(c) except *:
 
     return PPL_Coefficient(coeff.z)
 
+@cython.freelist(128)
 cdef class Variable(object):
     r"""
     Wrapper for PPL's ``Variable`` class.
