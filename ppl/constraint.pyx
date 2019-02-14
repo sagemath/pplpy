@@ -91,7 +91,15 @@ cdef class Constraint(object):
     >>> Linear_Expression(0) == 1
     mpz(-1)==0
     """
-    def __cinit__(self, do_not_construct_manually=False):
+    def __init__(self, arg=None):
+        if arg is None:
+            self.thisptr = new PPL_Constraint()
+        elif isinstance(arg, Constraint):
+            self.thisptr = new PPL_Constraint((<Constraint> arg).thisptr[0])
+        else:
+            raise TypeError("invalid argument for Constraint")
+
+    def __cinit__(self):
         """
         The Cython constructor.
 
@@ -104,14 +112,12 @@ cdef class Constraint(object):
             >>> x>0   # indirect doctest
             x0>0
         """
-        assert(do_not_construct_manually)
         self.thisptr = NULL
 
     def __dealloc__(self):
         """
         The Cython destructor.
         """
-        assert self.thisptr!=NULL, 'Do not construct Constraints manually!'
         del self.thisptr
 
     def __hash__(self):
@@ -651,18 +657,7 @@ cdef class Constraint_System(object):
         >>> cs[0]
         5*x0-2*x1>0
     """
-    def __cinit__(self, arg=None):
-        """
-        The Cython constructor.
-
-        See :class:`Constraint_System` for documentation.
-
-        Tests:
-
-        >>> from ppl import Constraint_System
-        >>> Constraint_System()
-        Constraint_System {}
-        """
+    def __init__(self, arg=None):
         if arg is None:
             self.thisptr = new PPL_Constraint_System()
         elif isinstance(arg, Constraint):
@@ -677,6 +672,20 @@ cdef class Constraint_System(object):
                 self.insert(constraint)
         else:
             raise TypeError('cannot initialize from {!r}'.format(arg))
+
+    def __cinit__(self, arg=None):
+        """
+        The Cython constructor.
+
+        See :class:`Constraint_System` for documentation.
+
+        Tests:
+
+        >>> from ppl import Constraint_System
+        >>> Constraint_System()
+        Constraint_System {}
+        """
+        self.thisptr = NULL
 
     def __dealloc__(self):
         """
@@ -1253,7 +1262,7 @@ cdef _wrap_Constraint(PPL_Constraint constraint):
     """
     Wrap a C++ ``PPL_Constraint`` into a Cython ``Constraint``.
     """
-    cdef Constraint c = Constraint(True)
+    cdef Constraint c = Constraint.__new__(Constraint)
     c.thisptr = new PPL_Constraint(constraint)
     return c
 
@@ -1261,8 +1270,7 @@ cdef _wrap_Constraint_System(PPL_Constraint_System constraint_system):
     """
     Wrap a C++ ``PPL_Constraint_System`` into a Cython ``Constraint_System``.
     """
-    cdef Constraint_System cs = Constraint_System()
-    del cs.thisptr
+    cdef Constraint_System cs = Constraint_System.__new__(Constraint_System)
     cs.thisptr = new PPL_Constraint_System(constraint_system)
     return cs
 
