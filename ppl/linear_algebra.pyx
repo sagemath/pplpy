@@ -359,26 +359,33 @@ cdef class Variables_Set(object):
 
     A set of variables' indexes.
 
-    EXAMPLES:
+    Examples:
 
-    Build the empty set of variable indexes::
+    Build the empty set of variable indexes:
 
-            >>> from ppl import Variable, Variables_Set
-            >>> Variables_Set()
-            Variables_Set of cardinality 0
+    >>> from ppl import Variable, Variables_Set
+    >>> Variables_Set()
+    Variables_Set of cardinality 0
 
-    Build the singleton set of indexes containing the index of the variable::
+    Build the singleton set of indexes containing the index of the variable:
 
-            >>> v123 = Variable(123)
-            >>> Variables_Set(v123)
-            Variables_Set of cardinality 1
+    >>> v123 = Variable(123)
+    >>> Variables_Set(v123)
+    Variables_Set of cardinality 1
 
     Build the set of variables' indexes in the range from one variable to
-    another variable::
+    another variable:
 
-            >>> v127 = Variable(127)
-            >>> Variables_Set(v123,v127)
-            Variables_Set of cardinality 5
+    >>> v127 = Variable(127)
+    >>> Variables_Set(v123,v127)
+    Variables_Set of cardinality 5
+
+    You can alternatively use integers:
+
+    >>> Variables_Set(23)
+    Variables_Set of cardinality 1
+    >>> Variables_Set(10, 14)
+    Variables_Set of cardinality 5
     """
     def __cinit__(self, *args):
         """
@@ -392,15 +399,27 @@ cdef class Variables_Set(object):
         >>> Variables_Set()
         Variables_Set of cardinality 0
         """
+        cdef Variable arg0, arg1
         if len(args) == 0:
             self.thisptr = new PPL_Variables_Set()
         elif len(args) == 1:
-            v = <Variable?>args[0]
-            self.thisptr = new PPL_Variables_Set(v.thisptr[0])
+            if type(args[0]) is Variable:
+                arg0 = <Variable> args[0]
+            else:
+                arg0 = Variable(args[0])
+            self.thisptr = new PPL_Variables_Set(arg0.thisptr[0])
         elif len(args) == 2:
-            v = <Variable?>args[0]
-            w = <Variable?>args[1]
-            self.thisptr = new PPL_Variables_Set(v.thisptr[0], w.thisptr[0])
+            if type(args[0]) is Variable:
+                arg0 = <Variable> args[0]
+            else:
+                arg0 = Variable(args[0])
+
+            if type(args[1]) is Variable:
+                arg1 = <Variable> args[1]
+            else:
+                arg1 = Variable(args[1])
+
+            self.thisptr = new PPL_Variables_Set(arg0.thisptr[0], arg1.thisptr[0])
 
     def __hash__(self):
         r"""
@@ -693,7 +712,7 @@ cdef class Linear_Expression(object):
         """
         return self.thisptr.space_dimension()
 
-    def set_space_dimension(self, size_t n):
+    def set_space_dimension(self, PPL_dimension_type n):
         r"""
         Set the dimension of the ambient space to ``n``
 
@@ -714,7 +733,84 @@ cdef class Linear_Expression(object):
         """
         self.thisptr.set_space_dimension(n)
 
-    def coefficient(self, Variable v):
+    def swap_space_dimensions(self, v1, v2):
+        r"""
+        Swaps the coefficients of ``v1`` and ``v2``.
+
+        INPUT:
+
+        - ``v1``, ``v2`` - variables or indices of variables
+
+        Examples:
+
+        >>> import ppl
+        >>> L = ppl.Variable(1) - 3 * ppl.Variable(3)
+        >>> L.swap_space_dimensions(ppl.Variable(1), ppl.Variable(3))
+        >>> L
+        -3*x1+x3
+
+        >>> L = ppl.Variable(1) - 3 * ppl.Variable(3)
+        >>> L.swap_space_dimensions(1, 3)
+        >>> L
+        -3*x1+x3
+        """
+        cdef Variable vv1, vv2
+        if type(v1) is Variable:
+            vv1 = <Variable> v1
+        else:
+            vv1 = Variable(v1)
+        if type(v2) is Variable:
+            vv2 = <Variable> v2
+        else:
+            vv2 = Variable(v2)
+        self.thisptr.swap_space_dimensions(vv1.thisptr[0], vv2.thisptr[0])
+
+    def shift_space_dimensions(self, v, PPL_dimension_type n):
+        r"""
+        Shift by ``n`` the coefficients of variables starting from the
+        coefficient of ``v``.
+
+        This increases the space dimension by ``n``.
+
+        Examples:
+
+        >>> import ppl
+        >>> L = ppl.Variable(0) + 13 * ppl.Variable(2) + 5 * ppl.Variable(7)
+        >>> L
+        x0+13*x2+5*x7
+        >>> L.shift_space_dimensions(ppl.Variable(2), 2)
+        >>> L
+        x0+13*x4+5*x9
+        >>> L.shift_space_dimensions(ppl.Variable(7), 3)
+        >>> L
+        x0+13*x4+5*x12
+        """
+        cdef Variable vv
+        if type(v) is Variable:
+            vv = <Variable> v
+        else:
+            vv = Variable(v)
+        self.thisptr.shift_space_dimensions(vv.thisptr[0], n)
+
+    def remove_space_dimensions(self, Variables_Set V):
+        r"""
+        Removes the dimension specified by the set of variables ``V``.
+
+        See :class:`Variables_Set` to construct set of variables.
+
+        Examples:
+
+        >>> import ppl
+        >>> L = sum(i * ppl.Variable(i) for i in range(10))
+        >>> L
+        x1+2*x2+3*x3+4*x4+5*x5+6*x6+7*x7+8*x8+9*x9
+        >>> L.remove_space_dimensions(ppl.Variables_Set(3,5))
+        >>> L
+        x1+2*x2+6*x3+7*x4+8*x5+9*x6
+        """
+        self.thisptr.remove_space_dimensions(V.thisptr[0])
+
+    def coefficient(self, v):
         """
         Return the coefficient of the variable ``v``.
 
@@ -734,7 +830,12 @@ cdef class Linear_Expression(object):
         >>> e.coefficient(x)
         mpz(3)
         """
-        return GMPy_MPZ_From_mpz(self.thisptr.coefficient(v.thisptr[0]).get_mpz_t())
+        cdef Variable vv
+        if type(v) is Variable:
+            vv = <Variable> v
+        else:
+            vv = Variable(v)
+        return GMPy_MPZ_From_mpz(self.thisptr.coefficient(vv.thisptr[0]).get_mpz_t())
 
     def coefficients(self):
         """
@@ -759,6 +860,35 @@ cdef class Linear_Expression(object):
             coeffs[i] = GMPy_MPZ_From_mpz(self.thisptr.coefficient(PPL_Variable(i)).get_mpz_t())
         return tuple(coeffs)
 
+    def set_coefficient(self, i, v):
+        """
+        Set the ``i``-th coefficient to ``v``.
+
+        INPUT:
+
+        - ``i`` - variable or variable index
+
+        - ``v`` - integer
+
+        Examples:
+
+        >>> from ppl import Variable
+        >>> L = Variable(0) + 3 * Variable(1)
+        >>> L.set_coefficient(1, -5)
+        >>> L.set_coefficient(7, 3)
+        >>> L
+        x0-5*x1
+        """
+        cdef Variable ii
+        if type(i) is Variable:
+            ii = <Variable> i
+        else:
+            ii = Variable(i)
+
+        cdef PPL_Coefficient vv = PPL_Coefficient_from_pyobject(v)
+
+        self.thisptr.set_coefficient(ii.thisptr[0], vv)
+
     def inhomogeneous_term(self):
         """
         Return the inhomogeneous term of the linear expression.
@@ -769,11 +899,26 @@ cdef class Linear_Expression(object):
 
         Examples:
 
-        >>> from ppl import Variable, Linear_Expression
+        >>> from ppl import Linear_Expression
         >>> Linear_Expression(10).inhomogeneous_term()
         mpz(10)
         """
         return GMPy_MPZ_From_mpz(self.thisptr.inhomogeneous_term().get_mpz_t())
+
+    def set_inhomogeneous_term(self, v):
+        """
+        Set the inhomogeneous term of this linear expression.
+
+        Examples:
+
+        >>> from ppl import Linear_Expression
+        >>> L = Linear_Expression()
+        >>> L.set_inhomogeneous_term(-1313958534578713747)
+        >>> L.inhomogeneous_term()
+        mpz(-1313958534578713747)
+        """
+        cdef PPL_Coefficient vv = PPL_Coefficient_from_pyobject(v)
+        self.thisptr.set_inhomogeneous_term(vv)
 
     def is_zero(self):
         """
@@ -809,6 +954,25 @@ cdef class Linear_Expression(object):
         """
         return self.thisptr.all_homogeneous_terms_are_zero()
 
+    def is_equal_to(self, Linear_Expression other):
+        """
+        Test equality with an other linear expression.
+
+        OUTPUT: boolean
+
+        Examples:
+
+        >>> from ppl import Variable
+        >>> L1 = Variable(0) + 2 * Variable(3)
+        >>> L2 = Variable(0) + 2 * Variable(3)
+        >>> L3 = Variable(0) - Variable(2)
+        >>> L1.is_equal_to(L2)
+        True
+        >>> L1.is_equal_to(L3)
+        False
+        """
+        return self.thisptr.is_equal_to(other.thisptr[0])
+
     def ascii_dump(self):
         r"""
         Write an ASCII dump to stderr.
@@ -837,7 +1001,7 @@ cdef class Linear_Expression(object):
 
         Examples:
 
-        >>> from ppl import Linear_Expression, Variable
+        >>> from ppl import Variable
         >>> x = Variable(0)
         >>> y = Variable(1)
         >>> e = 3*x+2*y+1
@@ -1108,6 +1272,8 @@ cdef class Linear_Expression(object):
         r"""
         Permute the coordinates according to ``cycle``.
 
+        Examples:
+
         >>> from ppl import Variable
         >>> x = Variable(0); y = Variable(1); z = Variable(2)
         >>> l = 2*x - y + 3*z
@@ -1119,7 +1285,7 @@ cdef class Linear_Expression(object):
         -x0+2*x1+3*x2
         """
         cdef cppvector[PPL_Variable] cpp_cycle
-        cdef int i
+        cdef PPL_dimension_type i
         for i in cycle:
             cpp_cycle.push_back(PPL_Variable(i))
         self.thisptr.permute_space_dimensions(cpp_cycle)

@@ -74,20 +74,40 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         void ascii_dump()
         bint OK()
 
+    # class Parma_Polyhedra_Library::Linear_Expression
+    # lines 28238-28879 of ppl.hh
     cdef cppclass PPL_Linear_Expression:
         PPL_Linear_Expression()
         PPL_Linear_Expression(PPL_Linear_Expression &e)
         PPL_Linear_Expression(PPL_Coefficient n)
         PPL_Linear_Expression(PPL_Variable v)
+
+        PPL_dimension_type max_space_dimension()
         PPL_dimension_type space_dimension()
         void set_space_dimension(PPL_dimension_type d)
         PPL_Coefficient coefficient(PPL_Variable v)
+        void set_coefficient(PPL_Variable v, PPL_Coefficient)
         PPL_Coefficient inhomogeneous_term()
+        void set_inhomogeneous_term(PPL_Coefficient n)
+        void linear_combine(const PPL_Linear_Expression& y, PPL_Variable v)
+        void linear_combine(const PPL_Linear_Expression& y, PPL_Coefficient c1, PPL_Coefficient c2)
+        void linear_combine_lax(const PPL_Linear_Expression& u, PPL_Coefficient c1, PPL_Coefficient c2)
+        void swap_space_dimensions(PPL_Variable v1, PPL_Variable v2)
+        void remove_space_dimensions(const PPL_Variables_Set)
+        void shift_space_dimensions(PPL_Variable v, PPL_dimension_type n)
+        void permute_space_dimensions(const cppvector[PPL_Variable]& cycle) except +ValueError
         bint is_zero()
         bint all_homogeneous_terms_are_zero()
+        bint is_equal_to(PPL_Linear_Expression& x)
+        bint all_zeroes(const PPL_Variables_Set& v)
+
         void ascii_dump()
         bint OK()
-        void permute_space_dimensions(const cppvector[PPL_Variable]& cycle) except +ValueError
+
+        #PPL_Linear_Expression operator+=(PPL_Linear_Expression& e)
+        #PPL_Linear_Expression operator-=(PPL_Linear_Expression& e)
+        #PPL_Linear_Expression operator*=(PPL_Coefficient n)
+        #PPL_Linear_Expression operator/=(PPL_Coefficient n)
         PPL_Linear_Expression operator+(PPL_Linear_Expression& e)
         PPL_Linear_Expression operator-(PPL_Linear_Expression& e)
         PPL_Linear_Expression operator*(PPL_Coefficient n)
