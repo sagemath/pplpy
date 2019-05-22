@@ -67,24 +67,12 @@ with open('version.txt') as f:
     assert 2 <= len(VERSION.split('.')) <= 3
 
 extensions = [
-    Extension('ppl.linear_algebra',
-        sources=['ppl/linear_algebra.pyx', 'ppl/ppl_shim.cc'],
-        depends=['ppl/*']),
-    Extension('ppl.mip_problem',
-        sources=['ppl/mip_problem.pyx', 'ppl/ppl_shim.cc'],
-        depends=['ppl/*']),
-    Extension('ppl.polyhedron',
-        sources = ['ppl/polyhedron.pyx', 'ppl/ppl_shim.cc'],
-        depends=['ppl/*']),
-    Extension('ppl.generator',
-        sources = ['ppl/generator.pyx', 'ppl/ppl_shim.cc'],
-        depends=['ppl/*']),
-    Extension('ppl.constraint',
-        sources = ['ppl/constraint.pyx', 'ppl/ppl_shim.cc'],
-        depends=['ppl/*']),
-    Extension('ppl.bit_arrays',
-        sources = ['ppl/bit_arrays.pyx', 'ppl/ppl_shim.cc'],
-        depends=['ppl/*'])
+    Extension('ppl.linear_algebra', sources=['ppl/linear_algebra.pyx', 'ppl/ppl_shim.cc']),
+    Extension('ppl.mip_problem', sources=['ppl/mip_problem.pyx', 'ppl/ppl_shim.cc']),
+    Extension('ppl.polyhedron', sources = ['ppl/polyhedron.pyx', 'ppl/ppl_shim.cc']),
+    Extension('ppl.generator', sources = ['ppl/generator.pyx', 'ppl/ppl_shim.cc']),
+    Extension('ppl.constraint', sources = ['ppl/constraint.pyx', 'ppl/ppl_shim.cc']),
+    Extension('ppl.bit_arrays', sources = ['ppl/bit_arrays.pyx', 'ppl/ppl_shim.cc']),
     ]
 
 setup(
@@ -101,7 +89,7 @@ setup(
     packages=['ppl'],
     package_dir={'ppl': 'ppl'},
     package_data={'ppl': ['*.pxd', '*.h', '*.hh']},
-    install_requires=['Cython', 'cysignals', 'gmpy2'],  # For pip install, pip can't read setup_requires
+    install_requires=['Cython', 'cysignals', 'gmpy2>=2.1.0a1'],  # For pip install, pip can't read setup_requires
     include_dirs=['ppl'] + sys.path,
     ext_modules=extensions,
     classifiers=[
