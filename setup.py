@@ -1,4 +1,17 @@
 #!/usr/bin/env python
+#
+# Ideally, it should be possible to generate a source distribution
+# before building the package. However, in order to install dependency
+# a convenient option would be to generate the egg-info via
+#
+#  python setup.py egg_info
+#
+# But that does not work without all dependencies being available... see e.g.
+#
+# https://github.com/pypa/setuptools/issues/1317#issuecomment-387702371
+#
+# Everything could be solved once pip is complient with PEP 517 / PEP 518.
+
 from setuptools import setup
 from distutils.command.build_ext import build_ext as _build_ext
 from distutils.cmd import Command
@@ -89,7 +102,6 @@ setup(
     packages=['ppl'],
     package_dir={'ppl': 'ppl'},
     package_data={'ppl': ['*.pxd', '*.h', '*.hh']},
-    install_requires=['Cython', 'cysignals', 'gmpy2>=2.1.0a1'],  # For pip install, pip can't read setup_requires
     include_dirs=['ppl'] + sys.path,
     ext_modules=extensions,
     classifiers=[
