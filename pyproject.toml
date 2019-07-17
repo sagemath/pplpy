@@ -1,0 +1,2 @@
+[build-system]
+requires = ["setuptools", "wheel", "Cython", "cysignals", "gmpy2>=2.1.0a1"]

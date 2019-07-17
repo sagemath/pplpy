@@ -104,13 +104,13 @@ Requirements
 
 - `cysignals <https://pypi.python.org/pypi/cysignals>`_
 
-- `gmpy2 <https://pypi.python.org/pypi/gmpy2>`_: version 2.1.0a4 from sources (see below)
+- `gmpy2 <https://pypi.python.org/pypi/gmpy2>`_: version >= 2.1.0a4 from sources (see below)
 
 On Debian/Ubuntu systems these can be installed with::
 
     $ sudo apt-get install libgmp-dev libmpfr-dev libmpc-dev libppl-dev cython
     $ pip install cysignals --user
-    $ pip install gmpy2==2.1.0a4 --user
+    $ pip install gmpy2 --pre --user
 
 The pip optional option `--user` allows to install python packages for a single
 user with no need for administrator rights. The two pip install commands might
