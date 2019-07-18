@@ -956,7 +956,7 @@ cdef class Linear_Expression(object):
 
     def is_equal_to(self, Linear_Expression other):
         """
-        Test equality with an other linear expression.
+        Test equality with another linear expression.
 
         OUTPUT: boolean
 

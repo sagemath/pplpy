@@ -1487,7 +1487,7 @@ cdef class Polyhedron(object):
 
         .. note::
 
-            The modified polyhedron is not neccessarily a lattice
+            The modified polyhedron is not necessarily a lattice
             polyhedron; Some vertices will, in general, still be
             rational. Lattice points interior to the polyhedron may be
             lost in the process.
@@ -1595,7 +1595,7 @@ cdef class Polyhedron(object):
         True
 
         if this method is going to be called too many times, the
-        ``tp`` parameter allows to reduce the computation cost by
+        ``tp`` parameter allows one to reduce the computation cost by
         computing the widening only when ``tp`` is equal to 0,
         otherwise the this method will decrement the value of ``tp``
         and return it.
@@ -1796,7 +1796,7 @@ cdef class Polyhedron(object):
         this->space_dimension() == 2, y.space_dimension() == 3.
 
         if this method is going to be called too many times, the
-        ``tp`` parameter allows to reduce the computation cost by
+        ``tp`` parameter allows one to reduce the computation cost by
         computing the widening only when ``tp`` is equal to 0,
         otherwise the this method will decrement the value of ``tp``
         and return it.
