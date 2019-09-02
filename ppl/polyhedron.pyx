@@ -1615,13 +1615,14 @@ cdef class Polyhedron(object):
         >>> known_result = NNC_Polyhedron(2)
         >>> known_result.add_constraint(y >= 0)
         >>> known_result.add_constraint(y < 1)
-        >>> tp = 1
-        >>> tp = ph2.BHRZ03_widening_assign(ph1, tp); tp
-        0
+        >>> tp = ph2.BHRZ03_widening_assign(ph1, 1)
+        >>> tp == 0
+        True
         >>> ph2 == ph2_copy
         True
-        >>> tp = ph2.BHRZ03_widening_assign(ph1, tp); tp
-        0
+        >>> tp = ph2.BHRZ03_widening_assign(ph1, 0)
+        >>> tp == 0
+        True
         >>> ph2 == known_result
         True
         """
@@ -1815,13 +1816,14 @@ cdef class Polyhedron(object):
         >>> ph2_copy = C_Polyhedron(ph2)
         >>> known_result = C_Polyhedron(2)
         >>> known_result.add_constraint(y >= 0)
-        >>> tp = 1
-        >>> tp = ph2.H79_widening_assign(ph1, tp); tp
-        0
+        >>> tp = ph2.H79_widening_assign(ph1, 1)
+        >>> tp == 0
+        True
         >>> ph2 == ph2_copy
         True
-        >>> tp = ph2.H79_widening_assign(ph1, tp); tp
-        0
+        >>> tp = ph2.H79_widening_assign(ph1, 0)
+        >>> tp == 0
+        True
         >>> ph2 == known_result
         True
         """
