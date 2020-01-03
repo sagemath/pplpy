@@ -16,3 +16,4 @@ dist/
 pplpy.egg-info/
 docs/build/
 .idea/*
+/.tox
