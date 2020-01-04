@@ -2,5 +2,5 @@ setuptools
 wheel
 Cython
 cysignals
-gmpy2>=2.1.0a1
+gmpy2==2.1.0b1
 sphinx
