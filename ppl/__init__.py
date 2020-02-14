@@ -118,9 +118,10 @@ necessarily some differences. The main ones are:
 
 AUTHORS:
 
-- Volker Braun (2010-10-08): initial version (within Sage).
-- Risan (2012-02-19): extension for MIP_Problem class (within Sage)
-- Vincent Delecroix (2016): convert Sage files into a standalone Python package
+- Volker Braun (2010): initial version (within Sage).
+- Risan (2012): extension for MIP_Problem class (within Sage)
+- Vincent Delecroix (2016-2020): convert Sage files into a standalone Python package,
+  interface bit_array, interface congruence
 - Vincent Klein (2017): improve doctest support and Python 3 compatibility
   Split the main code into several files.
   Remove the _mutable_immutable class.
@@ -144,5 +145,7 @@ closure_point = Generator.closure_point
 from .constraint import (
         Constraint, Constraint_System, Poly_Con_Relation,
         inequality, equation, strict_inequality)
+
+from .congruence import Congruence, Congruence_System
 
 from .bit_arrays import Bit_Row, Bit_Matrix

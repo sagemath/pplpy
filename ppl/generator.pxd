@@ -1,4 +1,6 @@
-from ppl_decl cimport *
+from __future__ import absolute_import
+
+from .ppl_decl cimport *
 from .linear_algebra cimport *
 
 cdef _wrap_Generator(PPL_Generator generator)

@@ -35,7 +35,6 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library::MIP_Problem":
     ctypedef enum PPL_MIP_Problem_Control_Parameter_Value:
         PRICING_STEEPEST_EDGE_FLOAT, PRICING_STEEPEST_EDGE_EXACT, PRICING_TEXTBOOK
 
-
 cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
     ctypedef size_t PPL_dimension_type  "Parma_Polyhedra_Library::dimension_type"
     ctypedef mpz_class PPL_Coefficient  "Parma_Polyhedra_Library::Coefficient"
@@ -46,6 +45,8 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
     cdef cppclass PPL_Generator_System  "Parma_Polyhedra_Library::Generator_System"
     cdef cppclass PPL_Constraint        "Parma_Polyhedra_Library::Constraint"
     cdef cppclass PPL_Constraint_System "Parma_Polyhedra_Library::Constraint_System"
+    cdef cppclass PPL_Congruence        "Parma_Polyhedra_Library::Congruence"
+    cdef cppclass PPL_Congruence_System "Parma_Polyhedra_Library::Congruence_System"
     cdef cppclass PPL_Polyhedron        "Parma_Polyhedra_Library::Polyhedron"
     cdef cppclass PPL_C_Polyhedron      "Parma_Polyhedra_Library::C_Polyhedron"   (PPL_Polyhedron)
     cdef cppclass PPL_NNC_Polyhedron    "Parma_Polyhedra_Library::NNC_Polyhedron" (PPL_Polyhedron)
@@ -53,8 +54,10 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
     cdef cppclass PPL_Poly_Con_Relation "Parma_Polyhedra_Library::Poly_Con_Relation"
     cdef cppclass PPL_MIP_Problem       "Parma_Polyhedra_Library::MIP_Problem"
     cdef cppclass PPL_mip_iterator      "Parma_Polyhedra_Library::MIP_Problem::const_iterator"
-    cdef cppclass PPL_gs_iterator       "Parma_Polyhedra_Library::Generator_System_const_iterator"
-    cdef cppclass PPL_cs_iterator       "Parma_Polyhedra_Library::Constraint_System_const_iterator"
+    cdef cppclass PPL_gs_iterator       "Parma_Polyhedra_Library::Generator_System::const_iterator"
+    cdef cppclass PPL_Constraint_System_iterator   "Parma_Polyhedra_Library::Constraint_System::const_iterator"
+    cdef cppclass PPL_Congruence_System_iterator   "Parma_Polyhedra_Library::Congruence_System::const_iterator"
+
     cdef cppclass PPL_Bit_Row           "Parma_Polyhedra_Library::Bit_Row"
     cdef cppclass PPL_Bit_Matrix        "Parma_Polyhedra_Library::Bit_Matrix"
 
@@ -117,6 +120,7 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         PPL_Constraint operator<=(PPL_Linear_Expression& e)
         PPL_Constraint operator< (PPL_Linear_Expression& e)
 
+
     cdef cppclass PPL_Constraint:
         PPL_Constraint()
         PPL_Constraint(PPL_Constraint &g)
@@ -152,6 +156,57 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         bint OK()
         void permute_space_dimensions(const cppvector[PPL_Variable]& cycle) except +ValueError
 
+    cdef cppclass PPL_Congruence:
+        PPL_Congruence()
+        PPL_Congruence(const PPL_Congruence &g)
+        PPL_Congruence(const PPL_Constraint &c) except +ValueError
+        PPL_dimension_type space_dimension()
+        # NOTE: curiously, this can raise an error (behavior different from Linear_Expression)
+        PPL_Coefficient coefficient(PPL_Variable v) except +ValueError
+        PPL_Coefficient inhomogeneous_term()
+        PPL_Coefficient modulus()
+        void set_modulus(PPL_Coefficient& m)
+        void scale(PPL_Coefficient& m)
+        bint is_tautological()
+        bint is_inconsistent()
+        bint is_proper_congruence()
+        bint is_equality()
+        bint OK()
+        void ascii_dump()
+        void swap_space_dimension(PPL_Variable v1, PPL_Variable v2)
+        void set_space_dimension(PPL_dimension_type n)
+        void shift_space_dimensions(PPL_Variable v, PPL_dimension_type n)
+        void sign_normalize()
+        void normalize()
+        void strong_normalize()
+        PPL_dimension_type max_space_dimension()
+
+        cppbool operator==(const PPL_Congruence &x, const PPL_Congruence &y)
+        cppbool operator!=(const PPL_Congruence &x, const PPL_Congruence &y)
+
+    cdef cppclass PPL_Congruence_System:
+        PPL_Congruence_System()
+        PPL_Congruence_System(PPL_Congruence &c)
+        PPL_Congruence_System(PPL_Congruence_System &cs)
+        PPL_dimension_type space_dimension()
+        PPL_Congruence_System_iterator begin()
+        PPL_Congruence_System_iterator end()
+        bint has_equalities()
+        bint has_strict_inequalities()
+        void clear()
+        void insert(PPL_Congruence &g)
+        bint empty()
+        void ascii_dump()
+        bint OK()
+
+    cdef cppclass PPL_Congruence_System_iterator:
+        PPL_Congruence_System_iterator()
+        PPL_Congruence_System_iterator(PPL_Congruence_System_iterator &csi)
+        PPL_Congruence& operator* ()
+        PPL_Congruence_System_iterator inc "operator++" (int i)
+        cppbool operator==(PPL_Congruence_System_iterator& y)
+        cppbool operator!=(PPL_Congruence_System_iterator& y)
+
     cdef cppclass PPL_Generator_System:
         PPL_Generator_System()
         PPL_Generator_System(PPL_Generator &g)
@@ -181,21 +236,21 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         cppbool operator==(PPL_gs_iterator& y)
         cppbool operator!=(PPL_gs_iterator& y)
 
-    cdef cppclass PPL_cs_iterator:
-        PPL_cs_iterator()
-        PPL_cs_iterator(PPL_cs_iterator &csi)
+    cdef cppclass PPL_Constraint_System_iterator:
+        PPL_Constraint_System_iterator()
+        PPL_Constraint_System_iterator(PPL_Constraint_System_iterator &csi)
         PPL_Constraint& operator* ()
-        PPL_cs_iterator inc "operator++" (int i)
-        cppbool operator==(PPL_cs_iterator& y)
-        cppbool operator!=(PPL_cs_iterator& y)
+        PPL_Constraint_System_iterator inc "operator++" (int i)
+        cppbool operator==(PPL_Constraint_System_iterator& y)
+        cppbool operator!=(PPL_Constraint_System_iterator& y)
 
     cdef cppclass PPL_Constraint_System:
         PPL_Constraint_System()
         PPL_Constraint_System(PPL_Constraint &g)
         PPL_Constraint_System(PPL_Constraint_System &gs)
         PPL_dimension_type space_dimension()
-        PPL_cs_iterator begin()
-        PPL_cs_iterator end()
+        PPL_Constraint_System_iterator begin()
+        PPL_Constraint_System_iterator end()
         bint has_equalities()
         bint has_strict_inequalities()
         void clear()
@@ -386,3 +441,5 @@ cdef extern from "ppl.hh":
 cdef extern from "ppl_shim.hh":
     PPL_Poly_Gen_Relation* new_relation_with(PPL_Polyhedron &p, PPL_Generator &g) except +ValueError
     PPL_Poly_Con_Relation* new_relation_with(PPL_Polyhedron &p, PPL_Constraint &c) except +ValueError
+
+    PPL_Congruence modulo(const PPL_Linear_Expression &expr, PPL_Coefficient& mod)

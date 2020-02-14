@@ -11,7 +11,7 @@
 #                     2016 Jori Mäntysalo <jori.mantysalo@uta.fi>
 #                     2016 Matthias Koeppe <mkoeppe@math.ucdavis.edu>
 #                     2016-2017 Frédéric Chapoton <chapoton@math.univ-lyon1.fr>
-#                     2016-2018 Vincent Delecroix <vincent.delecroix@labri.fr>
+#                     2016-2020 Vincent Delecroix <vincent.delecroix@labri.fr>
 #                     2017-2018 Vincent Klein <vinklein@gmail.com>
 #
 #  Distributed under the terms of the GNU General Public License (GPL)
@@ -29,7 +29,7 @@ from cpython.long cimport PyLong_CheckExact
 from cpython.object cimport PyObject
 from gmpy2 cimport import_gmpy2, mpz, GMPy_MPZ_From_mpz, MPZ_Check
 from .constraint cimport _make_Constraint_from_richcmp
-from .ppl_decl cimport mpz_t, mpz_init, mpz_class
+from .ppl_decl cimport mpz_t, mpz_init, mpz_class, modulo
 
 # initialize gmpy2 C API
 import_gmpy2()
@@ -829,6 +829,8 @@ cdef class Linear_Expression(object):
         >>> e = 3*x+1
         >>> e.coefficient(x)
         mpz(3)
+        >>> e.coefficient(Variable(13))
+        mpz(0)
         """
         cdef Variable vv
         if type(v) is Variable:
@@ -1036,7 +1038,7 @@ cdef class Linear_Expression(object):
         """
         s = ''
         first = True
-        for i in range(0,self.space_dimension()):
+        for i in range(self.space_dimension()):
             x = Variable(i)
             coeff = self.coefficient(x)
             if coeff == 0: continue

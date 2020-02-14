@@ -111,3 +111,11 @@ Module `ppl.mip_problem`
     :members:
     :undoc-members:
     :show-inheritance:
+
+Module `ppl.congruence`
+-----------------------
+
+.. automodule:: ppl.congruence
+    :members:
+    :undoc-members:
+    :show-inheritance:
