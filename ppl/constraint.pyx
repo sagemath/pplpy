@@ -11,7 +11,7 @@
 #                     2016 Jori Mäntysalo <jori.mantysalo@uta.fi>
 #                     2016 Matthias Koeppe <mkoeppe@math.ucdavis.edu>
 #                     2016-2017 Frédéric Chapoton <chapoton@math.univ-lyon1.fr>
-#                     2016-2018 Vincent Delecroix <vincent.delecroix@labri.fr>
+#                     2016-2020 Vincent Delecroix <vincent.delecroix@labri.fr>
 #                     2017-2018 Vincent Klein <vinklein@gmail.com>
 #
 #  Distributed under the terms of the GNU General Public License (GPL)
@@ -21,9 +21,11 @@
 #*****************************************************************************
 from __future__ import absolute_import, print_function
 
-from gmpy2 cimport GMPy_MPZ_From_mpz, import_gmpy2
+from gmpy2 cimport GMPy_MPZ_From_mpz, mpz, import_gmpy2, MPZ_Check
 from cython.operator cimport dereference as deref
 from cpython.object cimport Py_LT, Py_LE, Py_EQ, Py_NE, Py_GT, Py_GE
+
+from .congruence cimport Congruence
 
 # PPL can use floating-point arithmetic to compute integers
 cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
@@ -552,6 +554,24 @@ cdef class Constraint(object):
             cpp_cycle.push_back(PPL_Variable(i))
         self.thisptr.permute_space_dimensions(cpp_cycle)
 
+    def __mod__(self, m):
+        r"""
+        Return this equality modulo m
+
+        >>> import ppl
+        >>> x = ppl.Variable(0)
+        >>> y = ppl.Variable(1)
+        >>> (2*x + 3*y == 3) % 5
+        2*x0+3*x1-3==0 (mod 5)
+
+        >>> (x <= 3) % 5
+        Traceback (most recent call last):
+        ...
+        ValueError: PPL::Congruence::Congruence(c, r):
+        constraint c must be an equality.
+        """
+        return Congruence(self, m)
+
 ####################################################
 def inequality(expression):
     """
@@ -871,16 +891,28 @@ cdef class Constraint_System(object):
 
         >>> from ppl import Variable, Constraint_System
         >>> x = Variable(0)
-        >>> cs = Constraint_System( x>0 )
-        >>> cs.insert( x<1 )
+        >>> cs = Constraint_System( [x>0, x<1] )
         >>> len(cs)
         2
+        >>> cs.insert(2*x < 3)
+        >>> len(cs)
+        3
+        >>> cs.clear()
+        >>> len(cs)
+        0
         """
-        return sum(1 for c in self)
+        cdef Py_ssize_t l = 0
+        cdef PPL_Constraint_System_iterator *csi_ptr = new PPL_Constraint_System_iterator(self.thisptr[0].begin())
+        while csi_ptr[0] != self.thisptr[0].end():
+            l += 1
+            csi_ptr[0].inc(1)
+        del csi_ptr
+        return l
 
     def __iter__(self):
         """
         Iterate through the constraints of the system.
+
         Examples:
 
         >>> from ppl import Variable, Constraint_System
@@ -913,7 +945,7 @@ cdef class Constraint_System(object):
         ...
         StopIteration
         """
-        cdef PPL_cs_iterator *csi_ptr = new PPL_cs_iterator(self.thisptr[0].begin())
+        cdef PPL_Constraint_System_iterator *csi_ptr = new PPL_Constraint_System_iterator(self.thisptr[0].begin())
         try:
             while csi_ptr[0] != self.thisptr[0].end():
                 yield _wrap_Constraint(deref(csi_ptr[0].inc(1)))
@@ -996,7 +1028,7 @@ cdef class Constraint_System(object):
         >>> loads(dumps(cs))
         Constraint_System {-3*x0-2*x1+2>0, -x0-1>0}
         """
-        return (Constraint_System, (tuple(self), ))
+        return (Constraint_System, (tuple(self),))
 
 cdef class Poly_Con_Relation(object):
     r"""

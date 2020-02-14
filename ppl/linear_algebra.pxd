@@ -1,4 +1,6 @@
-from ppl_decl cimport *
+from __future__ import absolute_import
+
+from .ppl_decl cimport *
 
 cdef class Variable(object):
     cdef PPL_Variable *thisptr

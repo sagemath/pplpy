@@ -11,7 +11,7 @@ ans = 0 # set to nonzero if an error is found
 print("Running pplpy doctests")
 print('-'*80)
 import doctest
-for mod in [ppl, ppl.linear_algebra, ppl.mip_problem, ppl.polyhedron, ppl.generator, ppl.constraint, ppl.bit_arrays]:
+for mod in [ppl, ppl.linear_algebra, ppl.mip_problem, ppl.polyhedron, ppl.generator, ppl.constraint, ppl.congruence, ppl.bit_arrays]:
     res = doctest.testmod(mod, optionflags=doctest.ELLIPSIS | doctest.REPORT_NDIFF)
     print(mod)
     print(res)

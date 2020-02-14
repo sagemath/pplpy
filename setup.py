@@ -38,7 +38,10 @@ class build_ext(_build_ext):
             sys.exit(1)
 
         self.distribution.ext_modules[:] = cythonize(
-            self.distribution.ext_modules, include_path=sys.path)
+            self.distribution.ext_modules,
+            include_path=sys.path,
+            compiler_directives={'embedsignature': True})
+
         _build_ext.finalize_options(self)
 
 class TestCommand(Command):
@@ -85,6 +88,7 @@ extensions = [
     Extension('ppl.polyhedron', sources = ['ppl/polyhedron.pyx', 'ppl/ppl_shim.cc']),
     Extension('ppl.generator', sources = ['ppl/generator.pyx', 'ppl/ppl_shim.cc']),
     Extension('ppl.constraint', sources = ['ppl/constraint.pyx', 'ppl/ppl_shim.cc']),
+    Extension('ppl.congruence', sources=['ppl/congruence.pyx', 'ppl/ppl_shim.cc']),
     Extension('ppl.bit_arrays', sources = ['ppl/bit_arrays.pyx', 'ppl/ppl_shim.cc']),
     ]
 
