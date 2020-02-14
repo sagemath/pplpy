@@ -6,9 +6,7 @@ before_script:
 # when pip supports PEP 517 / PEP 518, the dependency installation could
 # be omitted
 - $PYTHON -m pip install --upgrade pip
-- $PYTHON -m pip install Cython --disable-pip-version-check
-- $PYTHON -m pip install cysignals --disable-pip-version-check
-- $PYTHON -m pip install gmpy2==2.1.0b1 --disable-pip-version-check
+- $PYTHON -m pip install -r requirements.txt
 - $PYTHON setup.py sdist
 - $PYTHON -m pip install dist/pplpy-*.tar.gz
 

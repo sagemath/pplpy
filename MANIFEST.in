@@ -1,4 +1,4 @@
-include README.rst LICENSE.txt CHANGES.txt setup.py version.txt
+include README.rst LICENSE.txt CHANGES.txt setup.py version.txt requirements.txt tox.ini
 recursive-include ppl *.pxd *.pyx *.py
 recursive-include tests  *.pyx *.py
 include ppl/ppl_shim.cc
