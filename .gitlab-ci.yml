@@ -22,7 +22,7 @@ python2.7:
   stage: test
   variables:
     PYTHON: python
-    PKGS: python-pip python-sphinx
+    PKGS: python-pip python-sphinx python-configparser
   script: *test_script
 
 python3.6:
