@@ -1026,7 +1026,7 @@ cdef class Polyhedron(object):
         Adds a copy of constraint ``c`` to the system of constraints
         of ``self``, without minimizing the result.
 
-        See alse :meth:`add_constraints`.
+        See also :meth:`add_constraints`.
 
         INPUT:
 
@@ -1148,7 +1148,7 @@ cdef class Polyhedron(object):
         Adds a copy of constraints in ``cs`` to the system of constraints
         of ``self``, without minimizing the result.
 
-        See alse :meth:`add_constraint`.
+        See also :meth:`add_constraint`.
 
         INPUT:
 
@@ -1207,7 +1207,7 @@ cdef class Polyhedron(object):
         Adds a copy of the generators in ``gs`` to the system of
         generators of ``self``, without minimizing the result.
 
-        See alse :meth:`add_generator`.
+        See also :meth:`add_generator`.
 
         INPUT:
 
@@ -2090,7 +2090,7 @@ cdef class Polyhedron(object):
         r"""
         Assign to ``self`` the concatenation of ``self`` and ``y``.
 
-        This functions returns the Cartiesian product of ``self`` and
+        This functions returns the Cartesian product of ``self`` and
         ``y``.
 
         Viewing a polyhedron as a set of tuples (its points), it is

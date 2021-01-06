@@ -461,7 +461,7 @@ cdef class Variables_Set(object):
         r"""
         Returns the dimension of the smallest vector space enclosing all the variables whose indexes are in the set.
 
-        OUPUT:
+        OUTPUT:
 
         Integer.
 

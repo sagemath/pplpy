@@ -10,7 +10,7 @@
 #
 # https://github.com/pypa/setuptools/issues/1317#issuecomment-387702371
 #
-# Everything could be solved once pip is complient with PEP 517 / PEP 518.
+# Everything could be solved once pip is compliant with PEP 517 / PEP 518.
 
 from setuptools import setup
 from distutils.command.build_ext import build_ext as _build_ext
