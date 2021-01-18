@@ -1,22 +1,20 @@
 #!/usr/bin/env python
-#
-# Ideally, it should be possible to generate a source distribution
-# before building the package. However, in order to install dependency
-# a convenient option would be to generate the egg-info via
-#
-#  python setup.py egg_info
-#
-# But that does not work without all dependencies being available... see e.g.
-#
-# https://github.com/pypa/setuptools/issues/1317#issuecomment-387702371
-#
-# Everything could be solved once pip is complient with PEP 517 / PEP 518.
+
+import os
+import sys
 
 from setuptools import setup
+from setuptools.config import read_configuration
+from setuptools.extension import Extension
+
 from distutils.command.build_ext import build_ext as _build_ext
 from distutils.cmd import Command
-from setuptools.extension import Extension
-import sys
+
+dir_path = os.path.dirname(os.path.realpath(__file__))
+conf_dict = read_configuration(os.path.join(dir_path, "setup.cfg"))
+# NOTE: Python2.7 do not support multiple dictionaries unpacking
+kwds = conf_dict['metadata']
+kwds.update(conf_dict['options'])
 
 # Adapted from Cython's new_build_ext
 class build_ext(_build_ext):
@@ -78,10 +76,6 @@ class TestCommand(Command):
             os.chdir(old_path)
             rmtree(tempdir_path)
 
-with open('version.txt') as f:
-    VERSION = f.read()[:-1]
-    assert 2 <= len(VERSION.split('.')) <= 3
-
 extensions = [
     Extension('ppl.linear_algebra', sources=['ppl/linear_algebra.pyx', 'ppl/ppl_shim.cc']),
     Extension('ppl.mip_problem', sources=['ppl/mip_problem.pyx', 'ppl/ppl_shim.cc']),
@@ -93,35 +87,11 @@ extensions = [
     ]
 
 setup(
-    name='pplpy',
-    version=VERSION,
-    description='Python PPL wrapper',
-    long_description=open("README.rst").read(),
-    author='Vincent Delecroix',
-    author_email='vincent.delecroix@labri.fr',
-    url='https://gitlab.com/videlec/pplpy',
-    download_url='https://pypi.org/project/pplpy/#files',
-    license='GPL v3',
-    platforms=['any'],
-    packages=['ppl'],
-    package_dir={'ppl': 'ppl'},
-    package_data={'ppl': ['*.pxd', '*.h', '*.hh']},
-    include_dirs=['ppl'] + sys.path,
-    ext_modules=extensions,
-    classifiers=[
-        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
-        "Programming Language :: C++",
-        "Programming Language :: Python",
-        "Development Status :: 3 - Alpha",
-        "Operating System :: Unix",
-        "Intended Audience :: Science/Research",
-        "Programming Language :: Python :: 2",
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-    ],
-    keywords=['polyhedron', 'polytope', 'convex', 'mathematics', 'ppl', 'milp', 'linear-programming'],
-    cmdclass = {'build_ext': build_ext, 'test': TestCommand}
+    long_description = open("README.rst").read(),
+    package_dir = {'ppl': 'ppl'},
+    package_data = {'ppl': ['*.pxd', '*.h', '*.hh']},
+    include_dirs = ['ppl'] + sys.path,
+    ext_modules = extensions,
+    cmdclass = {'build_ext': build_ext, 'test': TestCommand},
+    **kwds
 )
