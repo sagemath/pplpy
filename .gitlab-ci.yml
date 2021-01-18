@@ -9,7 +9,7 @@ before_script:
 # install_requires of setuptools is broken with Cython.
 - $PYTHON -m pip install setuptools wheel Cython cysignals sphinx "gmpy2>=2.1.0b1"
 - $PYTHON setup.py sdist
-- $PYTHON -m pip install dist/pplpy-*.tar.gz
+- $PYTHON -m pip -v install dist/pplpy-*.tar.gz
 
 .template_script:
   script: &test_script
