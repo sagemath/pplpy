@@ -3,6 +3,7 @@ v0.8, 2019/01/18
    - some more support for PPL objects: permute_space_dimensions, Bit_Row,
      Bit_Matrix
    - upgrade gmpy2 version dependency
+   - add pyproject.toml and setup.cfg files
 v0.7, 2017/11/24
    - use of gmpy2 for integers and rationals (Vincent Delecroix/Vincent Klein)
    - tests on travis (Vincent Delecroix/Vincent Klein)
