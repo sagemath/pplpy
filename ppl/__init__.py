@@ -79,7 +79,7 @@ documentation, in particular:
   mpz(5)
 
 * PPL supports (topologically) closed polyhedra
-  (:class:`C_Polyhedron`) as well as not neccesarily closed polyhedra
+  (:class:`C_Polyhedron`) as well as not necessarily closed polyhedra
   (:class:`NNC_Polyhedron`). Only the latter allows closure points
   (=points of the closure but not of the actual polyhedron) and strict
   inequalities (``>`` and ``<``)
@@ -89,7 +89,7 @@ The naming convention for the C++ classes is that they start with
 ``PPL_Linear_Expression``. The Python wrapper has the same name as the
 original library class, that is, just ``Linear_Expression``. In short:
 
-* If you are using the Python wrapper (if in doubt: thats you), then
+* If you are using the Python wrapper (if in doubt: that's you), then
   you use the same names as the PPL C++ class library.
 
 * If you are writing your own Cython code, you can access the

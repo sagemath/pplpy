@@ -575,7 +575,7 @@ cdef class Constraint(object):
 ####################################################
 def inequality(expression):
     """
-    Constuct an inequality.
+    Construct an inequality.
 
     INPUT:
 
@@ -600,7 +600,7 @@ def inequality(expression):
 ####################################################
 def strict_inequality(expression):
     """
-    Constuct a strict inequality.
+    Construct a strict inequality.
 
     INPUT:
 
@@ -625,7 +625,7 @@ def strict_inequality(expression):
 ####################################################
 def equation(expression):
     """
-    Constuct an equation.
+    Construct an equation.
 
     INPUT:
 

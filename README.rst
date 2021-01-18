@@ -114,6 +114,6 @@ On Debian/Ubuntu systems these can be installed with::
 
 The pip optional option `--user` allows to install python packages for a single
 user with no need for administrator rights. The two pip install commands might
-be replaced by `sudo pip install PKG` (not recommanded). On recent Debian/Ubuntu systems,
+be replaced by `sudo pip install PKG` (not recommended). On recent Debian/Ubuntu systems,
 cysignals is also available as a package under the name `python-cysignals` for
 Python 2 and `python3-cysignals` for Python 3.
