@@ -64,7 +64,6 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
     cdef cppclass PPL_Variable:
         PPL_Variable(PPL_dimension_type i)
         PPL_dimension_type id()
-        bint OK()
         PPL_dimension_type space_dimension()
 
     cdef cppclass PPL_Variables_Set:
@@ -75,7 +74,6 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         void insert(PPL_Variable v)
         size_t size()
         void ascii_dump()
-        bint OK()
 
     # class Parma_Polyhedra_Library::Linear_Expression
     # lines 28238-28879 of ppl.hh
@@ -105,7 +103,6 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         bint all_zeroes(const PPL_Variables_Set& v)
 
         void ascii_dump()
-        bint OK()
 
         #PPL_Linear_Expression operator+=(PPL_Linear_Expression& e)
         #PPL_Linear_Expression operator-=(PPL_Linear_Expression& e)
@@ -136,7 +133,6 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         bint is_inconsistent()
         bint is_equivalent_to(PPL_Constraint &y)
         void ascii_dump()
-        bint OK()
         void permute_space_dimensions(const cppvector[PPL_Variable]& cycle) except +ValueError
 
     cdef cppclass PPL_Generator:
@@ -153,7 +149,6 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         PPL_Coefficient divisor() except +
         bint is_equivalent_to(PPL_Generator &y)
         void ascii_dump()
-        bint OK()
         void permute_space_dimensions(const cppvector[PPL_Variable]& cycle) except +ValueError
 
     cdef cppclass PPL_Congruence:
@@ -171,7 +166,6 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         bint is_inconsistent()
         bint is_proper_congruence()
         bint is_equality()
-        bint OK()
         void ascii_dump()
         void swap_space_dimension(PPL_Variable v1, PPL_Variable v2)
         void set_space_dimension(PPL_dimension_type n)
@@ -197,7 +191,6 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         void insert(PPL_Congruence &g)
         bint empty()
         void ascii_dump()
-        bint OK()
 
     cdef cppclass PPL_Congruence_System_iterator:
         PPL_Congruence_System_iterator()
@@ -219,7 +212,6 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         void insert(PPL_Generator &g)
         bint empty()
         void ascii_dump()
-        bint OK()
 
     cdef cppclass PPL_mip_iterator:
         PPL_mip_iterator(PPL_mip_iterator &mipi)
@@ -257,7 +249,6 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         void insert(PPL_Constraint &g)
         bint empty()
         void ascii_dump()
-        bint OK()
 
     cdef enum PPL_Degenerate_Element "Parma_Polyhedra_Library::Degenerate_Element":
         UNIVERSE, EMPTY
@@ -329,7 +320,6 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         void ascii_dump()
         int hash_code()
         PPL_dimension_type max_space_dimension()
-        bint OK(cppbool check_not_empty=false)
         bint operator!=(PPL_Polyhedron &y)
         bint operator==(PPL_Polyhedron &y)
 
@@ -350,13 +340,11 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         PPL_Poly_Gen_Relation(PPL_Poly_Gen_Relation &cpy_from)
         bint implies(PPL_Poly_Gen_Relation &y)
         void ascii_dump()
-        bint OK()
 
     cdef cppclass PPL_Poly_Con_Relation:
         PPL_Poly_Con_Relation(PPL_Poly_Con_Relation &cpy_from)
         bint implies(PPL_Poly_Con_Relation &y)
         void ascii_dump()
-        bint OK()
 
     cdef cppclass PPL_MIP_Problem:
         PPL_MIP_Problem(PPL_MIP_Problem &cpy_from)
@@ -378,7 +366,6 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         PPL_Generator& feasible_point()
         PPL_Generator optimizing_point() except +ValueError
         void optimal_value(PPL_Coefficient &num, PPL_Coefficient &den) except +ValueError
-        bint OK()
         PPL_MIP_Problem_Control_Parameter_Value get_control_parameter(PPL_MIP_Problem_Control_Parameter_Name name)
         void set_control_parameter(PPL_MIP_Problem_Control_Parameter_Value value)
         PPL_mip_iterator constraints_begin()
@@ -402,7 +389,6 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         unsigned long count_ones()
         cppbool empty()
 
-        cppbool OK()
 
     cdef cppclass PPL_Bit_Matrix:
         PPL_Bit_Matrix()
@@ -419,7 +405,6 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         PPL_dimension_type num_rows()
 
         void sort_rows()
-        cppbool OK()
 
 cdef extern from "ppl.hh":
     PPL_Generator PPL_line          "Parma_Polyhedra_Library::line"             (PPL_Linear_Expression &e) except +ValueError

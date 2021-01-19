@@ -646,24 +646,3 @@ cdef class MIP_Problem(object):
         finally:
             sig_off()
         return _wrap_Generator(g[0])
-
-    def OK(self):
-        """
-        Check if all the invariants are satisfied.
-
-        OUTPUT:
-
-        ``True`` if and only if ``self`` satisfies all the invariants.
-
-        Examples:
-
-        >>> from ppl import Variable, MIP_Problem
-        >>> x = Variable(0)
-        >>> y = Variable(1)
-        >>> m = MIP_Problem()
-        >>> m.add_space_dimensions_and_embed(2)
-        >>> m.add_constraint(x >= 0)
-        >>> m.OK()
-        True
-        """
-        return self.thisptr.OK()

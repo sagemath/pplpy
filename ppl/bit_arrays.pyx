@@ -61,19 +61,6 @@ cdef class Bit_Row(object):
         """
         raise TypeError("Bit_Row unhashable")
 
-    def OK(self):
-        r"""
-        Check if all the invariants are satisfied
-
-        Examples:
-
-        >>> from ppl import Bit_Row
-        >>> r = Bit_Row()
-        >>> r.OK()
-        True
-        """
-        return self.thisptr.OK()
-
     def set(self, unsigned long k):
         r"""
         Set the bit in position ``k``
