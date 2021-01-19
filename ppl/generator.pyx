@@ -647,21 +647,6 @@ cdef class Generator(object):
         """
         self.thisptr.ascii_dump()
 
-    def OK(self):
-        """
-        Check if all the invariants are satisfied.
-
-        Examples:
-
-        >>> from ppl import Variable
-        >>> x = Variable(0)
-        >>> y = Variable(1)
-        >>> e = 3*x+2*y+1
-        >>> e.OK()
-        True
-    """
-        return self.thisptr.OK()
-
     def __reduce__(self):
         """
         Pickle object.
@@ -920,21 +905,6 @@ cdef class Generator_System(object):
         <BLANKLINE>
         """
         self.thisptr.ascii_dump()
-
-    def OK(self):
-        """
-        Check if all the invariants are satisfied.
-
-        Examples:
-
-        >>> from ppl import Variable, Generator_System, point
-        >>> x = Variable(0)
-        >>> y = Variable(1)
-        >>> gs = Generator_System( point(3*x+2*y+1) )
-        >>> gs.OK()
-        True
-        """
-        return self.thisptr.OK()
 
     def __len__(self):
         """
@@ -1227,18 +1197,6 @@ cdef class Poly_Gen_Relation(object):
         0
         """
         self.thisptr.ascii_dump()
-
-    def OK(self, check_non_empty=False):
-        """
-        Check if all the invariants are satisfied.
-
-        Examples:
-
-            >>> from ppl import Poly_Gen_Relation
-            >>> Poly_Gen_Relation.nothing().OK()
-            True
-        """
-        return self.thisptr.OK()
 
     def __repr__(self):
         r"""

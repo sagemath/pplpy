@@ -147,23 +147,6 @@ cdef class Variable(object):
         """
         return self.thisptr.id()
 
-    def OK(self):
-        """
-        Checks if all the invariants are satisfied.
-
-        OUTPUT:
-
-        Boolean.
-
-        Examples:
-
-        >>> from ppl import Variable
-        >>> x = Variable(0)
-        >>> x.OK()
-        True
-        """
-        return self.thisptr.OK()
-
     def space_dimension(self):
         r"""
         Return the dimension of the vector space enclosing ``self``.
@@ -439,24 +422,6 @@ cdef class Variables_Set(object):
         """
         del self.thisptr
 
-    def OK(self):
-        """
-        Checks if all the invariants are satisfied.
-
-        OUTPUT:
-
-        Boolean.
-
-        EXAMPLES::
-
-            >>> from ppl import Variable, Variables_Set
-            >>> v123 = Variable(123)
-            >>> S = Variables_Set(v123)
-            >>> S.OK()
-            True
-        """
-        return self.thisptr.OK()
-
     def space_dimension(self):
         r"""
         Returns the dimension of the smallest vector space enclosing all the variables whose indexes are in the set.
@@ -581,8 +546,6 @@ cdef class Linear_Expression(object):
     >>> x = Variable(123)
     >>> expr = x+1; expr
     x123+1
-    >>> expr.OK()
-    True
     >>> expr.coefficient(x)
     mpz(1)
     >>> expr.coefficient( Variable(124) )
@@ -996,21 +959,6 @@ cdef class Linear_Expression(object):
         True
         """
         self.thisptr.ascii_dump()
-
-    def OK(self):
-        """
-        Check if all the invariants are satisfied.
-
-        Examples:
-
-        >>> from ppl import Variable
-        >>> x = Variable(0)
-        >>> y = Variable(1)
-        >>> e = 3*x+2*y+1
-        >>> e.OK()
-        True
-        """
-        return self.thisptr.OK()
 
     def __repr__(self):
         r"""

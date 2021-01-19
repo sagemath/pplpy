@@ -244,21 +244,6 @@ cdef class Congruence_System(object):
         """
         self.thisptr.ascii_dump()
 
-    def OK(self):
-        r"""
-        Check if the invariants are satisfied.
-
-        Examples:
-
-        >>> from ppl import Variable, Congruence_System
-        >>> x = Variable(0)
-        >>> y = Variable(1)
-        >>> cs = Congruence_System( (3*x == 2*y+1) % 7 )
-        >>> cs.OK()
-        True
-        """
-        return self.thisptr.OK()
-
     def __len__(self):
         r"""
         Return the number of congruences in the system.

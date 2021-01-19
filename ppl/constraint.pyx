@@ -494,21 +494,6 @@ cdef class Constraint(object):
         """
         self.thisptr.ascii_dump()
 
-    def OK(self):
-        """
-        Check if all the invariants are satisfied.
-
-        Examples:
-
-        >>> from ppl import Variable
-        >>> x = Variable(0)
-        >>> y = Variable(1)
-        >>> ineq = (3*x+2*y+1>=0)
-        >>> ineq.OK()
-        True
-        """
-        return self.thisptr.OK()
-
     def __reduce__(self):
         """
         Pickle object.
@@ -868,21 +853,6 @@ cdef class Constraint_System(object):
         """
         self.thisptr.ascii_dump()
 
-    def OK(self):
-        """
-        Check if all the invariants are satisfied.
-
-        Examples:
-
-        >>> from ppl import Variable, Constraint_System
-        >>> x = Variable(0)
-        >>> y = Variable(1)
-        >>> cs = Constraint_System( 3*x+2*y+1 <= 10 )
-        >>> cs.OK()
-        True
-        """
-        return self.thisptr.OK()
-
     def __len__(self):
         """
         Return the number of constraints in the system.
@@ -1231,18 +1201,6 @@ cdef class Poly_Con_Relation(object):
         NOTHING
         """
         self.thisptr.ascii_dump()
-
-    def OK(self, check_non_empty=False):
-        """
-        Check if all the invariants are satisfied.
-
-        Examples:
-
-        >>> from ppl import Poly_Con_Relation
-        >>> Poly_Con_Relation.nothing().OK()
-        True
-        """
-        return self.thisptr.OK()
 
     def __repr__(self):
         r"""

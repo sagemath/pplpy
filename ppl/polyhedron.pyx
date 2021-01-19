@@ -2321,42 +2321,6 @@ cdef class Polyhedron(object):
         """
         return self.thisptr.max_space_dimension()
 
-    def OK(self, check_non_empty=False):
-        """
-        Check if all the invariants are satisfied.
-
-        The check is performed so as to intrude as little as
-        possible. If the library has been compiled with run-time
-        assertions enabled, error messages are written on std::cerr in
-        case invariants are violated. This is useful for the purpose
-        of debugging the library.
-
-        INPUT:
-
-        - ``check_not_empty`` -- boolean. ``True`` if and only if, in
-          addition to checking the invariants, ``self`` must be
-          checked to be not empty.
-
-        OUTPUT:
-
-        ``True`` if and only if ``self`` satisfies all the invariants
-        and either ``check_not_empty`` is ``False`` or ``self`` is not
-        empty.
-
-        Examples:
-
-        >>> from ppl import Variable
-        >>> x = Variable(0)
-        >>> y = Variable(1)
-        >>> e = 3*x+2*y+1
-        >>> e.OK()
-        True
-        """
-        sig_on()
-        cdef bint result = self.thisptr.OK()
-        sig_off()
-        return result
-
     def hash_code(self):
         r"""
         Return a hash code
