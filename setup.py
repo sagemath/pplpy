@@ -3,12 +3,12 @@
 import os
 import sys
 
-from setuptools import setup
+from setuptools import setup, Command
 from setuptools.config import read_configuration
 from setuptools.extension import Extension
 
+# NOTE: setuptools build_ext does not work properly with Cython code
 from distutils.command.build_ext import build_ext as _build_ext
-from distutils.cmd import Command
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 conf_dict = read_configuration(os.path.join(dir_path, "setup.cfg"))
