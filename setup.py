@@ -18,7 +18,7 @@ kwds.update(conf_dict['options'])
 
 # Adapted from Cython's new_build_ext
 class build_ext(_build_ext):
-    def finalize_options(self):
+    def run(self):
         # Check dependencies
         try:
             from Cython.Build.Dependencies import cythonize
@@ -35,12 +35,12 @@ class build_ext(_build_ext):
             sys.stderr.write("The installation of ppl requires cysignals\n")
             sys.exit(1)
 
-        self.distribution.ext_modules[:] = cythonize(
-            self.distribution.ext_modules,
+        self.extensions[:] = cythonize(
+            self.extensions,
             include_path=sys.path,
             compiler_directives={'embedsignature': True})
 
-        _build_ext.finalize_options(self)
+        _build_ext.run(self)
 
 class TestCommand(Command):
     user_options = []
