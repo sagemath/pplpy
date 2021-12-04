@@ -1,8 +1,9 @@
-image: ubuntu:18.04
+image: ubuntu:20.04
 before_script:
 - export DEBIAN_FRONTEND=noninteractive   # avoid tzdata interactive configuration
 - apt-get -qq update
 - apt-get install -y apt-utils git libgmp-dev libmpfr-dev libmpc-dev libppl-dev $PKGS
+- $PYTHON --version
 - $PYTHON -m pip install --upgrade pip
 # NOTE: currently it seems not possible to build the sdist without manually installing
 # dependencies. pyproject.toml is ignored by the call to 'setup.py sdist' below and the
@@ -18,30 +19,16 @@ before_script:
   # build documentation
   - make -w -C docs html
 
-python2.7:
-  stage: test
-  variables:
-    PYTHON: python
-    PKGS: python-pip python-sphinx python-configparser
-  script: *test_script
-
-python3.6:
-  stage: test
-  variables:
-    PYTHON: python3
-    PKGS: python3-pip python3-sphinx
-  script: *test_script
-
-python3.7:
-  stage: test
-  variables:
-    PYTHON: python3.7
-    PKGS: python3.7 python3.7-dev python3-pip python3-sphinx
-  script: *test_script
-
 python3.8:
   stage: test
   variables:
     PYTHON: python3.8
     PKGS: python3.8 python3.8-dev python3-pip python3-sphinx
+  script: *test_script
+
+python3.9:
+  stage: test
+  variables:
+    PYTHON: python3.9
+    PKGS: python3.9 python3.9-dev python3-pip python3-sphinx
   script: *test_script
