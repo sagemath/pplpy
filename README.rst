@@ -92,19 +92,13 @@ the License, or (at your option) any later version. See http://www.gnu.org/licen
 Requirements
 ------------
 
-- `gmp <https://gmplib.org/>`_
-
-- `mpfr <http://www.mpfr.org/>`_
-
-- `mpc <http://www.multiprecision.org/index.php?prog=mpc>`_
-
 - `PPL <http://bugseng.com/products/ppl/>`_
 
 - `Cython <http://cython.org>`_
 
 - `cysignals <https://pypi.python.org/pypi/cysignals>`_
 
-- `gmpy2 <https://pypi.python.org/pypi/gmpy2>`_: version >= 2.1.0a4 from sources (see below)
+- `gmpy2 <https://pypi.python.org/pypi/gmpy2>`_: version >= 2.1.0a4 (see below)
 
 On Debian/Ubuntu systems these can be installed with::
 
