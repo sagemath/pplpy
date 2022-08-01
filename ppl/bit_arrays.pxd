@@ -1,4 +1,4 @@
-from ppl_decl cimport *
+from .ppl_decl cimport *
 
 cdef class Bit_Row(object):
     cdef PPL_Bit_Row *thisptr
