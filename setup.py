@@ -38,7 +38,8 @@ class build_ext(_build_ext):
         self.extensions[:] = cythonize(
             self.extensions,
             include_path=sys.path,
-            compiler_directives={'embedsignature': True})
+            compiler_directives={'embedsignature': True,
+                                 'language_level': '3'})
 
         _build_ext.run(self)
 
