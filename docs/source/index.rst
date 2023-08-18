@@ -10,9 +10,9 @@ pplpy is available from the `Python Package Index <https://pypi.python.org/pypi/
 
     $ pip install pplpy
 
-The code source can be obtained from `gitlab <https://gitlab.com/videlec/pplpy>`_::
+The code source can be obtained from `github <https://github.com/sagemath/pplpy>`_::
 
-    $ git clone https://gitlab.com/videlec/pplpy.git
+    $ git clone https://github.com/sagemath/pplpy.git
 
 Introduction
 ------------
