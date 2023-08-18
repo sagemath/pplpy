@@ -212,6 +212,9 @@ cdef class Variable(object):
         """
         return Linear_Expression(self) + Linear_Expression(other)
 
+    def __radd__(self, other):
+        return Linear_Expression(self) + Linear_Expression(other)
+
     def __sub__(self, other):
         r"""
         Return the difference ``self`` - ``other``.
@@ -235,7 +238,10 @@ cdef class Variable(object):
         >>> 15 - y
         -x1+15
         """
-        return Linear_Expression(self)-Linear_Expression(other)
+        return Linear_Expression(self) - Linear_Expression(other)
+
+    def __rsub__(self, other):
+        return Linear_Expression(other) - Linear_Expression(self)
 
     def __mul__(self, other):
         r"""
@@ -259,10 +265,10 @@ cdef class Variable(object):
         >>> 15 * y
         15*x1
         """
-        if isinstance(self, Variable):
-            return Linear_Expression(self) * other
-        else:
-            return Linear_Expression(other) * self
+        return Linear_Expression(self) * other
+
+    def __rmul__(self, other):
+        return Linear_Expression(self) * other
 
     def __pos__(self):
         r"""
@@ -1043,13 +1049,30 @@ cdef class Linear_Expression(object):
         >>> from gmpy2 import mpz
         >>> mpz(3) + x + mpz(5) + y + mpz(7)
         x0+x1+15
+        >>> from gmpy2 import mpz
+        >>> x + mpz(5)
+        x0+5
         """
         cdef Linear_Expression lhs, rhs
 
-        if isinstance(self, Linear_Expression):
-            lhs = <Linear_Expression> self
+        lhs = <Linear_Expression> self
+
+        if isinstance(other, Linear_Expression):
+            rhs = <Linear_Expression> other
         else:
-            lhs = Linear_Expression(self)
+            rhs = Linear_Expression(other)
+
+        cdef Linear_Expression result = Linear_Expression()
+        result.thisptr[0] = lhs.thisptr[0] + rhs.thisptr[0]
+        return result
+
+    def __radd__(self, other):
+        r"""
+        Add ``self`` and ``other``.
+        """
+        cdef Linear_Expression lhs, rhs
+
+        lhs = <Linear_Expression> self
 
         if isinstance(other, Linear_Expression):
             rhs = <Linear_Expression> other
@@ -1138,12 +1161,22 @@ cdef class Linear_Expression(object):
         """
         cdef Linear_Expression e
         cdef c
-        if isinstance(self, Linear_Expression):
-            e = <Linear_Expression>self
-            c = other
-        else:
-            e = <Linear_Expression>other
-            c = self
+        e = <Linear_Expression> self
+        c = other
+
+        cdef PPL_Coefficient cc = PPL_Coefficient_from_pyobject(c)
+        cdef Linear_Expression result = Linear_Expression()
+        result.thisptr[0] = e.thisptr[0] * cc
+        return result
+
+    def __rmul__(self, other):
+        r"""
+        Multiply ``self`` with ``other``
+        """
+        cdef Linear_Expression e
+        cdef c
+        e = <Linear_Expression> self
+        c = other
 
         cdef PPL_Coefficient cc = PPL_Coefficient_from_pyobject(c)
         cdef Linear_Expression result = Linear_Expression()
