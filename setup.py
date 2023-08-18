@@ -4,17 +4,10 @@ import os
 import sys
 
 from setuptools import setup, Command
-from setuptools.config import read_configuration
 from setuptools.extension import Extension
 
 # NOTE: setuptools build_ext does not work properly with Cython code
 from distutils.command.build_ext import build_ext as _build_ext
-
-dir_path = os.path.dirname(os.path.realpath(__file__))
-conf_dict = read_configuration(os.path.join(dir_path, "setup.cfg"))
-# NOTE: Python2.7 do not support multiple dictionaries unpacking
-kwds = conf_dict['metadata']
-kwds.update(conf_dict['options'])
 
 # Adapted from Cython's new_build_ext
 class build_ext(_build_ext):
@@ -35,6 +28,14 @@ class build_ext(_build_ext):
             sys.stderr.write("The installation of ppl requires cysignals\n")
             sys.exit(1)
 
+        try:
+            # We need the header files for gmpy2 at compile-time
+            import gmpy2
+        except ImportError as E:
+            sys.stderr.write("Error: {0}\n".format(E))
+            sys.stderr.write("The installation of ppl requires gmpy2\n")
+            sys.exit(1)
+
         self.extensions[:] = cythonize(
             self.extensions,
             include_path=sys.path,
@@ -53,14 +54,12 @@ class TestCommand(Command):
         pass
 
     def run(self):
-        import subprocess, os, tempfile
-        from shutil import rmtree
-        from distutils.dir_util import copy_tree
+        import subprocess, os, tempfile, shutil
 
         old_path = os.getcwd()
         tempdir_path = tempfile.mkdtemp()
         try:
-            copy_tree('./tests', tempdir_path)
+            shutil.copytree('./tests', tempdir_path, dirs_exist_ok=True)
             os.chdir(tempdir_path)
 
             if subprocess.call([sys.executable, 'runtests.py']):
@@ -75,7 +74,7 @@ class TestCommand(Command):
                 raise SystemExit("Cython test 2 failure")
         finally:
             os.chdir(old_path)
-            rmtree(tempdir_path)
+            shutil.rmtree(tempdir_path)
 
 extensions = [
     Extension('ppl.linear_algebra', sources=['ppl/linear_algebra.pyx', 'ppl/ppl_shim.cc']),
@@ -88,11 +87,6 @@ extensions = [
     ]
 
 setup(
-    long_description = open("README.rst").read(),
-    package_dir = {'ppl': 'ppl'},
-    package_data = {'ppl': ['*.pxd', '*.h', '*.hh']},
-    include_dirs = ['ppl'] + sys.path,
     ext_modules = extensions,
     cmdclass = {'build_ext': build_ext, 'test': TestCommand},
-    **kwds
 )
