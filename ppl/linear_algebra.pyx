@@ -48,8 +48,12 @@ cdef PPL_Coefficient PPL_Coefficient_from_pyobject(c) except *:
 
     if MPZ_Check(c):
         coeff = <mpz> c
+    elif isinstance(c, (int, str)):
+        coeff = mpz(c)
     else:
         coeff = mpz(c)
+        if coeff != c or c != coeff:
+            raise TypeError('ppl coefficients must be integral')
 
     return PPL_Coefficient(coeff.z)
 
@@ -209,6 +213,15 @@ cdef class Variable(object):
         x0+3
         >>> mpz(-5) + y
         x1-5
+
+        >>> x + 1.5
+        Traceback (most recent call last):
+        ...
+        TypeError: ppl coefficients must be integral
+        >>> 1.5 + x
+        Traceback (most recent call last):
+        ...
+        TypeError: ppl coefficients must be integral
         """
         return Linear_Expression(self) + Linear_Expression(other)
 
@@ -264,6 +277,15 @@ cdef class Variable(object):
         15*x0
         >>> 15 * y
         15*x1
+
+        >>> 1.5 * x
+        Traceback (most recent call last):
+        ...
+        TypeError: ppl coefficients must be integral
+        >>> x * 1.5
+        Traceback (most recent call last):
+        ...
+        TypeError: ppl coefficients must be integral
         """
         return Linear_Expression(self) * other
 
@@ -563,32 +585,29 @@ cdef class Linear_Expression(object):
     >>> Linear_Expression([mpz(5), mpz(2)], mpz(-2))
     5*x0+2*x1-2
 
-    String, rationals and floating point types are tolarated:
+    String, rationals and floating point types are accepted as long as they
+    represent exact integers:
 
     >>> Linear_Expression(('4', 1), 2)
     4*x0+x1+2
-
     >>> Linear_Expression((4, 1.0, mpq('4/2')), 2.0)
     4*x0+x1+2*x2+2
-
-    The conversion to integer coefficients is done via a call to `gmpy2.mpz`.
-    For example, Python floating point numbers and gmpy2 rationals are silently
-    casted to integers:
-
+    >>> Linear_Expression(('1.5',), 0)
+    Traceback (most recent call last):
+    ...
+    ValueError: invalid digits
+    >>> Linear_Expression((mpq('3/2'),), 0)
+    Traceback (most recent call last):
+    ...
+    TypeError: ppl coefficients must be integral
     >>> Linear_Expression((1, 2.1, 1), 1)
-    x0+2*x1+x2+1
+    Traceback (most recent call last):
+    ...
+    TypeError: ppl coefficients must be integral
     >>> Linear_Expression(mpq('1/2'))
-    0
-
-    Since
-
-    >>> mpz(2.1)
-    mpz(2)
-    >>> mpz(mpq('1/2'))
-    mpz(0)
-
-    Invalid input result in errors:
-
+    Traceback (most recent call last):
+    ...
+    TypeError: ppl coefficients must be integral
     >>> Linear_Expression('I am a linear expression')
     Traceback (most recent call last):
     ...
