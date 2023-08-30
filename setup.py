@@ -88,6 +88,5 @@ extensions = [
 
 setup(
     ext_modules = extensions,
-    package_data = {'ppl': ['*.pxd', 'ppl_shim.hh']},
     cmdclass = {'build_ext': build_ext, 'test': TestCommand},
 )
