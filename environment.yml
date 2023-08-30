@@ -3,5 +3,8 @@ channels:
   - conda-forge
   - defaults
 dependencies:
+  - setuptools
+  - gmpy2
+  - cysignals
   - cython
   - ppl
