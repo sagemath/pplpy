@@ -160,7 +160,7 @@ cdef class Generator(object):
             g.thisptr = new PPL_Generator(PPL_line(e.thisptr[0]))
         except BaseException:
             # g.thisptr must be set to something valid or g.__dealloc__() will segfault
-            g.thisptr = new PPL_Generator(PPL_point(e.thisptr[0],PPL_Coefficient(1)))
+            g.thisptr = new PPL_Generator(PPL_point(e.thisptr[0], PPL_Coefficient(1)))
             raise
         return g
 
@@ -204,7 +204,7 @@ cdef class Generator(object):
             g.thisptr = new PPL_Generator(PPL_ray(e.thisptr[0]))
         except BaseException:
             # g.thisptr must be set to something valid or g.__dealloc__() will segfault
-            g.thisptr = new PPL_Generator(PPL_point(e.thisptr[0],PPL_Coefficient(1)))
+            g.thisptr = new PPL_Generator(PPL_point(e.thisptr[0], PPL_Coefficient(1)))
             raise
         return g
 
@@ -251,7 +251,7 @@ cdef class Generator(object):
             g.thisptr = new PPL_Generator(PPL_point(e.thisptr[0], PPL_Coefficient_from_pyobject(divisor)))
         except BaseException:
             # g.thisptr must be set to something valid or g.__dealloc__() will segfault
-            g.thisptr = new PPL_Generator(PPL_point(e.thisptr[0],PPL_Coefficient(1)))
+            g.thisptr = new PPL_Generator(PPL_point(e.thisptr[0], PPL_Coefficient(1)))
             raise
         return g
 
@@ -565,7 +565,7 @@ cdef class Generator(object):
         cdef int d = self.space_dimension()
         cdef int i
         coeffs = []
-        for i in range(0,d):
+        for i in range(0, d):
             coeffs.append(GMPy_MPZ_From_mpz(self.thisptr.coefficient(PPL_Variable(i)).get_mpz_t()))
         return tuple(coeffs)
 
@@ -762,7 +762,7 @@ cdef class Generator_System(object):
             gs = <Generator_System>arg
             self.thisptr = new PPL_Generator_System(gs.thisptr[0])
             return
-        if isinstance(arg, (list,tuple)):
+        if isinstance(arg, (list, tuple)):
             self.thisptr = new PPL_Generator_System()
             for generator in arg:
                 self.insert(generator)
@@ -1014,7 +1014,7 @@ cdef class Generator_System(object):
         'Generator_System {point(3/1, 2/1), ray(1, 0)}'
         """
         s = 'Generator_System {'
-        s += ', '.join([ repr(g) for g in self ])
+        s += ', '.join([repr(g) for g in self])
         s += '}'
         return s
 

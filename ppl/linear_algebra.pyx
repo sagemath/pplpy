@@ -24,12 +24,8 @@ from __future__ import absolute_import, print_function
 
 cimport cython
 
-from cpython.int cimport PyInt_CheckExact
-from cpython.long cimport PyLong_CheckExact
-from cpython.object cimport PyObject
 from gmpy2 cimport import_gmpy2, mpz, GMPy_MPZ_From_mpz, MPZ_Check
 from .constraint cimport _make_Constraint_from_richcmp
-from .ppl_decl cimport mpz_t, mpz_init, mpz_class, modulo
 
 # initialize gmpy2 C API
 import_gmpy2()
@@ -56,6 +52,7 @@ cdef PPL_Coefficient PPL_Coefficient_from_pyobject(c) except *:
             raise TypeError('ppl coefficients must be integral')
 
     return PPL_Coefficient(coeff.z)
+
 
 @cython.freelist(128)
 cdef class Variable(object):
@@ -501,7 +498,7 @@ cdef class Variables_Set(object):
             >>> print(str(err.decode('ascii')))
             <BLANKLINE>
             variables( 1 )
-            123 
+            123
         """
         self.thisptr.ascii_dump()
 
@@ -1014,7 +1011,8 @@ cdef class Linear_Expression(object):
         for i in range(self.space_dimension()):
             x = Variable(i)
             coeff = self.coefficient(x)
-            if coeff == 0: continue
+            if coeff == 0:
+                continue
             if first and coeff == 1:
                 s += '%r' % x
                 first = False

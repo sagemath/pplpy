@@ -21,7 +21,7 @@
 #*****************************************************************************
 from __future__ import absolute_import, print_function
 
-from gmpy2 cimport GMPy_MPZ_From_mpz, mpz, import_gmpy2, MPZ_Check
+from gmpy2 cimport GMPy_MPZ_From_mpz, import_gmpy2
 from cython.operator cimport dereference as deref
 from cpython.object cimport Py_LT, Py_LE, Py_EQ, Py_NE, Py_GT, Py_GE
 
@@ -38,16 +38,13 @@ import_gmpy2()
 # but with PPL's rounding the gsl will be very unhappy; must turn off!
 restore_pre_PPL_rounding()
 
+
 def _dummy():
     raise ValueError
 
-####################################################
-### Constraint ######################################
-####################################################
 
-####################################################
 cdef class Constraint(object):
-    """
+    r"""
     Wrapper for PPL's ``Constraint`` class.
 
     An object of the class ``Constraint`` is either:
@@ -358,7 +355,7 @@ cdef class Constraint(object):
         cdef int d = self.space_dimension()
         cdef int i
         coeffs = []
-        for i in range(0,d):
+        for i in range(0, d):
             coeffs.append(GMPy_MPZ_From_mpz(self.thisptr.coefficient(PPL_Variable(i)).get_mpz_t()))
         return tuple(coeffs)
 
@@ -557,7 +554,7 @@ cdef class Constraint(object):
         """
         return Congruence(self, m)
 
-####################################################
+
 def inequality(expression):
     """
     Construct an inequality.
@@ -582,7 +579,6 @@ def inequality(expression):
     return expression >= 0
 
 
-####################################################
 def strict_inequality(expression):
     """
     Construct a strict inequality.
@@ -607,7 +603,6 @@ def strict_inequality(expression):
     return expression > 0
 
 
-####################################################
 def equation(expression):
     """
     Construct an equation.
@@ -632,13 +627,6 @@ def equation(expression):
     return expression == 0
 
 
-
-####################################################
-### Constraint_System  ##############################
-####################################################
-
-
-####################################################
 cdef class Constraint_System(object):
     """
     Wrapper for PPL's ``Constraint_System`` class.
@@ -671,7 +659,7 @@ cdef class Constraint_System(object):
         elif isinstance(arg, Constraint_System):
             gs = <Constraint_System>arg
             self.thisptr = new PPL_Constraint_System(gs.thisptr[0])
-        elif isinstance(arg, (list,tuple)):
+        elif isinstance(arg, (list, tuple)):
             self.thisptr = new PPL_Constraint_System()
             for constraint in arg:
                 self.insert(constraint)
@@ -871,13 +859,13 @@ cdef class Constraint_System(object):
         >>> len(cs)
         0
         """
-        cdef Py_ssize_t l = 0
+        cdef Py_ssize_t length = 0
         cdef PPL_Constraint_System_iterator *csi_ptr = new PPL_Constraint_System_iterator(self.thisptr[0].begin())
         while csi_ptr[0] != self.thisptr[0].end():
-            l += 1
+            length += 1
             csi_ptr[0].inc(1)
         del csi_ptr
-        return l
+        return length
 
     def __iter__(self):
         """
@@ -979,7 +967,7 @@ cdef class Constraint_System(object):
         'Constraint_System {-3*x0-2*x1+2>0, -x0-1>0}'
         """
         s = 'Constraint_System {'
-        s += ', '.join([ repr(c) for c in self ])
+        s += ', '.join([repr(c) for c in self])
         s += '}'
         return s
 
@@ -999,6 +987,7 @@ cdef class Constraint_System(object):
         Constraint_System {-3*x0-2*x1+2>0, -x0-1>0}
         """
         return (Constraint_System, (tuple(self),))
+
 
 cdef class Poly_Con_Relation(object):
     r"""
@@ -1150,7 +1139,6 @@ cdef class Poly_Con_Relation(object):
         """
         return _wrap_Poly_Con_Relation(PPL_Poly_Con_Relation_strictly_intersects())
 
-
     @classmethod
     def is_included(cls):
         r"""
@@ -1230,23 +1218,25 @@ cdef class Poly_Con_Relation(object):
         else:
             return 'nothing'
 
+
 cdef _make_Constraint_from_richcmp(lhs_, rhs_, op):
     cdef Linear_Expression lhs = Linear_Expression(lhs_)
     cdef Linear_Expression rhs = Linear_Expression(rhs_)
     if op == Py_LT:
-        return _wrap_Constraint(lhs.thisptr[0] <  rhs.thisptr[0])
+        return _wrap_Constraint(lhs.thisptr[0] < rhs.thisptr[0])
     elif op == Py_LE:
         return _wrap_Constraint(lhs.thisptr[0] <= rhs.thisptr[0])
     elif op == Py_EQ:
         return _wrap_Constraint(lhs.thisptr[0] == rhs.thisptr[0])
     elif op == Py_GT:
-        return _wrap_Constraint(lhs.thisptr[0] >  rhs.thisptr[0])
+        return _wrap_Constraint(lhs.thisptr[0] > rhs.thisptr[0])
     elif op == Py_GE:
         return _wrap_Constraint(lhs.thisptr[0] >= rhs.thisptr[0])
     elif op == Py_NE:
         raise NotImplementedError
     else:
         assert(False)
+
 
 cdef _wrap_Constraint(PPL_Constraint constraint):
     """
@@ -1256,6 +1246,7 @@ cdef _wrap_Constraint(PPL_Constraint constraint):
     c.thisptr = new PPL_Constraint(constraint)
     return c
 
+
 cdef _wrap_Constraint_System(PPL_Constraint_System constraint_system):
     """
     Wrap a C++ ``PPL_Constraint_System`` into a Cython ``Constraint_System``.
@@ -1263,6 +1254,7 @@ cdef _wrap_Constraint_System(PPL_Constraint_System constraint_system):
     cdef Constraint_System cs = Constraint_System.__new__(Constraint_System)
     cs.thisptr = new PPL_Constraint_System(constraint_system)
     return cs
+
 
 cdef _wrap_Poly_Con_Relation(PPL_Poly_Con_Relation relation):
     """

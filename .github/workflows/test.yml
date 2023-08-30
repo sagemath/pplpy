@@ -31,7 +31,7 @@ jobs:
       - name: Linter
         shell: bash -l {0}
         run: |
-          cython-lint ppl/
+          cython-lint --ignore=E265,E266,E501,E741 --exclude='ppl_decl.pxd' ppl/
       - name: Run tests
         shell: bash -l {0}
         run: |
