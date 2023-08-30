@@ -12,7 +12,7 @@ print("Running pplpy doctests")
 print('-'*80)
 import doctest
 for mod in [ppl, ppl.linear_algebra, ppl.mip_problem, ppl.polyhedron, ppl.generator, ppl.constraint, ppl.congruence, ppl.bit_arrays]:
-    res = doctest.testmod(mod, optionflags=doctest.ELLIPSIS | doctest.REPORT_NDIFF)
+    res = doctest.testmod(mod, optionflags=doctest.ELLIPSIS | doctest.REPORT_NDIFF | doctest.NORMALIZE_WHITESPACE)
     print(mod)
     print(res)
     print('-'*80)
