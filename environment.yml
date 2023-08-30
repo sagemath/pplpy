@@ -3,9 +3,5 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - python
   - cython
   - ppl
-  - sphinx  # optional: doc
-pip:
-  - linkchecker  # optional: doc

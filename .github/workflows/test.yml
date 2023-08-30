@@ -10,10 +10,6 @@ concurrency:
 jobs:
   test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - optionals: ""
     steps:
       - uses: actions/checkout@v2
         with: { submodules: recursive }
@@ -22,15 +18,7 @@ jobs:
       - name: Install dependencies
         shell: bash -l {0}
         run: |
-          mamba create -n test
-
-          while read; do
-            optional=$(echo "$REPLY" | grep -o '# optional: [^ ]*' | awk '{ print $3; }') || true
-            (test "$optional" == '' || (echo "${{ matrix.optionals }}" | grep -E '\b'"$optional"'\b') > /dev/null) && echo "$REPLY" || true
-          done < environment.yml > environment.test.yml
-
-          mamba env update --quiet -n test -f environment.test.yml
-
+          mamba env update --quiet -n base -f environment.yml
           conda list
       - name: Install pplpy
         shell: bash -l {0}
@@ -39,10 +27,7 @@ jobs:
       - name: Run tests
         shell: bash -l {0}
         run: |
-          sage -python setup.py test
+          python setup.py test
       - name: Show logs
         run: grep "" /dev/null `find -name '*.log'` || true
         if: ${{ always() }}
-
-env:
-  MAKEFLAGS: -j2
