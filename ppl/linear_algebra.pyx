@@ -533,8 +533,9 @@ cdef class Linear_Expression(object):
     If there are two arguments ``Linear_Expression(a,b)``, they are
     interpreted as
 
-    - ``a`` -- an iterable of integer coefficients, for example a
-      list.
+    - ``a`` -- either a dictionary whose indices are space dimension and
+      values are coefficients or an iterable coefficients (e.g. a list or
+      tuple).
 
     - ``b`` -- an integer. The inhomogeneous term.
 
@@ -560,20 +561,29 @@ cdef class Linear_Expression(object):
     Examples:
 
     >>> from ppl import Variable, Linear_Expression
-    >>> Linear_Expression([1,2,3,4],5)
+
+    >>> Linear_Expression({1: -3, 7: 1}, 0)
+    -3*x1+x7
+    >>> Linear_Expression([1, 2, 3, 4], 5)
     x0+2*x1+3*x2+4*x3+5
     >>> Linear_Expression(10)
     10
     >>> Linear_Expression()
     0
+    >>> Linear_Expression({}, 2)
+    2
+    >>> Linear_Expression([], 2)
+    2
+
     >>> Linear_Expression(10).inhomogeneous_term()
     mpz(10)
     >>> x = Variable(123)
-    >>> expr = x+1; expr
+    >>> expr = x+1
+    >>> expr
     x123+1
     >>> expr.coefficient(x)
     mpz(1)
-    >>> expr.coefficient( Variable(124) )
+    >>> expr.coefficient(Variable(124))
     mpz(0)
 
     >>> from gmpy2 import mpz, mpq
@@ -614,7 +624,7 @@ cdef class Linear_Expression(object):
     ...
     TypeError: mpz() requires numeric or string argument
     """
-    def __cinit__(self, *args):
+    def __init__(self, *args):
         """
         The Cython constructor.
 
@@ -626,31 +636,37 @@ cdef class Linear_Expression(object):
         >>> Linear_Expression(10)   # indirect doctest
         10
         """
-        cdef long i
+        cdef size_t i
         if len(args) == 2:
             a = args[0]
             b = args[1]
-            ex = Linear_Expression(0)
-            for i in range(len(a)):
-                ex += Variable(i) * a[i]
-            arg = ex + b
+            self.thisptr = new PPL_Linear_Expression()
+            if isinstance(a, dict) and a:
+                self.thisptr.set_space_dimension(1 + max(a))
+                for i, coeff in a.items():
+                    self.thisptr.set_coefficient(PPL_Variable(i), PPL_Coefficient_from_pyobject(coeff))
+            elif a:
+                self.thisptr.set_space_dimension(len(a))
+                for i, coeff in enumerate(a):
+                    self.thisptr.set_coefficient(PPL_Variable(i), PPL_Coefficient_from_pyobject(coeff))
+            self.thisptr.set_inhomogeneous_term(PPL_Coefficient_from_pyobject(b))
+            return
         elif len(args) == 1:
             arg = args[0]
+            if isinstance(arg, Variable):
+                v = <Variable>arg
+                self.thisptr = new PPL_Linear_Expression(v.thisptr[0])
+                return
+            if isinstance(arg, Linear_Expression):
+                e = <Linear_Expression>arg
+                self.thisptr = new PPL_Linear_Expression(e.thisptr[0])
+                return
+            self.thisptr = new PPL_Linear_Expression(PPL_Coefficient_from_pyobject(arg))
         elif len(args) == 0:
             self.thisptr = new PPL_Linear_Expression()
             return
         else:
             raise ValueError("Cannot initialize with more than 2 arguments.")
-
-        if isinstance(arg, Variable):
-            v = <Variable>arg
-            self.thisptr = new PPL_Linear_Expression(v.thisptr[0])
-            return
-        if isinstance(arg, Linear_Expression):
-            e = <Linear_Expression>arg
-            self.thisptr = new PPL_Linear_Expression(e.thisptr[0])
-            return
-        self.thisptr = new PPL_Linear_Expression(PPL_Coefficient_from_pyobject(arg))
 
     def __dealloc__(self):
         """
