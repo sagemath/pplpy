@@ -23,7 +23,7 @@ jobs:
       - name: Install pplpy
         shell: bash -l {0}
         run: |
-          pip install --verbose --no-index .
+          pip install --verbose --no-index --no-build-isolation .
       - name: Run tests
         shell: bash -l {0}
         run: |
