@@ -11,17 +11,18 @@
 from __future__ import absolute_import, print_function
 
 from cython.operator cimport dereference as deref
-from cpython.object cimport Py_LT, Py_LE, Py_EQ, Py_NE, Py_GT, Py_GE
 
-from gmpy2 cimport GMPy_MPZ_From_mpz, mpz, import_gmpy2, MPZ_Check
+from gmpy2 cimport GMPy_MPZ_From_mpz, mpz, import_gmpy2
 
 from .constraint cimport Constraint
 from .linear_algebra cimport Variable, Linear_Expression, PPL_Coefficient_from_pyobject
 
 import_gmpy2()
 
+
 def _dummy():
     raise ValueError
+
 
 cdef class Congruence(object):
     r"""
@@ -131,7 +132,7 @@ cdef class Congruence(object):
         cdef int d = self.space_dimension()
         cdef int i
         coeffs = []
-        for i in range(0,d):
+        for i in range(0, d):
             coeffs.append(GMPy_MPZ_From_mpz(self.thisptr.coefficient(PPL_Variable(i)).get_mpz_t()))
         return tuple(coeffs)
 
@@ -283,7 +284,7 @@ cdef class Congruence_System(object):
 
     def __repr__(self):
         s = 'Congruence_System {'
-        s += ', '.join([ repr(c) for c in self ])
+        s += ', '.join([repr(c) for c in self])
         s += '}'
         return s
 
@@ -337,10 +338,12 @@ cdef class Congruence_System(object):
         """
         return (Congruence_System, (tuple(self),))
 
+
 cdef _wrap_Congruence(PPL_Congruence congruence):
     cdef Congruence c = Congruence.__new__(Congruence)
     c.thisptr = new PPL_Congruence(congruence)
     return c
+
 
 def congruence(le, m):
     return Congruence(le, m)

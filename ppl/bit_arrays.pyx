@@ -13,7 +13,7 @@ from __future__ import absolute_import, print_function
 
 from libc.limits cimport ULONG_MAX
 
-from .ppl_decl cimport PPL_Bit_Row, PPL_Bit_Matrix
+from .ppl_decl cimport PPL_Bit_Row
 
 cdef class Bit_Row(object):
     r"""

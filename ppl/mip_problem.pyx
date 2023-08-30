@@ -36,9 +36,7 @@ import_gmpy2()
 # but with PPL's rounding the gsl will be very unhappy; must turn off!
 restore_pre_PPL_rounding()
 
-####################################################
-### MIP_Problem ####################################
-####################################################
+
 cdef class MIP_Problem(object):
     r"""
     wrapper for PPL's MIP_Problem class
@@ -615,11 +613,11 @@ cdef class MIP_Problem(object):
         finally:
             sig_off()
         if tmp == UNFEASIBLE_MIP_PROBLEM:
-            return { 'status':'unfeasible' }
+            return {'status': 'unfeasible'}
         elif tmp == UNBOUNDED_MIP_PROBLEM:
-            return { 'status':'unbounded' }
+            return {'status': 'unbounded'}
         else:
-            return { 'status':'optimized' }
+            return {'status': 'optimized'}
 
     def optimizing_point(self):
         """

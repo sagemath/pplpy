@@ -1,0 +1,9 @@
+name: pplpy-test
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - sphinx
+  - pip:
+    - linkchecker
+    - cython-lint 

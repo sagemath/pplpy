@@ -117,7 +117,6 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         PPL_Constraint operator<=(PPL_Linear_Expression& e)
         PPL_Constraint operator< (PPL_Linear_Expression& e)
 
-
     cdef cppclass PPL_Constraint:
         PPL_Constraint()
         PPL_Constraint(PPL_Constraint &g)
@@ -388,7 +387,6 @@ cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
         unsigned long next(unsigned long position)
         unsigned long count_ones()
         cppbool empty()
-
 
     cdef cppclass PPL_Bit_Matrix:
         PPL_Bit_Matrix()

@@ -41,9 +41,7 @@ import_gmpy2()
 # but with PPL's rounding the gsl will be very unhappy; must turn off!
 restore_pre_PPL_rounding()
 
-####################################################
-################# Polyhedron #######################
-####################################################
+
 cdef class Polyhedron(object):
     r"""
     Wrapper for PPL's ``Polyhedron`` class.
@@ -156,29 +154,37 @@ cdef class Polyhedron(object):
                 desc += ", "
             first = False
             desc += str(n_points)
-            if n_points==1:  desc += ' point'
-            else:          desc += ' points'
+            if n_points == 1:
+                desc += ' point'
+            else:
+                desc += ' points'
         if n_closure_points>0:
             if not first:
                 desc += ", "
             first = False
             desc += str(n_closure_points)
-            if n_closure_points==1:  desc += ' closure_point'
-            else:          desc += ' closure_points'
+            if n_closure_points == 1:
+                desc += ' closure_point'
+            else:
+                desc += ' closure_points'
         if n_rays>0:
             if not first:
                 desc += ", "
             first = False
             desc += str(n_rays)
-            if n_rays==1:  desc += ' ray'
-            else:          desc += ' rays'
+            if n_rays == 1:
+                desc += ' ray'
+            else:
+                desc += ' rays'
         if n_lines>0:
             if not first:
                 desc += ", "
             first = False
             desc += repr(n_lines)
-            if n_lines==1: desc +=' line'
-            else:          desc +=' lines'
+            if n_lines == 1:
+                desc +=' line'
+            else:
+                desc +=' lines'
         return desc
 
     def space_dimension(self):
@@ -836,9 +842,9 @@ cdef class Polyhedron(object):
         mpz_sup_d = GMPy_MPZ_From_mpz(sup_d.get_mpz_t())
 
         if rc:
-            return { 'bounded':True, 'sup_n':mpz_sup_n, 'sup_d':mpz_sup_d, 'maximum':maximum, 'generator':g }
+            return {'bounded': True, 'sup_n': mpz_sup_n, 'sup_d': mpz_sup_d, 'maximum': maximum, 'generator': g}
         else:
-            return { 'bounded':False }
+            return {'bounded': False}
 
     def minimize(self, Linear_Expression expr):
         r"""
@@ -916,9 +922,9 @@ cdef class Polyhedron(object):
         mpz_inf_d = GMPy_MPZ_From_mpz(inf_d.get_mpz_t())
 
         if rc:
-            return { 'bounded':True, 'inf_n':mpz_inf_n, 'inf_d':mpz_inf_d, 'minimum':minimum, 'generator':g }
+            return {'bounded': True, 'inf_n': mpz_inf_n, 'inf_d': mpz_inf_d, 'minimum': minimum, 'generator': g}
         else:
-            return { 'bounded':False }
+            return {'bounded': False}
 
     def contains(self, Polyhedron y):
         r"""
@@ -1534,13 +1540,13 @@ cdef class Polyhedron(object):
         sig_off()
 
     def BHRZ03_widening_assign(self, Polyhedron y, unsigned tp = 0):
-        r""" 
+        r"""
         Assigns to ``self``` the result of computing the `BHRZ03-widening`
-        between ``self`` and ``y``.  
+        between ``self`` and ``y``.
 
         INPUT:
 
-        - ``y`` -- a :class:`Polyhedron` that must be contained in ``self`` 
+        - ``y`` -- a :class:`Polyhedron` that must be contained in ``self``
 
         - ``tp`` -- an optional unsigned variable with the number of
           available tokens (to be used when applying the `widening with
@@ -1559,7 +1565,7 @@ cdef class Polyhedron(object):
 
         >>> from ppl import NNC_Polyhedron, Variable
         >>> x = Variable(0)
-        >>> y = Variable(1)        
+        >>> y = Variable(1)
         >>> ph1 = NNC_Polyhedron(2)
         >>> ph1.add_constraint( y >= 0 )
         >>> ph1.add_constraint( x + y > 0 )
@@ -1599,7 +1605,7 @@ cdef class Polyhedron(object):
         computing the widening only when ``tp`` is equal to 0,
         otherwise the this method will decrement the value of ``tp``
         and return it.
-        
+
         >>> from ppl import closure_point
         >>> gs1 = Generator_System()
         >>> gs1.insert(point( 2 * x ))
@@ -1634,14 +1640,14 @@ cdef class Polyhedron(object):
         return tp
 
     def limited_BHRZ03_extrapolation_assign(self, Polyhedron y, Constraint_System cs, unsigned tp = 0):
-        r""" 
+        r"""
         Assigns to ``self``` the result of computing the limited
         extrapolation between ``self`` and ``y`` using the
         `BHRZ03-widening` operator.
 
         INPUT:
 
-        - ``y`` -- a :class:`Polyhedron` that must be contained in ``self`` 
+        - ``y`` -- a :class:`Polyhedron` that must be contained in ``self``
 
         - ``cs`` -- a :class:`Constraint_System` used to improve the
           widened polyhedron
@@ -1695,14 +1701,14 @@ cdef class Polyhedron(object):
         return tp
 
     def bounded_BHRZ03_extrapolation_assign(self, Polyhedron y, Constraint_System cs, unsigned tp = 0):
-        r""" 
+        r"""
         Assigns to ``self``` the result of computing the bounded
         extrapolation between ``self`` and ``y`` using the
         `BHRZ03-widening` operator.
 
         INPUT:
 
-        - ``y`` -- a :class:`Polyhedron` that must be contained in ``self`` 
+        - ``y`` -- a :class:`Polyhedron` that must be contained in ``self``
 
         - ``cs`` -- a :class:`Constraint_System` used to improve the
           widened polyhedron
@@ -1721,7 +1727,7 @@ cdef class Polyhedron(object):
         topology-incompatible or dimesion-incompatible.
 
         Examples:
-        
+
         >>> from ppl import Variable, Constraint_System, C_Polyhedron
         >>> x = Variable(0)
         >>> ph1 = C_Polyhedron(1)
@@ -1747,13 +1753,13 @@ cdef class Polyhedron(object):
         return tp
 
     def H79_widening_assign(self, Polyhedron y, unsigned tp = 0):
-        r""" 
+        r"""
         Assigns to ``self``` the result of computing the `H79-widening`
-        between ``self`` and ``y``.  
+        between ``self`` and ``y``.
 
         INPUT:
 
-        - ``y`` -- a :class:`Polyhedron` that must be contained in ``self`` 
+        - ``y`` -- a :class:`Polyhedron` that must be contained in ``self``
 
         - ``tp`` -- an optional unsigned variable with the number of
           available tokens (to be used when applying the `widening with
@@ -1801,7 +1807,7 @@ cdef class Polyhedron(object):
         computing the widening only when ``tp`` is equal to 0,
         otherwise the this method will decrement the value of ``tp``
         and return it.
-        
+
         >>> from ppl import point, ray, Generator_System
         >>> gs1 = Generator_System()
         >>> gs1.insert(point())
@@ -1837,14 +1843,14 @@ cdef class Polyhedron(object):
     widening_assign = H79_widening_assign
 
     def limited_H79_extrapolation_assign(self, Polyhedron y, Constraint_System cs, unsigned tp = 0):
-        r""" 
+        r"""
         Assigns to ``self``` the result of computing the limited
         extrapolation between ``self`` and ``y`` using the
         `H79-widening` operator.
 
         INPUT:
 
-        - ``y`` -- a :class:`Polyhedron` that must be contained in ``self`` 
+        - ``y`` -- a :class:`Polyhedron` that must be contained in ``self``
 
         - ``cs`` -- a :class:`Constraint_System` used to improve the
           widened polyhedron
@@ -1916,16 +1922,16 @@ cdef class Polyhedron(object):
         finally:
             sig_off()
         return tp
-    
+
     def bounded_H79_extrapolation_assign(self, Polyhedron y, Constraint_System cs, unsigned tp = 0):
-        r""" 
+        r"""
         Assigns to ``self``` the result of computing the bounded
         extrapolation between ``self`` and ``y`` using the
         `H79-widening` operator.
 
         INPUT:
 
-        - ``y`` -- a :class:`Polyhedron` that must be contained in ``self`` 
+        - ``y`` -- a :class:`Polyhedron` that must be contained in ``self``
 
         - ``cs`` -- a :class:`Constraint_System` used to improve the
           widened polyhedron
@@ -2296,8 +2302,8 @@ cdef class Polyhedron(object):
         <BLANKLINE>
         sat_g
         2 x 2
-        0 0 
-        0 1 
+        0 0
+        0 1
         <BLANKLINE>
         <BLANKLINE>
         """
