@@ -1,0 +1,7 @@
+name: pplpy-build
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - cython
+  - ppl
