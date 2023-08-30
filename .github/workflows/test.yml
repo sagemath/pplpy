@@ -42,8 +42,8 @@ jobs:
       - name: Build documentation
         shell: bash -l {0}
         run:
-          sphinx-build docs/source html
-          touch html/.nojekyll
+          sphinx-build docs/source html/pplpy
+          touch html/pplpy/.nojekyll
       - name: Detect broken links
         shell: bash -l {0}
         run: |
@@ -56,6 +56,6 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages
-          FOLDER: html/
+          FOLDER: html/pplpy/
           TARGET_FOLDER: docs/
         if: ${{ github.event_name == 'push' }}
