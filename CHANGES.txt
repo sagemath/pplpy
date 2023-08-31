@@ -5,6 +5,11 @@ v0.8, 2019/01/18
    - upgrade gmpy2 version dependency
    - add pyproject.toml and setup.cfg files
    - remove the OK functions which caused trouble for clang on FreeBSD
+   - switch back to github under SageMath organization
+   - fast initialization of Linear_Expression from list/dict
+   - CI (test, linter, doc build and deployment)
+   - add a Cython pool for ppl.Variable
+   - support for congruences
 v0.7, 2017/11/24
    - use of gmpy2 for integers and rationals (Vincent Delecroix/Vincent Klein)
    - tests on travis (Vincent Delecroix/Vincent Klein)
