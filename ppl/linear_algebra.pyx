@@ -284,7 +284,11 @@ cdef class Variable(object):
         ...
         TypeError: ppl coefficients must be integral
         """
-        return Linear_Expression(self) * other
+        if isinstance(self, Variable):
+            return Linear_Expression(self) * other
+        else:
+            # NOTE: this code path will only be executed when compiled with cython < 3.0.0
+            return Linear_Expression(other) * self
 
     def __rmul__(self, other):
         return Linear_Expression(self) * other
@@ -1088,7 +1092,11 @@ cdef class Linear_Expression(object):
         """
         cdef Linear_Expression lhs, rhs
 
-        lhs = <Linear_Expression> self
+        if isinstance(self, Linear_Expression):
+            lhs = <Linear_Expression> self
+        else:
+            # NOTE: this code path will only be executed when compiled with cython < 3.0.0
+            lhs = Linear_Expression(self)
 
         if isinstance(other, Linear_Expression):
             rhs = <Linear_Expression> other
@@ -1181,9 +1189,9 @@ cdef class Linear_Expression(object):
         >>> from ppl import Variable
         >>> x = Variable(0)
         >>> y = Variable(1)
-        >>> 8*(x+1)
+        >>> 8 * (x + 1)
         8*x0+8
-        >>> y*8
+        >>> y * 8
         8*x1
         >>> 2**128 * x
         340282366920938463463374607431768211456*x0
@@ -1194,8 +1202,14 @@ cdef class Linear_Expression(object):
         """
         cdef Linear_Expression e
         cdef c
-        e = <Linear_Expression> self
-        c = other
+
+        if isinstance(self, Linear_Expression):
+            e = <Linear_Expression> self
+            c = other
+        else:
+            # NOTE: this code path will only be executed when compiled with cython < 3.0.0
+            e = <Linear_Expression> other
+            c = self
 
         cdef PPL_Coefficient cc = PPL_Coefficient_from_pyobject(c)
         cdef Linear_Expression result = Linear_Expression()
