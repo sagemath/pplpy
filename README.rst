@@ -94,20 +94,12 @@ Requirements
 
 - `PPL <http://bugseng.com/products/ppl/>`_
 
-- `Cython <http://cython.org>`_
+- `Cython <http://cython.org>`_ (tested with both 0.29 and 3.0)
 
 - `cysignals <https://pypi.python.org/pypi/cysignals>`_
 
-- `gmpy2 <https://pypi.python.org/pypi/gmpy2>`_: version >= 2.1.0a4 (see below)
+- `gmpy2 <https://pypi.python.org/pypi/gmpy2>`_
 
-On Debian/Ubuntu systems these can be installed with::
+On Debian/Ubuntu systems the dependencies can be installed with::
 
-    $ sudo apt-get install libgmp-dev libmpfr-dev libmpc-dev libppl-dev cython
-    $ pip install cysignals --user
-    $ pip install gmpy2 --pre --user
-
-The pip optional option `--user` allows to install python packages for a single
-user with no need for administrator rights. The two pip install commands might
-be replaced by `sudo pip install PKG` (not recommended). On recent Debian/Ubuntu systems,
-cysignals is also available as a package under the name `python-cysignals` for
-Python 2 and `python3-cysignals` for Python 3.
+    $ sudo apt-get install libgmp-dev libmpfr-dev libmpc-dev libppl-dev cython3 python3-gmpy2 python3-cysignals-pari
