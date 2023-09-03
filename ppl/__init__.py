@@ -126,7 +126,6 @@ AUTHORS:
   Split the main code into several files.
   Remove the _mutable_immutable class.
 """
-from __future__ import absolute_import
 
 from .linear_algebra import (
         Variable, Variables_Set, Linear_Expression,

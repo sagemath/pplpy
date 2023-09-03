@@ -9,8 +9,6 @@
 #                  http://www.gnu.org/licenses/
 #*****************************************************************************
 
-from __future__ import absolute_import, print_function
-
 from libc.limits cimport ULONG_MAX
 
 from .ppl_decl cimport PPL_Bit_Row

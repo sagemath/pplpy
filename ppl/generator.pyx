@@ -19,7 +19,6 @@
 #  the License, or (at youroption) any later version.
 #                  http://www.gnu.org/licenses/
 #*****************************************************************************
-from __future__ import absolute_import, print_function
 
 from gmpy2 cimport GMPy_MPZ_From_mpz, import_gmpy2
 from cython.operator cimport dereference as deref
