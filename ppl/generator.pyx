@@ -25,8 +25,6 @@ from gmpy2 cimport GMPy_MPZ_From_mpz, import_gmpy2
 from cython.operator cimport dereference as deref
 from .linear_algebra cimport PPL_Coefficient_from_pyobject
 
-import sys
-cdef int PY_MAJOR_VERSION = sys.version_info.major
 
 # PPL can use floating-point arithmetic to compute integers
 cdef extern from "ppl.hh" namespace "Parma_Polyhedra_Library":
@@ -667,24 +665,14 @@ cdef class Generator(object):
         """
         le = Linear_Expression(self.coefficients(), 0)
         t = self.thisptr.type()
-        if PY_MAJOR_VERSION == 2:
-            if t == LINE or t == RAY:
-                return (_unpickle_generator, (self.type(), le))
-            elif t == POINT or t == CLOSURE_POINT:
-                return (_unpickle_generator, (self.type(), le, self.divisor()))
-            else:
-                raise RuntimeError
-        elif PY_MAJOR_VERSION == 3:
-            if t == LINE:
-                return (Generator.line, (le,))
-            elif t == RAY:
-                return (Generator.ray, (le,))
-            elif t == POINT:
-                return (Generator.point, (le, self.divisor()))
-            elif t == CLOSURE_POINT:
-                return (Generator.closure_point, (le, self.divisor()))
-            else:
-                raise RuntimeError
+        if t == LINE:
+            return (Generator.line, (le,))
+        elif t == RAY:
+            return (Generator.ray, (le,))
+        elif t == POINT:
+            return (Generator.point, (le, self.divisor()))
+        elif t == CLOSURE_POINT:
+            return (Generator.closure_point, (le, self.divisor()))
         else:
             raise RuntimeError
 
@@ -1224,18 +1212,3 @@ cdef _wrap_Poly_Gen_Relation(PPL_Poly_Gen_Relation relation):
     cdef Poly_Gen_Relation rel = Poly_Gen_Relation(True)
     rel.thisptr = new PPL_Poly_Gen_Relation(relation)
     return rel
-
-if PY_MAJOR_VERSION == 2:
-    def _unpickle_generator(*args):
-        t = args[0]
-        args = args[1:]
-        if t == 'line':
-            return Generator.line(*args)
-        elif t == 'ray':
-            return Generator.ray(*args)
-        elif t == 'point':
-            return Generator.point(*args)
-        elif t == 'closure_point':
-            return Generator.closure_point(*args)
-        else:
-            raise RuntimeError
