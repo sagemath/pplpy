@@ -19,7 +19,6 @@
 #  the License, or (at youroption) any later version.
 #                  http://www.gnu.org/licenses/
 #*****************************************************************************
-from __future__ import absolute_import, print_function
 
 from cysignals.signals cimport sig_on, sig_off
 from gmpy2 cimport import_gmpy2, GMPy_MPQ_From_mpz

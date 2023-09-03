@@ -8,7 +8,6 @@
 #  the License, or (at youroption) any later version.
 #                  http://www.gnu.org/licenses/
 #*****************************************************************************
-from __future__ import absolute_import, print_function
 
 from cython.operator cimport dereference as deref
 
