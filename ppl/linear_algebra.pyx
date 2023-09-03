@@ -645,11 +645,12 @@ cdef class Linear_Expression(object):
             a = args[0]
             b = args[1]
             self.thisptr = new PPL_Linear_Expression()
-            if isinstance(a, dict) and a:
-                self.thisptr.set_space_dimension(1 + max(a))
-                for i, coeff in a.items():
-                    self.thisptr.set_coefficient(PPL_Variable(i), PPL_Coefficient_from_pyobject(coeff))
-            elif a:
+            if isinstance(a, dict):
+                if a:
+                    self.thisptr.set_space_dimension(1 + max(a))
+                    for i, coeff in a.items():
+                        self.thisptr.set_coefficient(PPL_Variable(i), PPL_Coefficient_from_pyobject(coeff))
+            else:
                 self.thisptr.set_space_dimension(len(a))
                 for i, coeff in enumerate(a):
                     self.thisptr.set_coefficient(PPL_Variable(i), PPL_Coefficient_from_pyobject(coeff))
