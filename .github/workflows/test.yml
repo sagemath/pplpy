@@ -14,6 +14,9 @@ jobs:
       matrix:
         python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
         cython: ["cython", "cython<3.0.0"]
+        exclude:
+          - python-version: 3.12
+            cython: cython<3.0.0
     steps:
       - uses: actions/checkout@v2
         with: { submodules: recursive }
@@ -22,8 +25,19 @@ jobs:
       - name: Install pplpy dependencies
         shell: bash -l {0}
         run: |
-          mamba install --quiet setuptools gmpy2 cysignals ppl "${{matrix.cython}}"
-          conda list
+          mamba install --quiet setuptools cysignals ppl gmp mpfr mpc "${{matrix.cython}}"
+      - name: Install gmpy2 via mamba
+        shell: bash -l {0}
+        if: ${{ matrix.python-version != '3.12' }}
+        run: |
+          mamba install --quiet gmpy2
+          python -c 'import gmpy2; print(gmpy2.version())'
+      - name: Install gmpy2 via pip
+        shell: bash -l {0}
+        if: ${{ matrix.python-version == '3.12' }}
+        run: |
+          pip install --pre gmpy2==2.2.0a1
+          python -c 'import gmpy2; print(gmpy2.version())'
       - name: Install pplpy
         shell: bash -l {0}
         run: |
