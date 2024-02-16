@@ -1,3 +1,50 @@
 [build-system]
-requires = ["setuptools", "wheel", "Cython", "cysignals", "sphinx", "gmpy2>=2.1.0b1"]
+requires = [
+    "setuptools>=61.2",
+    "Cython",
+    "cysignals",
+    "sphinx",
+    "gmpy2>=2.1.0b1",
+]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "pplpy"
+version = "0.8.8"
+description = "Python PPL wrapper"
+readme = "README.rst"
+authors = [{name = "Vincent Delecroix", email = "vincent.delecroix@labri.fr"}]
+license = {text = "GPL v3"}
+classifiers = [
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Programming Language :: C++",
+    "Programming Language :: Python",
+    "Development Status :: 5 - Production/Stable",
+    "Operating System :: Unix",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+keywords = [
+    "polyhedron",
+    "polytope",
+    "convex",
+    "mathematics",
+    "ppl",
+    "milp",
+    "linear-programming",
+]
+
+[project.urls]
+Homepage = "https://github.com/sagemath/pplpy"
+Download = "https://pypi.org/project/pplpy/#files"
+
+[tool.setuptools]
+packages = ["ppl"]
+platforms = ["any"]
+include-package-data = false
+
+[tool.setuptools.package-data]
+ppl = ["*.pxd", "*.h", "*.hh"]
