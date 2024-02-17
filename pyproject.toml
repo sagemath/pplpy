@@ -3,7 +3,6 @@ requires = [
     "setuptools>=61.2",
     "Cython",
     "cysignals",
-    "sphinx",
     "gmpy2>=2.1.0b1",
 ]
 build-backend = "setuptools.build_meta"
@@ -41,6 +40,10 @@ dependencies = [
     "gmpy2>=2.1.0b1",
 ]
 
+[project.optional-dependencies]
+doc = [
+    "sphinx",
+]
 
 [project.urls]
 Homepage = "https://github.com/sagemath/pplpy"
