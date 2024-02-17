@@ -36,6 +36,11 @@ keywords = [
     "milp",
     "linear-programming",
 ]
+dependencies = [
+    "cysignals",
+    "gmpy2>=2.1.0b1",
+]
+
 
 [project.urls]
 Homepage = "https://github.com/sagemath/pplpy"
