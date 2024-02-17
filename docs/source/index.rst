@@ -6,7 +6,7 @@ Welcome to pplpy's documentation!
 Installation
 ------------
 
-pplpy is available from the `Python Package Index <https://pypi.python.org/pypi/pplpy/>`_. You can hence install it with::
+pplpy is available from the `Python Package Index <https://pypi.org/project/pplpy/>`_. You can hence install it with::
 
     $ pip install pplpy
 
