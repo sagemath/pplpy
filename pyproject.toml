@@ -9,7 +9,6 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pplpy"
-version = "0.8.8"
 description = "Python PPL wrapper"
 readme = "README.rst"
 authors = [{name = "Vincent Delecroix", email = "vincent.delecroix@labri.fr"}]
@@ -39,6 +38,7 @@ dependencies = [
     "cysignals",
     "gmpy2>=2.1.0b1",
 ]
+dynamic = ["version"]
 
 [project.optional-dependencies]
 doc = [
@@ -53,6 +53,9 @@ Download = "https://pypi.org/project/pplpy/#files"
 packages = ["ppl"]
 platforms = ["any"]
 include-package-data = false
+
+[tool.setuptools.dynamic]
+version = {attr = "ppl.__version__"}
 
 [tool.setuptools.package-data]
 ppl = ["*.pxd", "*.h", "*.hh"]

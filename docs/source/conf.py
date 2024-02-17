@@ -43,16 +43,9 @@ copyright = u'2016, Vincent Delecroix'
 # built documents.
 #
 # The short X.Y version.
-import configparser
-config = configparser.ConfigParser(allow_no_value=True)
-try:
-    with open("../../setup.cfg", encoding='utf-8') as f:
-        config.read_string(f.read())
-except TypeError:
-    # NOTE: encoding is not a keyword in Python 2
-    with open("../../setup.cfg") as f:
-        config.read_string(f.read().decode('utf-8'))
-version = release = config['metadata']['version']
+from ppl import __version__ as release
+
+version = release
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
