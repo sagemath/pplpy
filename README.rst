@@ -44,6 +44,10 @@ The available objects and functions from the `ppl` Python module are:
 Installation
 ------------
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/master
 The project is available at `Python Package Index <https://pypi.org/project/pplpy/>`_ and
 can be installed with pip::
 
@@ -96,9 +100,9 @@ Requirements
 
 - `Cython <http://cython.org>`_ (tested with both 0.29 and 3.0)
 
-- `cysignals <https://pypi.org/project/cysignals>`_
+- `cysignals <https://pypi.org/project/cysignals/>`_
 
-- `gmpy2 <https://pypi.org/project/gmpy2>`_
+- `gmpy2 <https://pypi.org/project/gmpy2/>`_
 
 On Debian/Ubuntu systems the dependencies can be installed with::
 

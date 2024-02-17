@@ -4,6 +4,7 @@ channels:
   - defaults
 dependencies:
   - sphinx
+  - pip
   - pip:
     - linkchecker
     - cython-lint 
