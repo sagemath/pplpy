@@ -76,7 +76,7 @@ Documentation
 
 An online version of the documentation is available at https://www.sagemath.org/pplpy/
 
-Compiling the html documentation requires make and `sphinx <http://www.sphinx-doc.org/en/master/>`_.
+Compiling the html documentation requires make and `sphinx <https://www.sphinx-doc.org/en/master/>`_.
 Before building the documentation, you need to install the pplpy package (sphinx uses Python introspection).
 The documentation source code is contained in the repository `docs` where there is a standard
 Makefile with a target `html`. Running `make html` in the `docs` repository builds the documentation
