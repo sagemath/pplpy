@@ -127,6 +127,8 @@ AUTHORS:
   Remove the _mutable_immutable class.
 """
 
+__version__ = "0.8.9"
+
 from .linear_algebra import (
         Variable, Variables_Set, Linear_Expression,
         )
