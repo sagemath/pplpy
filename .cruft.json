@@ -1,6 +1,6 @@
 {
   "template": "https://github.com/mkoeppe/sage",
-  "commit": "b73d4e2fad3b71c74b62740aa83f37e98faa3f15",
+  "commit": "016c53ef397a9a3a764b467ab45de04f4284c0c8",
   "checkout": "sagemath-environment-cookiecutter",
   "context": {
     "cookiecutter": {
