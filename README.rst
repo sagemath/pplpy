@@ -44,10 +44,6 @@ The available objects and functions from the `ppl` Python module are:
 Installation
 ------------
 
-<<<<<<< HEAD
-=======
-
->>>>>>> upstream/master
 The project is available at `Python Package Index <https://pypi.org/project/pplpy/>`_ and
 can be installed with pip::
 
