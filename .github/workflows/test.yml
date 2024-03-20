@@ -12,10 +12,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13-dev"]
         cython: ["cython", "cython<3.0.0"]
         exclude:
           - python-version: 3.12
+            cython: cython<3.0.0
+          - python-version: 3.13-dev
             cython: cython<3.0.0
     steps:
       - uses: actions/checkout@v2
