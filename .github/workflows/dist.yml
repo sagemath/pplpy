@@ -24,7 +24,7 @@ jobs:
         run: |
           python3 -m pip install build
           python3 -m build --sdist
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v5
         with:
           path: "dist/*.tar.gz"
           name: dist
@@ -37,33 +37,22 @@ jobs:
         if: env.CAN_DEPLOY == 'true' && github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
 
   build_wheels:
-    name: Build wheels on ${{ matrix.os }}, arch ${{ matrix.arch }}
+    name: Build wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     needs: sdists_for_pypi
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - os: ubuntu-latest
-            arch: x86_64
-          - os: ubuntu-latest
-            arch: i686
-          - os: macos-latest
-            arch: auto
-          - os: macos-14
-            arch: auto
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - ubuntu-24.04-arm
+          - macos-15-intel
     env:
       # SPKGs to install as system packages
-      SPKGS: _bootstrap _prereq
+      SPKGS: _bootstrap _prereq gmp mpfr mpc
       # Non-Python packages to install as spkgs
       TARGETS_PRE: gmp mpfr mpc ppl-ensure
-      # Disable building PyPy wheels on all platforms
-      # Disable musllinux until #33083 provides alpine package information
-      CIBW_SKIP: "pp* *-musllinux*"
-      #
-      CIBW_ARCHS: ${{ matrix.arch }}
-      # https://cibuildwheel.readthedocs.io/en/stable/options/#requires-python
-      CIBW_PROJECT_REQUIRES_PYTHON: ">=3.9"
       # Environment during wheel build
       CIBW_ENVIRONMENT: "PATH=$(pwd)/local/bin:$PATH CPATH=$(pwd)/local/include:$CPATH LIBRARY_PATH=$(pwd)/local/lib:$LIBRARY_PATH LD_LIBRARY_PATH=$(pwd)/local/lib:$LD_LIBRARY_PATH PKG_CONFIG_PATH=$(pwd)/local/share/pkgconfig:$PKG_CONFIG_PATH ACLOCAL_PATH=/usr/share/aclocal"
       # Use 'build', not 'pip wheel'
@@ -74,7 +63,7 @@ jobs:
           repository:   sagemath/sage
           ref:          develop
 
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v6
         with:
           name: dist
           path: dist
@@ -84,7 +73,7 @@ jobs:
         # Installing pipx follows the approach of https://github.com/pypa/cibuildwheel/pull/1743
         id: python
         with:
-          python-version: "3.8 - 3.12"
+          python-version: "3.12 - 3.14"
           update-environment: false
 
       - name: Build platform wheels
@@ -97,16 +86,16 @@ jobs:
         run: |
           "${{ steps.python.outputs.python-path }}" -m pip install pipx
           export PATH=build/bin:$PATH
-          export CIBW_BEFORE_ALL="( $(sage-print-system-package-command debian --yes --no-install-recommends install $(sage-get-system-packages debian $SPKGS)) || $(sage-print-system-package-command fedora --yes --no-install-recommends install $(sage-get-system-packages fedora $SPKGS | sed s/pkg-config/pkgconfig/)) || ( $(sage-print-system-package-command homebrew --yes --no-install-recommends install $(sage-get-system-packages homebrew $SPKGS)) || echo error ignored) ) && ./bootstrap && ./configure --enable-build-as-root --enable-fat-binary && MAKE=\"make -j6\" make V=0 $TARGETS_PRE"
+          export CIBW_BEFORE_ALL="( $(sage-print-system-package-command debian --yes --no-install-recommends install $(sage-get-system-packages debian $SPKGS)) || $(sage-print-system-package-command fedora --yes --no-install-recommends install $(sage-get-system-packages fedora $SPKGS | sed s/pkg-config/pkgconfig/)) || ( $(sage-print-system-package-command homebrew --yes --no-install-recommends install $(sage-get-system-packages homebrew $SPKGS)) || $(sage-print-system-package-command alpine --yes --no-install-recommends install $(sage-get-system-packages alpine $SPKGS)) || echo error ignored) ) && ./bootstrap && ./configure --enable-build-as-root --enable-fat-binary --disable-meson-check --disable-boost && MAKE=\"make -j6\" make V=0 $TARGETS_PRE"
           mkdir -p unpacked
           for pkg in pplpy; do
               (cd unpacked && tar xfz - ) < dist/$pkg*.tar.gz
-              "${{ steps.python.outputs.python-path }}" -m pipx run cibuildwheel==2.17.0 unpacked/$pkg*
+              "${{ steps.python.outputs.python-path }}" -m pipx run cibuildwheel==3.2.1 unpacked/$pkg*
           done
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v5
         with:
-          name: wheels
+          name: wheels-${{ matrix.os }}
           path: ./wheelhouse/*.whl
 
   pypi-publish:
@@ -119,7 +108,7 @@ jobs:
       CAN_DEPLOY: ${{ secrets.SAGEMATH_PYPI_API_TOKEN != '' }}
     steps:
 
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v6
         with:
           name: wheels
           path: wheelhouse
