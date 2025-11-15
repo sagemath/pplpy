@@ -1,11 +1,10 @@
 [build-system]
 requires = [
-    "setuptools>=61.2",
-    "Cython",
-    "cysignals",
-    "gmpy2>=2.1.0b1",
+    "meson-python>=0.18.0",
+    "Cython>=3.0",
+    "cysignals>=1.11.3",
 ]
-build-backend = "setuptools.build_meta"
+build-backend = "mesonpy"
 
 [project]
 name = "pplpy"
@@ -36,7 +35,7 @@ keywords = [
     "linear-programming",
 ]
 dependencies = [
-    "cysignals",
+    "cysignals>=1.11.3",
     "gmpy2>=2.1.0b1",
 ]
 dynamic = ["version"]
@@ -49,14 +48,3 @@ doc = [
 [project.urls]
 Homepage = "https://github.com/sagemath/pplpy"
 Download = "https://pypi.org/project/pplpy/#files"
-
-[tool.setuptools]
-packages = ["ppl"]
-platforms = ["any"]
-include-package-data = false
-
-[tool.setuptools.dynamic]
-version = {attr = "ppl.__version__"}
-
-[tool.setuptools.package-data]
-ppl = ["*.pxd", "*.h", "*.hh"]
