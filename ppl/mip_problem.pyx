@@ -72,7 +72,7 @@ cdef class MIP_Problem(object):
         >>> m.optimal_value()
         mpq(10,3)
         >>> float(_)
-        3.333333333333333
+        3.3333333333333335
         >>> m.optimizing_point()
         point(10/3, 0/3)
     """
