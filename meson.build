@@ -2,7 +2,7 @@ project('pplpy',
   ['c', 'cpp', 'cython'],
   version: files('VERSION'),
   license: 'GPL v3',
-  default_options: ['cpp_std=c++17', 'python.install_env=auto'],
+  default_options: ['cpp_std=c++11', 'python.install_env=auto'],
   meson_version: '>=1.2',
 )
 

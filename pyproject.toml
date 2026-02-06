@@ -3,6 +3,7 @@ requires = [
     "meson-python>=0.18.0",
     "Cython>=3.0",
     "cysignals>=1.11.3",
+    "gmpy2>=2.1.0b1",
 ]
 build-backend = "mesonpy"
 
