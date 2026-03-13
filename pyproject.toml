@@ -9,7 +9,7 @@ requires = [
 build-backend = "mesonpy"
 
 [tool.meson-python.args]
-setup = ['--default-library=static', '--buildtype=release']
+setup = ['--default-library=static']
 install = ['--skip-subprojects']
 
 [project]
@@ -68,13 +68,13 @@ before-all = '''
 cd /tmp &&
 curl -fL https://ftp.gnu.org/gnu/gmp/gmp-6.3.0.tar.xz | tar xJ &&
 cd gmp-6.3.0 &&
-./configure --disable-shared --enable-static --enable-cxx --with-pic --prefix=/usr/local &&
+./configure --disable-shared --enable-static --enable-cxx --with-pic --prefix=/usr/local CFLAGS='-O2' CXXFLAGS='-O2' &&
 make -j$(nproc) &&
 make install &&
 cd /tmp &&
 curl -fL https://ftp.gnu.org/gnu/glpk/glpk-5.0.tar.gz | tar xz &&
 cd glpk-5.0 &&
-./configure --disable-shared --enable-static --with-pic --prefix=/usr/local &&
+./configure --disable-shared --enable-static --with-pic --prefix=/usr/local CFLAGS='-O2' &&
 make -j$(nproc) &&
 make install
 '''
