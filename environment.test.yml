@@ -5,7 +5,8 @@ channels:
 dependencies:
   - sphinx
   - pip
-  - setuptools
+  - meson
+  - meson-python
   - pip:
     - linkchecker
-    - cython-lint 
+    - cython-lint

@@ -17,3 +17,8 @@ pplpy.egg-info/
 docs/build/
 .idea/*
 /.tox
+builddir/
+.venv/
+subprojects/ppl-1.2/
+subprojects/packagecache/
+subprojects/.wraplock

@@ -1,5 +1,3 @@
-# distutils: language = c++
-# distutils: libraries = ppl
 """
 The goal of this file is to test cython can use pplpy package properly
 In order to do this we do some test with objects from each packages and extension :

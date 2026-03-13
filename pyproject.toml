@@ -1,21 +1,25 @@
 [build-system]
 requires = [
-    "setuptools>=61.2",
+    "meson-python>=0.15",
+    "meson>=1.3.0",
     "Cython",
     "cysignals",
-    "gmpy2>=2.1.0b1",
+    "gmpy2>=2.2.0",
 ]
-build-backend = "setuptools.build_meta"
+build-backend = "mesonpy"
+
+[tool.meson-python.args]
+setup = ['--default-library=static']
+install = ['--skip-subprojects']
 
 [project]
 name = "pplpy"
 description = "Python PPL wrapper"
 readme = "README.rst"
 authors = [{name = "Vincent Delecroix", email = "vincent.delecroix@labri.fr"}]
-license = {text = "GPL v3"}
+license = "GPL-3.0-or-later"
 requires-python = ">=3.12"
 classifiers = [
-    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     "Programming Language :: C++",
     "Programming Language :: Python",
     "Development Status :: 5 - Production/Stable",
@@ -38,8 +42,9 @@ keywords = [
 ]
 dependencies = [
     "cysignals",
-    "gmpy2>=2.1.0b1",
+    "gmpy2>=2.2.0",
 ]
+
 dynamic = ["version"]
 
 [project.optional-dependencies]
@@ -51,13 +56,39 @@ doc = [
 Homepage = "https://github.com/sagemath/pplpy"
 Download = "https://pypi.org/project/pplpy/#files"
 
-[tool.setuptools]
-packages = ["ppl"]
-platforms = ["any"]
-include-package-data = false
+[tool.cibuildwheel]
+build = "cp312-* cp313-* cp314-* cp314t-*"
+enable = ["cpython-freethreading"]
+build-frontend = "build"
+test-command = "python {project}/tests/runtests.py"
 
-[tool.setuptools.dynamic]
-version = {attr = "ppl.__version__"}
+[tool.cibuildwheel.linux]
+before-all = '''
+(command -v apk > /dev/null && apk add --no-cache m4 g++ || true) &&
+cd /tmp &&
+curl -fL https://ftp.gnu.org/gnu/gmp/gmp-6.3.0.tar.xz | tar xJ &&
+cd gmp-6.3.0 &&
+./configure --disable-shared --enable-static --enable-cxx --with-pic --prefix=/usr/local &&
+make -j$(nproc) &&
+make install &&
+cd /tmp &&
+curl -fL https://ftp.gnu.org/gnu/glpk/glpk-5.0.tar.gz | tar xz &&
+cd glpk-5.0 &&
+./configure --disable-shared --enable-static --with-pic --prefix=/usr/local &&
+make -j$(nproc) &&
+make install
+'''
+repair-wheel-command = '''python -c "import zipfile,os,subprocess,tempfile,pathlib,shutil;whl='{wheel}';dest='{dest_dir}';tmp=tempfile.mkdtemp();zipfile.ZipFile(whl).extractall(tmp);[subprocess.run(['strip','--strip-debug',str(p)]) for p in pathlib.Path(tmp).rglob('*.so')];out=os.path.join(tmp,os.path.basename(whl));shutil.make_archive(out.removesuffix('.whl'),'zip',tmp);os.rename(out.removesuffix('.whl')+'.zip',out);subprocess.run(['auditwheel','repair','-w',dest,out],check=True)"'''
 
-[tool.setuptools.package-data]
-ppl = ["*.pxd", "*.h", "*.hh"]
+[tool.cibuildwheel.linux.environment]
+LIBRARY_PATH = "/usr/local/lib:$LIBRARY_PATH"
+CPATH = "/usr/local/include:$CPATH"
+PKG_CONFIG_PATH = "/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
+
+[tool.cibuildwheel.macos]
+before-all = '''
+brew install gmp glpk &&
+rm -f $(brew --prefix gmp)/lib/libgmp*.dylib $(brew --prefix gmp)/lib/libgmpxx*.dylib &&
+rm -f $(brew --prefix glpk)/lib/libglpk*.dylib
+'''
+repair-wheel-command = '''python -c "import zipfile,os,subprocess,tempfile,pathlib,shutil;whl='{wheel}';dest='{dest_dir}';tmp=tempfile.mkdtemp();zipfile.ZipFile(whl).extractall(tmp);[subprocess.run(['strip','-x',str(p)]) for p in list(pathlib.Path(tmp).rglob('*.so'))+list(pathlib.Path(tmp).rglob('*.dylib'))];out=os.path.join(tmp,os.path.basename(whl));shutil.make_archive(out.removesuffix('.whl'),'zip',tmp);os.rename(out.removesuffix('.whl')+'.zip',out);subprocess.run(['delocate-wheel','--require-archs','{delocate_archs}','-w',dest,out],check=True)"'''
