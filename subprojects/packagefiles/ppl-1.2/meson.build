@@ -14,7 +14,7 @@ p = mod.add_project(
         '--enable-static',
         '--disable-documentation',
     ],
-    env: ['CXXFLAGS=-DNDEBUG -O2 -fPIC'],
+    env: ['CXXFLAGS=-DNDEBUG -O2 -g0 -fPIC'],
 )
 
 ppl_dep = p.dependency('ppl')
