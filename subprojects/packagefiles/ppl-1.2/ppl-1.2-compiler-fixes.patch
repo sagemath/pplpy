@@ -1,0 +1,429 @@
+diff -ru ppl-1.2/src/CO_Tree_inlines.hh b/src/CO_Tree_inlines.hh
+--- ppl-1.2/src/CO_Tree_inlines.hh	2016-02-11 20:31:26.000000000 +0800
++++ b/src/CO_Tree_inlines.hh	2026-02-09 16:08:43.534480389 +0800
+@@ -351,7 +351,7 @@
+       from.~data_type();
+     </CODE>
+   */
+-  std::memcpy(&to, &from, sizeof(data_type));
++  std::memcpy(static_cast<void*>(&to), static_cast<const void*>(&from), sizeof(data_type));
+ }
+ 
+ 
+diff -ru ppl-1.2/src/Congruence_System_defs.hh b/src/Congruence_System_defs.hh
+--- ppl-1.2/src/Congruence_System_defs.hh	2016-02-11 20:31:26.000000000 +0800
++++ b/src/Congruence_System_defs.hh	2026-02-09 16:08:43.546480388 +0800
+@@ -247,13 +247,13 @@
+     cout << *i << endl;
+     \endcode
+   */
+-  class const_iterator
+-    : public std::iterator<std::forward_iterator_tag,
+-                           Congruence,
+-                           std::ptrdiff_t,
+-                           const Congruence*,
+-                           const Congruence&> {
++  class const_iterator {
+   public:
++    typedef std::forward_iterator_tag iterator_category;
++    typedef Congruence value_type;
++    typedef std::ptrdiff_t difference_type;
++    typedef const Congruence* pointer;
++    typedef const Congruence& reference;
+     //! Default constructor.
+     const_iterator();
+ 
+diff -ru ppl-1.2/src/Constraint_System_defs.hh b/src/Constraint_System_defs.hh
+--- ppl-1.2/src/Constraint_System_defs.hh	2016-02-11 20:31:26.000000000 +0800
++++ b/src/Constraint_System_defs.hh	2026-02-09 16:08:43.550480386 +0800
+@@ -607,13 +607,13 @@
+ // NOTE: This is not an inner class of Constraint_System, so Constraint can
+ // declare that this class is his friend without including this file
+ // (the .types.hh file suffices).
+-class Parma_Polyhedra_Library::Constraint_System_const_iterator
+-  : public std::iterator<std::forward_iterator_tag,
+-                         Constraint,
+-                         std::ptrdiff_t,
+-                         const Constraint*,
+-                         const Constraint&> {
++class Parma_Polyhedra_Library::Constraint_System_const_iterator {
+ public:
++  typedef std::forward_iterator_tag iterator_category;
++  typedef Constraint value_type;
++  typedef std::ptrdiff_t difference_type;
++  typedef const Constraint* pointer;
++  typedef const Constraint& reference;
+   //! Default constructor.
+   Constraint_System_const_iterator();
+ 
+diff -ru ppl-1.2/src/Dense_Row.cc b/src/Dense_Row.cc
+--- ppl-1.2/src/Dense_Row.cc	2016-02-11 20:31:26.000000000 +0800
++++ b/src/Dense_Row.cc	2026-02-09 16:08:43.554480386 +0800
+@@ -28,6 +28,7 @@
+ #include "Sparse_Row_defs.hh"
+ #include <iostream>
+ #include <iomanip>
++#include <cstring>
+ 
+ namespace PPL = Parma_Polyhedra_Library;
+ 
+@@ -55,7 +56,7 @@
+       Coefficient* const new_vec = impl.coeff_allocator.allocate(new_capacity);
+ 
+       if (impl.vec != 0) {
+-        memcpy(new_vec, impl.vec, sizeof(Coefficient) * impl.size);
++        std::memcpy(static_cast<void*>(new_vec), static_cast<const void*>(impl.vec), sizeof(Coefficient) * impl.size);
+         impl.coeff_allocator.deallocate(impl.vec, impl.capacity);
+       }
+ 
+@@ -100,7 +101,7 @@
+ 
+     PPL_ASSERT(impl.vec != 0);
+ 
+-    memcpy(new_vec, impl.vec, sizeof(Coefficient) * impl.size);
++    std::memcpy(static_cast<void*>(new_vec), static_cast<const void*>(impl.vec), sizeof(Coefficient) * impl.size);
+ 
+     impl.coeff_allocator.deallocate(impl.vec, impl.capacity);
+ 
+@@ -113,7 +114,7 @@
+       Coefficient* const new_vec = impl.coeff_allocator.allocate(new_capacity);
+ 
+       if (impl.vec != 0) {
+-        memcpy(new_vec, impl.vec, sizeof(Coefficient) * impl.size);
++        std::memcpy(static_cast<void*>(new_vec), static_cast<const void*>(impl.vec), sizeof(Coefficient) * impl.size);
+         impl.coeff_allocator.deallocate(impl.vec, impl.capacity);
+       }
+ 
+@@ -165,8 +166,8 @@
+     }
+ 
+     // Raw-copy the coefficients.
+-    memcpy(new_row.impl.vec, impl.vec, sizeof(Coefficient) * i);
+-    memcpy(&(new_row.impl.vec[i + n]), &impl.vec[i],
++    std::memcpy(static_cast<void*>(new_row.impl.vec), static_cast<const void*>(impl.vec), sizeof(Coefficient) * i);
++    std::memcpy(static_cast<void*>(&(new_row.impl.vec[i + n])), static_cast<const void*>(&impl.vec[i]),
+            sizeof(Coefficient) * (impl.size - i));
+ 
+     using std::swap;
+@@ -180,7 +181,7 @@
+ 
+   }
+   else {
+-    memmove(&impl.vec[n + i], &impl.vec[i], sizeof(Coefficient)
++    std::memmove(static_cast<void*>(&impl.vec[n + i]), static_cast<const void*>(&impl.vec[i]), sizeof(Coefficient)
+             * (impl.size - i));
+     impl.size = i;
+     const dimension_type target_size = impl.size + n;
+diff -ru ppl-1.2/src/Determinate_defs.hh b/src/Determinate_defs.hh
+--- ppl-1.2/src/Determinate_defs.hh	2016-02-11 20:31:26.000000000 +0800
++++ b/src/Determinate_defs.hh	2026-02-09 16:08:43.558480385 +0800
+@@ -211,7 +211,7 @@
+     having signature <CODE>void foo(PSET& x, const PSET& y)</CODE> that
+     applies an operator to \c x and \c y and assigns the result to \c x.
+     For instance, such a function object is obtained by
+-    <CODE>std::mem_fun_ref(&C_Polyhedron::intersection_assign)</CODE>.
++    <CODE>std::mem_fn(&C_Polyhedron::intersection_assign)</CODE>.
+   */
+ #endif // defined(PPL_DOXYGEN_INCLUDE_IMPLEMENTATION_DETAILS)
+   template <typename Binary_Operator_Assign>
+diff -ru ppl-1.2/src/Generator_System_defs.hh b/src/Generator_System_defs.hh
+--- ppl-1.2/src/Generator_System_defs.hh	2016-02-11 20:31:26.000000000 +0800
++++ b/src/Generator_System_defs.hh	2026-02-09 16:08:43.574480383 +0800
+@@ -677,13 +677,13 @@
+ copy(gs.begin(), gs.end(), ostream_iterator<Generator>(cout, "\n"));
+     \endcode
+ */
+-class Parma_Polyhedra_Library::Generator_System_const_iterator
+-  : public std::iterator<std::forward_iterator_tag,
+-        Generator,
+-        std::ptrdiff_t,
+-        const Generator*,
+-        const Generator&> {
++class Parma_Polyhedra_Library::Generator_System_const_iterator {
+ public:
++  typedef std::forward_iterator_tag iterator_category;
++  typedef Generator value_type;
++  typedef std::ptrdiff_t difference_type;
++  typedef const Generator* pointer;
++  typedef const Generator& reference;
+   //! Default constructor.
+   Generator_System_const_iterator();
+ 
+diff -ru ppl-1.2/src/Grid_Generator_System_defs.hh b/src/Grid_Generator_System_defs.hh
+--- ppl-1.2/src/Grid_Generator_System_defs.hh	2016-02-11 20:31:26.000000000 +0800
++++ b/src/Grid_Generator_System_defs.hh	2026-02-09 16:08:43.578480383 +0800
+@@ -275,13 +275,13 @@
+   copy(ggs.begin(), ggs.end(), ostream_iterator<Grid_Generator>(cout, "\n"));
+     \endcode
+   */
+-  class const_iterator
+-    : public std::iterator<std::forward_iterator_tag,
+-                           Grid_Generator,
+-                           std::ptrdiff_t,
+-                           const Grid_Generator*,
+-                           const Grid_Generator&> {
++  class const_iterator {
+   public:
++    typedef std::forward_iterator_tag iterator_category;
++    typedef Grid_Generator value_type;
++    typedef std::ptrdiff_t difference_type;
++    typedef const Grid_Generator* pointer;
++    typedef const Grid_Generator& reference;
+     //! Default constructor.
+     const_iterator();
+ 
+diff -ru ppl-1.2/src/PIP_Tree.cc b/src/PIP_Tree.cc
+--- ppl-1.2/src/PIP_Tree.cc	2016-02-11 20:31:26.000000000 +0800
++++ b/src/PIP_Tree.cc	2026-02-09 16:08:43.626480376 +0800
+@@ -1101,8 +1101,8 @@
+     false_child = y.false_child->clone();
+     false_child->set_parent(this);
+   }
+-  // Protect false_child from exception safety issues via std::auto_ptr.
+-  std::auto_ptr<PIP_Tree_Node> wrapped_node(false_child);
++  // Protect false_child from exception safety issues via std::unique_ptr.
++  std::unique_ptr<PIP_Tree_Node> wrapped_node(false_child);
+   if (y.true_child != 0) {
+     true_child = y.true_child->clone();
+     true_child->set_parent(this);
+@@ -3140,8 +3140,8 @@
+ 
+       // Create a solution node for the "true" version of current node.
+       PIP_Tree_Node* t_node = new PIP_Solution_Node(*this, No_Constraints());
+-      // Protect it from exception safety issues via std::auto_ptr.
+-      std::auto_ptr<PIP_Tree_Node> wrapped_node(t_node);
++      // Protect it from exception safety issues via std::unique_ptr.
++      std::unique_ptr<PIP_Tree_Node> wrapped_node(t_node);
+ 
+       // Add parametric constraint to context.
+       ctx.add_row(t_test);
+diff -ru ppl-1.2/src/Pointset_Powerset_inlines.hh b/src/Pointset_Powerset_inlines.hh
+--- ppl-1.2/src/Pointset_Powerset_inlines.hh	2016-02-11 20:31:26.000000000 +0800
++++ b/src/Pointset_Powerset_inlines.hh	2026-02-09 16:08:43.634480375 +0800
+@@ -28,6 +28,7 @@
+ #include "Constraint_System_defs.hh"
+ #include "Constraint_System_inlines.hh"
+ #include "Congruence_defs.hh"
++#include <functional>
+ #include "Congruence_System_defs.hh"
+ #include "Congruence_System_inlines.hh"
+ #include "C_Polyhedron_defs.hh"
+@@ -221,7 +222,7 @@
+ Pointset_Powerset<PSET>::intersection_assign(const Pointset_Powerset& y) {
+   Pointset_Powerset& x = *this;
+   x.pairwise_apply_assign(y,
+-                          Det_PSET::lift_op_assign(std::mem_fun_ref(&PSET::intersection_assign)));
++                          Det_PSET::lift_op_assign(std::mem_fn(&PSET::intersection_assign)));
+ }
+ 
+ template <typename PSET>
+@@ -229,7 +230,7 @@
+ Pointset_Powerset<PSET>::time_elapse_assign(const Pointset_Powerset& y) {
+   Pointset_Powerset& x = *this;
+   x.pairwise_apply_assign(y,
+-                          Det_PSET::lift_op_assign(std::mem_fun_ref(&PSET::time_elapse_assign)));
++                          Det_PSET::lift_op_assign(std::mem_fn(&PSET::time_elapse_assign)));
+ }
+ 
+ template <typename PSET>
+diff -ru ppl-1.2/src/Powerset_inlines.hh b/src/Powerset_inlines.hh
+--- ppl-1.2/src/Powerset_inlines.hh	2016-02-11 20:31:26.000000000 +0800
++++ b/src/Powerset_inlines.hh	2026-02-09 16:08:43.646480373 +0800
+@@ -26,6 +26,7 @@
+ 
+ #include "assertions.hh"
+ #include <algorithm>
++#include <functional>
+ 
+ namespace Parma_Polyhedra_Library {
+ 
+@@ -197,7 +198,7 @@
+ template <typename D>
+ inline void
+ Powerset<D>::meet_assign(const Powerset& y) {
+-  pairwise_apply_assign(y, std::mem_fun_ref(&D::meet_assign));
++  pairwise_apply_assign(y, std::mem_fn(&D::meet_assign));
+ }
+ 
+ template <typename D>
+diff -ru ppl-1.2/src/Ptr_Iterator_defs.hh b/src/Ptr_Iterator_defs.hh
+--- ppl-1.2/src/Ptr_Iterator_defs.hh	2016-02-11 20:31:26.000000000 +0800
++++ b/src/Ptr_Iterator_defs.hh	2026-02-09 16:08:43.646480373 +0800
+@@ -65,16 +65,13 @@
+ //! A class to define STL const and non-const iterators from pointer types.
+ #endif // defined(PPL_DOXYGEN_INCLUDE_IMPLEMENTATION_DETAILS)
+ template <typename P>
+-class Parma_Polyhedra_Library::Implementation::Ptr_Iterator
+-  : public std::iterator<typename std::iterator_traits<P>::iterator_category,
+-                         typename std::iterator_traits<P>::value_type,
+-                         typename std::iterator_traits<P>::difference_type,
+-                         typename std::iterator_traits<P>::pointer,
+-                         typename std::iterator_traits<P>::reference> {
++class Parma_Polyhedra_Library::Implementation::Ptr_Iterator {
+ public:
++  typedef typename std::iterator_traits<P>::iterator_category iterator_category;
++  typedef typename std::iterator_traits<P>::value_type value_type;
+   typedef typename std::iterator_traits<P>::difference_type difference_type;
+-  typedef typename std::iterator_traits<P>::reference reference;
+   typedef typename std::iterator_traits<P>::pointer pointer;
++  typedef typename std::iterator_traits<P>::reference reference;
+ 
+   //! Default constructor: no guarantees.
+   Ptr_Iterator();
+diff -ru ppl-1.2/src/ppl.hh.dist b/src/ppl.hh.dist
+--- ppl-1.2/src/ppl.hh.dist	2016-02-11 20:40:41.000000000 +0800
++++ b/src/ppl.hh.dist	2026-02-09 16:08:43.702480365 +0800
+@@ -23959,7 +23959,7 @@
+       from.~data_type();
+     </CODE>
+   */
+-  std::memcpy(&to, &from, sizeof(data_type));
++  std::memcpy(static_cast<void*>(&to), static_cast<const void*>(&from), sizeof(data_type));
+ }
+ 
+ 
+@@ -43799,13 +43799,13 @@
+ // NOTE: This is not an inner class of Constraint_System, so Constraint can
+ // declare that this class is his friend without including this file
+ // (the .types.hh file suffices).
+-class Parma_Polyhedra_Library::Constraint_System_const_iterator
+-  : public std::iterator<std::forward_iterator_tag,
+-                         Constraint,
+-                         std::ptrdiff_t,
+-                         const Constraint*,
+-                         const Constraint&> {
++class Parma_Polyhedra_Library::Constraint_System_const_iterator {
+ public:
++  typedef std::forward_iterator_tag iterator_category;
++  typedef Constraint value_type;
++  typedef std::ptrdiff_t difference_type;
++  typedef const Constraint* pointer;
++  typedef const Constraint& reference;
+   //! Default constructor.
+   Constraint_System_const_iterator();
+ 
+@@ -44516,13 +44516,13 @@
+     cout << *i << endl;
+     \endcode
+   */
+-  class const_iterator
+-    : public std::iterator<std::forward_iterator_tag,
+-                           Congruence,
+-                           std::ptrdiff_t,
+-                           const Congruence*,
+-                           const Congruence&> {
++  class const_iterator {
+   public:
++    typedef std::forward_iterator_tag iterator_category;
++    typedef Congruence value_type;
++    typedef std::ptrdiff_t difference_type;
++    typedef const Congruence* pointer;
++    typedef const Congruence& reference;
+     //! Default constructor.
+     const_iterator();
+ 
+@@ -46623,13 +46623,13 @@
+ copy(gs.begin(), gs.end(), ostream_iterator<Generator>(cout, "\n"));
+     \endcode
+ */
+-class Parma_Polyhedra_Library::Generator_System_const_iterator
+-  : public std::iterator<std::forward_iterator_tag,
+-        Generator,
+-        std::ptrdiff_t,
+-        const Generator*,
+-        const Generator&> {
++class Parma_Polyhedra_Library::Generator_System_const_iterator {
+ public:
++  typedef std::forward_iterator_tag iterator_category;
++  typedef Generator value_type;
++  typedef std::ptrdiff_t difference_type;
++  typedef const Generator* pointer;
++  typedef const Generator& reference;
+   //! Default constructor.
+   Generator_System_const_iterator();
+ 
+@@ -56055,13 +56055,13 @@
+   copy(ggs.begin(), ggs.end(), ostream_iterator<Grid_Generator>(cout, "\n"));
+     \endcode
+   */
+-  class const_iterator
+-    : public std::iterator<std::forward_iterator_tag,
+-                           Grid_Generator,
+-                           std::ptrdiff_t,
+-                           const Grid_Generator*,
+-                           const Grid_Generator&> {
++  class const_iterator {
+   public:
++    typedef std::forward_iterator_tag iterator_category;
++    typedef Grid_Generator value_type;
++    typedef std::ptrdiff_t difference_type;
++    typedef const Grid_Generator* pointer;
++    typedef const Grid_Generator& reference;
+     //! Default constructor.
+     const_iterator();
+ 
+@@ -60312,16 +60312,13 @@
+ //! A class to define STL const and non-const iterators from pointer types.
+ #endif // defined(PPL_DOXYGEN_INCLUDE_IMPLEMENTATION_DETAILS)
+ template <typename P>
+-class Parma_Polyhedra_Library::Implementation::Ptr_Iterator
+-  : public std::iterator<typename std::iterator_traits<P>::iterator_category,
+-                         typename std::iterator_traits<P>::value_type,
+-                         typename std::iterator_traits<P>::difference_type,
+-                         typename std::iterator_traits<P>::pointer,
+-                         typename std::iterator_traits<P>::reference> {
++class Parma_Polyhedra_Library::Implementation::Ptr_Iterator {
+ public:
++  typedef typename std::iterator_traits<P>::iterator_category iterator_category;
++  typedef typename std::iterator_traits<P>::value_type value_type;
+   typedef typename std::iterator_traits<P>::difference_type difference_type;
+-  typedef typename std::iterator_traits<P>::reference reference;
+   typedef typename std::iterator_traits<P>::pointer pointer;
++  typedef typename std::iterator_traits<P>::reference reference;
+ 
+   //! Default constructor: no guarantees.
+   Ptr_Iterator();
+@@ -100392,7 +100389,7 @@
+     having signature <CODE>void foo(PSET& x, const PSET& y)</CODE> that
+     applies an operator to \c x and \c y and assigns the result to \c x.
+     For instance, such a function object is obtained by
+-    <CODE>std::mem_fun_ref(&C_Polyhedron::intersection_assign)</CODE>.
++    <CODE>std::mem_fn(&C_Polyhedron::intersection_assign)</CODE>.
+   */
+ #endif // defined(PPL_DOXYGEN_INCLUDE_IMPLEMENTATION_DETAILS)
+   template <typename Binary_Operator_Assign>
+@@ -101623,6 +101620,7 @@
+ 
+ /* Automatically generated from PPL source file ../src/Powerset_inlines.hh line 28. */
+ #include <algorithm>
++#include <functional>
+ 
+ namespace Parma_Polyhedra_Library {
+ 
+@@ -101794,7 +101792,7 @@
+ template <typename D>
+ inline void
+ Powerset<D>::meet_assign(const Powerset& y) {
+-  pairwise_apply_assign(y, std::mem_fun_ref(&D::meet_assign));
++  pairwise_apply_assign(y, std::mem_fn(&D::meet_assign));
+ }
+ 
+ template <typename D>
+@@ -103752,7 +103750,7 @@
+ Pointset_Powerset<PSET>::intersection_assign(const Pointset_Powerset& y) {
+   Pointset_Powerset& x = *this;
+   x.pairwise_apply_assign(y,
+-                          Det_PSET::lift_op_assign(std::mem_fun_ref(&PSET::intersection_assign)));
++                          Det_PSET::lift_op_assign(std::mem_fn(&PSET::intersection_assign)));
+ }
+ 
+ template <typename PSET>
+@@ -103760,7 +103758,7 @@
+ Pointset_Powerset<PSET>::time_elapse_assign(const Pointset_Powerset& y) {
+   Pointset_Powerset& x = *this;
+   x.pairwise_apply_assign(y,
+-                          Det_PSET::lift_op_assign(std::mem_fun_ref(&PSET::time_elapse_assign)));
++                          Det_PSET::lift_op_assign(std::mem_fn(&PSET::time_elapse_assign)));
+ }
+ 
+ template <typename PSET>

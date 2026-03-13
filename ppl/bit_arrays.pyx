@@ -1,5 +1,3 @@
-# distutils: language = c++
-# distutils: libraries = gmp ppl m
 #*****************************************************************************
 #       Copyright (C) 2018 Vincent Delecroix <vincent.delecroix@labri.fr>
 #

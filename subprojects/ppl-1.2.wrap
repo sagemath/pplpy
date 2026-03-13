@@ -1,0 +1,10 @@
+[wrap-file]
+directory = ppl-1.2
+source_url = https://github.com/sagemath/sage/releases/download/10.8/ppl-1.2.tar.bz2
+source_filename = ppl-1.2.tar.bz2
+source_hash = 2d470b0c262904f190a19eac57fb5c2387b1bfc3510de25a08f3c958df62fdf1
+patch_directory = ppl-1.2
+diff_files = ppl-1.2/ppl-1.2-compiler-fixes.patch
+
+[provide]
+ppl = ppl_dep
