@@ -68,17 +68,17 @@ before-all = '''
 cd /tmp &&
 curl -fL https://ftp.gnu.org/gnu/gmp/gmp-6.3.0.tar.xz | tar xJ &&
 cd gmp-6.3.0 &&
-./configure --disable-shared --enable-static --enable-cxx --with-pic --prefix=/usr/local CFLAGS='-O2' CXXFLAGS='-O2' &&
+./configure --disable-shared --enable-static --enable-cxx --with-pic --prefix=/usr/local CFLAGS='-O2 -g0' CXXFLAGS='-O2 -g0' &&
 make -j$(nproc) &&
 make install &&
 cd /tmp &&
 curl -fL https://ftp.gnu.org/gnu/glpk/glpk-5.0.tar.gz | tar xz &&
 cd glpk-5.0 &&
-./configure --disable-shared --enable-static --with-pic --prefix=/usr/local CFLAGS='-O2' &&
+./configure --disable-shared --enable-static --with-pic --prefix=/usr/local CFLAGS='-O2 -g0' &&
 make -j$(nproc) &&
 make install
 '''
-repair-wheel-command = "auditwheel repair -w {dest_dir} {wheel}"
+repair-wheel-command = "auditwheel repair --strip -w {dest_dir} {wheel}"
 
 [tool.cibuildwheel.linux.environment]
 LIBRARY_PATH = "/usr/local/lib:$LIBRARY_PATH"
