@@ -2,7 +2,7 @@ project(
     'pplpy',
     'cpp',
     'cython',
-    version: '0.8.10',
+    version: '0.9.0',
 )
 
 py = import('python').find_installation(pure: false)

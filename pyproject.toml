@@ -9,7 +9,7 @@ requires = [
 build-backend = "mesonpy"
 
 [tool.meson-python.args]
-setup = ['--default-library=static']
+setup = ['--default-library=static', '--buildtype=release']
 install = ['--skip-subprojects']
 
 [project]
@@ -78,7 +78,7 @@ cd glpk-5.0 &&
 make -j$(nproc) &&
 make install
 '''
-repair-wheel-command = '''python -c "import zipfile,os,subprocess,tempfile,pathlib,shutil;whl='{wheel}';dest='{dest_dir}';tmp=tempfile.mkdtemp();zipfile.ZipFile(whl).extractall(tmp);[subprocess.run(['strip','--strip-debug',str(p)]) for p in pathlib.Path(tmp).rglob('*.so')];out=os.path.join(tmp,os.path.basename(whl));shutil.make_archive(out.removesuffix('.whl'),'zip',tmp);os.rename(out.removesuffix('.whl')+'.zip',out);subprocess.run(['auditwheel','repair','-w',dest,out],check=True)"'''
+repair-wheel-command = "auditwheel repair -w {dest_dir} {wheel}"
 
 [tool.cibuildwheel.linux.environment]
 LIBRARY_PATH = "/usr/local/lib:$LIBRARY_PATH"
@@ -91,4 +91,4 @@ brew install gmp glpk &&
 rm -f $(brew --prefix gmp)/lib/libgmp*.dylib $(brew --prefix gmp)/lib/libgmpxx*.dylib &&
 rm -f $(brew --prefix glpk)/lib/libglpk*.dylib
 '''
-repair-wheel-command = '''python -c "import zipfile,os,subprocess,tempfile,pathlib,shutil;whl='{wheel}';dest='{dest_dir}';tmp=tempfile.mkdtemp();zipfile.ZipFile(whl).extractall(tmp);[subprocess.run(['strip','-x',str(p)]) for p in list(pathlib.Path(tmp).rglob('*.so'))+list(pathlib.Path(tmp).rglob('*.dylib'))];out=os.path.join(tmp,os.path.basename(whl));shutil.make_archive(out.removesuffix('.whl'),'zip',tmp);os.rename(out.removesuffix('.whl')+'.zip',out);subprocess.run(['delocate-wheel','--require-archs','{delocate_archs}','-w',dest,out],check=True)"'''
+repair-wheel-command = "delocate-wheel --require-archs {delocate_archs} -w {dest_dir} {wheel}"
