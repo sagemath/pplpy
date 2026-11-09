@@ -22,3 +22,5 @@ builddir/
 subprojects/ppl-1.2/
 subprojects/packagecache/
 subprojects/.wraplock
+/html/
+.pixi/

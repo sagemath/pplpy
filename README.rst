@@ -56,6 +56,20 @@ example::
     $ export CFLAGS="-I/path/to/gmp/include/ -L/path/to/gmp/lib/ -I/path/to/ppl/include/ -L/path/to/ppl/lib $CFLAGS"
     $ pip install pplpy
 
+Development
+-----------
+
+We recommend you install `pixi <https://pixi.sh>`_ to provide all the
+dependencies for pplpy. Once installed, `git clone` this repository and then::
+
+    $ pixi run test                # to run the test suite
+    $ pixi run lint                # to run cython-lint
+    $ pixi run doc                 # to build the documentation into html/pplpy
+    $ pixi run python              # to spawn a Python repl where you can "import ppl"
+
+Changes to the Cython sources are automatically recompiled in all of the above
+on the internal ``import ppl``.
+
 Using from Cython
 -----------------
 
