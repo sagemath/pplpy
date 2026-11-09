@@ -24,3 +24,4 @@ subprojects/packagecache/
 subprojects/.wraplock
 /html/
 .pixi/
+.pytest_cache/

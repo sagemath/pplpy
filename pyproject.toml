@@ -56,11 +56,17 @@ doc = [
 Homepage = "https://github.com/sagemath/pplpy"
 Download = "https://pypi.org/project/pplpy/#files"
 
+[tool.pytest.ini_options]
+testpaths = ["tests", "ppl"]
+doctest_optionflags = "ELLIPSIS NORMALIZE_WHITESPACE"
+addopts = "--doctest-report=ndiff --import-mode=importlib"
+
 [tool.cibuildwheel]
 build = "cp312-* cp313-* cp314-* cp314t-*"
 enable = ["cpython-freethreading"]
 build-frontend = "build"
-test-command = "python {project}/tests/runtests.py"
+test-requires = ["pytest"]
+test-command = "pytest {project}/tests {project}/ppl"
 
 [tool.cibuildwheel.linux]
 before-all = '''
@@ -117,6 +123,7 @@ gmpy2 = ">=2.2.0"
 gmp = "*"
 ppl = "*"
 pip = "*"
+pytest = "*"
 
 [tool.pixi.pypi-dependencies]
 pplpy = { path = ".", editable = true }
@@ -125,7 +132,9 @@ pplpy = { path = ".", editable = true }
 no-build-isolation = ["pplpy"]
 
 [tool.pixi.tasks]
-test = { cmd = "python tests/runtests.py" }
+test = { depends-on = ["test-pytest", "test-examples"] }
+test-pytest = "pytest"
+test-examples = "meson setup --reconfigure build/examples && meson test -C build/examples"
 
 [tool.pixi.feature.py312.dependencies]
 python = "3.12.*"

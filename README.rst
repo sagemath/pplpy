@@ -63,7 +63,9 @@ All Python classes from pplpy are extension types and can be used with Cython. E
 extension type carries an attribute `thisptr` that holds a pointer to
 the corresponding C++ object from ppl.
 
-A complete example is provided with the files `tests/testpplpy.pyx` and `tests/setup.py`.
+A complete example is provided in `examples/cython_example.pyx`. To compile it,
+Cython needs the include paths of pplpy, PPL, GMP, cysignals and gmpy2; see
+`examples/meson.build`.
 
 Source
 ------
@@ -82,7 +84,7 @@ Development
 We recommend you install `pixi <https://pixi.sh>`_ to provide all the
 dependencies for pplpy. Once installed, `git clone` this repository and then::
 
-    $ pixi run test                # to run the test suite
+    $ pixi run test                # to run the test suite and the Cython example
     $ pixi run lint                # to run cython-lint
     $ pixi run doc                 # to build the documentation into html/pplpy
     $ pixi run python              # to spawn a Python repl where you can "import ppl"

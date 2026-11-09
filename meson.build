@@ -26,4 +26,4 @@ else
 endif
 
 subdir('ppl')
-subdir('tests')
+subdir('examples')
