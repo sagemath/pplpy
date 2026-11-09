@@ -905,7 +905,7 @@ cdef class Generator_System(object):
         >>> len(gs)
         3
         """
-        return sum([1 for g in self])
+        return sum(1 for _ in self)
 
     def __iter__(self):
         """
@@ -974,7 +974,7 @@ cdef class Generator_System(object):
             raise IndexError('index must be nonnegative')
         iterator = iter(self)
         try:
-            for i in range(k):
+            for _ in range(k):
                 next(iterator)
         except StopIteration:
             raise IndexError('index is past-the-end')
