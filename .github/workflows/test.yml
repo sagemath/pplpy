@@ -13,20 +13,17 @@ permissions:
 jobs:
   lint:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash -el {0}
     steps:
       - uses: actions/checkout@v6
 
-      - uses: conda-incubator/setup-miniconda@v3
+      - uses: prefix-dev/setup-pixi@v0.9.3
         with:
-          environment-file: environment.test.yml
-          activate-environment: pplpy-test
+          pixi-version: v0.84.1
+          environments: lint
+          locked: true
 
       - name: Lint
-        run: |
-          cython-lint --ignore=E265,E266,E501,E741 --exclude='ppl_decl.pxd' ppl/
+        run: pixi run lint
 
   test:
     runs-on: ${{ matrix.os }}
@@ -34,21 +31,15 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
-        python: ["3.12", "3.13", "3.14"]
-    defaults:
-      run:
-        shell: bash -el {0}
+        environment: [py312, py313, default]
     steps:
       - uses: actions/checkout@v6
 
-      - uses: conda-incubator/setup-miniconda@v3
+      - uses: prefix-dev/setup-pixi@v0.9.3
         with:
-          python-version: ${{ matrix.python }}
-          environment-file: environment.yml
-          activate-environment: pplpy-build
-
-      - name: Build and install
-        run: pip install --no-build-isolation .
+          pixi-version: v0.84.1
+          environments: ${{ matrix.environment }}
+          locked: true
 
       - name: Test
-        run: python tests/runtests.py
+        run: pixi run -e ${{ matrix.environment }} test

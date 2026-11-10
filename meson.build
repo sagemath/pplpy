@@ -1,8 +1,10 @@
 project(
     'pplpy',
+    'c',
     'cpp',
     'cython',
     version: '0.9.0',
+    meson_version: '>=1.3.0',
 )
 
 py = import('python').find_installation(pure: false)
@@ -26,4 +28,4 @@ else
 endif
 
 subdir('ppl')
-subdir('tests')
+subdir('examples')

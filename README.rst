@@ -63,7 +63,9 @@ All Python classes from pplpy are extension types and can be used with Cython. E
 extension type carries an attribute `thisptr` that holds a pointer to
 the corresponding C++ object from ppl.
 
-A complete example is provided with the files `tests/testpplpy.pyx` and `tests/setup.py`.
+A complete example is provided in `examples/cython_example.pyx`. To compile it,
+Cython needs the include paths of pplpy, PPL, GMP, cysignals and gmpy2; see
+`examples/meson.build`.
 
 Source
 ------
@@ -76,11 +78,19 @@ Documentation
 
 An online version of the documentation is available at https://www.sagemath.org/pplpy/
 
-Compiling the html documentation requires make and `sphinx <https://www.sphinx-doc.org/en/master/>`_.
-Before building the documentation, you need to install the pplpy package (sphinx uses Python introspection).
-The documentation source code is contained in the repository `docs` where there is a standard
-Makefile with a target `html`. Running `make html` in the `docs` repository builds the documentation
-inside `docs/build/html`. For more configuration options, run `make help`.
+Development
+-----------
+
+We recommend you install `pixi <https://pixi.sh>`_ to provide all the
+dependencies for pplpy. Once installed, `git clone` this repository and then::
+
+    $ pixi run test                # to run the test suite and the Cython example
+    $ pixi run lint                # to run cython-lint
+    $ pixi run doc                 # to build the documentation into html/pplpy
+    $ pixi run python              # to spawn a Python repl where you can "import ppl"
+
+Changes to the Cython sources are automatically recompiled in all of the above
+on the internal ``import ppl``.
 
 License
 -------
@@ -88,18 +98,3 @@ License
 pplpy is distributed under the terms of the GNU General Public License (GPL)
 published by the Free Software Foundation; either version 3 of
 the License, or (at your option) any later version. See http://www.gnu.org/licenses/.
-
-Requirements
-------------
-
-- `PPL <https://bugseng.com/ppl>`_
-
-- `Cython <http://cython.org>`_ (tested with both 0.29 and 3.0)
-
-- `cysignals <https://pypi.org/project/cysignals/>`_
-
-- `gmpy2 <https://pypi.org/project/gmpy2/>`_
-
-On Debian/Ubuntu systems the dependencies can be installed with::
-
-    $ sudo apt-get install libgmp-dev libmpfr-dev libmpc-dev libppl-dev cython3 python3-gmpy2 python3-cysignals-pari

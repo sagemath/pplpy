@@ -940,7 +940,7 @@ cdef class Constraint_System(object):
             raise IndexError('index must be nonnegative')
         iterator = iter(self)
         try:
-            for i in range(k):
+            for _ in range(k):
                 next(iterator)
         except StopIteration:
             raise IndexError('index is past-the-end')
