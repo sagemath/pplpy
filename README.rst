@@ -2,7 +2,7 @@ PPL Python wrapper
 ==================
 
 This Python package provides a wrapper to the C++ `Parma Polyhedra Library
-(PPL) <http://bugseng.com/products/ppl/>`_.
+(PPL) <https://bugseng.com/ppl>`_.
 
 The whole package started as a fork of a tiny part of the `Sage
 <http://sagemath.org>`_ software.
@@ -98,4 +98,3 @@ License
 pplpy is distributed under the terms of the GNU General Public License (GPL)
 published by the Free Software Foundation; either version 3 of
 the License, or (at your option) any later version. See http://www.gnu.org/licenses/.
-
